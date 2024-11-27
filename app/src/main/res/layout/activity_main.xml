@@ -84,7 +84,7 @@
                                 android:layout_height="100dp"
                                 android:layout_weight="1"
                                 android:layout_marginEnd="4dp"
-                                android:src="@drawable/push_image"
+                                android:src="@drawable/bench_press"
                                 android:contentDescription="Push"
                                 android:scaleType="centerCrop"/>
 
@@ -93,7 +93,7 @@
                                 android:layout_height="100dp"
                                 android:layout_weight="1"
                                 android:layout_marginEnd="4dp"
-                                android:src="@drawable/pull_image"
+                                android:src="@drawable/pull"
                                 android:contentDescription="Pull"
                                 android:scaleType="centerCrop"/>
 
@@ -101,7 +101,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="100dp"
                                 android:layout_weight="1"
-                                android:src="@drawable/legs_image"
+                                android:src="@drawable/legs"
                                 android:contentDescription="Legs"
                                 android:scaleType="centerCrop"/>
 
@@ -132,14 +132,15 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
-                        <ImageView
+                        <ImageButton
+                            android:id="@+id/button_chart"
                             android:layout_width="214dp"
                             android:layout_height="150dp"
                             android:layout_marginTop="8dp"
                             android:layout_weight="1"
                             android:contentDescription="Progress Chart"
                             android:scaleType="fitXY"
-                            android:src="@drawable/progress_chart" />
+                            android:src="@drawable/chart" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -165,13 +166,14 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            android:layout_width="302dp"
-                            android:layout_height="100dp"
+                        <ImageButton
+                            android:id="@+id/button_survey"
+                            android:layout_width="179dp"
+                            android:layout_height="111dp"
                             android:layout_marginTop="8dp"
                             android:contentDescription="Survey Icon"
                             android:scaleType="fitXY"
-                            android:src="@drawable/ic_menu" />
+                            android:src="@drawable/survey" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -189,14 +191,16 @@
             android:padding="16dp"
             android:gravity="center">
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/button_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="Home"
                 android:padding="8dp"
                 android:src="@drawable/ic_home" />
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/button_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -204,7 +208,8 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_progress" />
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/button_heart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
