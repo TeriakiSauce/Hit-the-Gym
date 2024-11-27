@@ -45,7 +45,16 @@ public class WorkoutPlan {
                     primaryMuscles.add(primaryMusclesArray.getString(j));
                 }
             }
-            Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles);
+            // Extract instructions
+            JSONArray instructionsArray = exerciseJson.optJSONArray("instructions");
+            List<String> instructions = new ArrayList<>();
+            if (instructionsArray != null) {
+                for (int j = 0; j < instructionsArray.length(); j++) {
+                    instructions.add(instructionsArray.getString(j));
+                }
+            }
+            // Create Exercise object
+            Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles, instructions);
             exercises.add(exercise);
         }
         return exercises;

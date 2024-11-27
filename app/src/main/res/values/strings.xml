@@ -45,4 +45,7 @@
     <string name="in_workout_screen">In-Workout Screen</string>
     <string name="start_workout">Start Workout</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="exercise_image">Exercise Image</string>
+    <string name="exercise_description">Exercise Description</string>
 </resources>

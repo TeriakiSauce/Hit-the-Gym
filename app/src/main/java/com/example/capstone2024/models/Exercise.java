@@ -4,18 +4,21 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Exercise implements Serializable {
-    private String name;
-    private String level;
-    private String equipment;
-    private String category;
-    private List<String> primaryMuscles;
+    private final String name;
+    private final String level;
+    private final String equipment;
+    private final String category;
+    private final List<String> primaryMuscles;
 
-    public Exercise(String name, String level, String equipment, String category, List<String> primaryMuscles) {
+    private final List<String> instructions;
+
+    public Exercise(String name, String level, String equipment, String category, List<String> primaryMuscles, List<String> instructions) {
         this.name = name;
         this.level = level;
         this.equipment = equipment;
         this.category = category;
         this.primaryMuscles = primaryMuscles;
+        this.instructions = instructions;
     }
 
     // Getters and setters
@@ -38,5 +41,9 @@ public class Exercise implements Serializable {
 
     public List<String> getPrimaryMuscles() {
         return primaryMuscles;
+    }
+
+    public List<String> getInstructions() {
+        return instructions;
     }
 }
