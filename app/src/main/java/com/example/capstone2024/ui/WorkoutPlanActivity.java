@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
-import com.example.capstone2024.models.Exercise;
-import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.models.WorkoutSession;
 
 import android.content.Intent;

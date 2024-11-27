@@ -1,10 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.SurveyActivity">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Questions -->
+        <TextView
+            android:id="@+id/question1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n1. What is your full name?" />
+
+        <EditText
+            android:id="@+id/answer1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name" />
+
+        <TextView
+            android:id="@+id/question2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n2. What is your age?" />
+
+        <EditText
+            android:id="@+id/answer2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your age" />
+
+        <TextView
+            android:id="@+id/question3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n3. What is your height?" />
+
+        <EditText
+            android:id="@+id/answer3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your height" />
+
+        <TextView
+            android:id="@+id/question4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n4. What is your current weight?" />
+
+        <EditText
+            android:id="@+id/answer4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your current weight" />
+
+        <TextView
+            android:id="@+id/question5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n5. What is your target weight?" />
+
+        <EditText
+            android:id="@+id/answer5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your target weight" />
+
+        <TextView
+            android:id="@+id/question6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n6. What is your workout level?" />
+
+        <RadioGroup
+            android:id="@+id/answer6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/optionBeginner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Beginner" />
+
+            <RadioButton
+                android:id="@+id/optionIntermediate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intermediate" />
+
+            <RadioButton
+                android:id="@+id/optionExpert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expert" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/question7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="\n\n7. What body parts would you like to target?" />
+
+        <CheckBox
+            android:id="@+id/answer7Biceps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Biceps" />
+
+        <CheckBox
+            android:id="@+id/answer7Triceps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Triceps" />
+
+        <CheckBox
+            android:id="@+id/answer7Chest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chest" />
+
+        <CheckBox
+            android:id="@+id/answer7Abs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abs" />
+
+        <CheckBox
+            android:id="@+id/answer7Shoulders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abs" />
+
+        <CheckBox
+            android:id="@+id/answer7Glutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Glutes" />
+
+        <CheckBox
+            android:id="@+id/answer7Legs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Legs" />
+
+        <!-- Submit -->
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+    </LinearLayout>
+</ScrollView>
