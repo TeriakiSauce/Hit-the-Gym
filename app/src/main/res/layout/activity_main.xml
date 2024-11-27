@@ -33,7 +33,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end"
-
                 android:contentDescription="Menu Icon"
                 android:src="@drawable/ic_menu" />
         </LinearLayout>
@@ -79,34 +78,79 @@
                             android:layout_marginTop="8dp"
                             android:weightSum="3">
 
-                            <ImageView
+                            <!-- Push -->
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="100dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:layout_marginEnd="4dp"
-                                android:src="@drawable/bench_press"
-                                android:contentDescription="Push"
-                                android:scaleType="centerCrop"/>
+                                android:orientation="vertical"
+                                android:gravity="center">
 
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="100dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="4dp"
-                                android:src="@drawable/pull"
-                                android:contentDescription="Pull"
-                                android:scaleType="centerCrop"/>
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/bench_press"
+                                    android:contentDescription="Push"
+                                    android:scaleType="centerCrop" />
 
-                            <ImageView
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Push"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+
+                            <!-- Pull -->
+                            <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="100dp"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:src="@drawable/legs"
-                                android:contentDescription="Legs"
-                                android:scaleType="centerCrop"/>
+                                android:orientation="vertical"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/pull"
+                                    android:contentDescription="Pull"
+                                    android:scaleType="centerCrop" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Pull"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+
+                            <!-- Legs -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/legs"
+                                    android:contentDescription="Legs"
+                                    android:scaleType="centerCrop" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Legs"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp"
+                                    android:gravity="center" />
+                            </LinearLayout>
 
                         </LinearLayout>
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -137,11 +181,9 @@
                             android:layout_width="214dp"
                             android:layout_height="150dp"
                             android:layout_marginTop="8dp"
-                            android:layout_weight="1"
                             android:contentDescription="Progress Chart"
                             android:scaleType="fitXY"
                             android:src="@drawable/chart" />
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -174,15 +216,12 @@
                             android:contentDescription="Survey Icon"
                             android:scaleType="fitXY"
                             android:src="@drawable/survey" />
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
         </ScrollView>
 
         <!-- Footer Navigation -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,8 +255,6 @@
                 android:contentDescription="Heart"
                 android:padding="8dp"
                 android:src="@drawable/ic_heart" />
-
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
