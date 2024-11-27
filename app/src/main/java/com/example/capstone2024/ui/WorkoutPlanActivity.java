@@ -1,91 +1,76 @@
 package com.example.capstone2024.ui;
+
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.models.ExerciseSession;
-import com.example.capstone2024.models.WorkoutPlan;
 import com.example.capstone2024.models.WorkoutSession;
 
-import org.json.JSONException;
+import android.content.Intent;
 
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class WorkoutPlanActivity extends AppCompatActivity {
 
-    private WorkoutPlan workoutPlan;
-    private TextView programTextView;
+    private Map<String, WorkoutSession> workoutProgram;
+    private LinearLayout daysLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_plan);
 
-        programTextView = findViewById(R.id.programTextView);
+        daysLayout = findViewById(R.id.daysLayout);
 
-        // Initialize the WorkoutPlan
-        try {
-            InputStream exercisesInputStream = getAssets().open("exercises.json");
-            workoutPlan = new WorkoutPlan(exercisesInputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-            programTextView.setText("Failed to load exercises data.");
-            return;
+        // Retrieve the workoutProgram from the Intent
+        workoutProgram = (HashMap<String, WorkoutSession>) getIntent().getSerializableExtra("WORKOUT_PROGRAM");
+
+        if (workoutProgram != null) {
+            displayWorkoutProgram();
+        } else {
+            // Handle the case when no workout program is received
+            showError("No workout program received.");
         }
+    }
 
-        // User input
-        Map<String, Object> userInput = getUserInput(); // You can define this method or hardcode values
-
-        // Generate workout program
-        Map<String, WorkoutSession> workoutProgram = null;
-        try {
-            workoutProgram = workoutPlan.generateWorkoutProgram(userInput);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Display the workout program
-        StringBuilder programDisplay = new StringBuilder();
+    private void displayWorkoutProgram() {
         for (Map.Entry<String, WorkoutSession> entry : workoutProgram.entrySet()) {
             String day = entry.getKey();
             WorkoutSession workoutSession = entry.getValue();
-            List<ExerciseSession> exerciseSessions = workoutSession.getExerciseSessions();
 
-            programDisplay.append("\n").append(day).append(":\n");
-            for (ExerciseSession exerciseSession : exerciseSessions) {
-                Exercise exercise = exerciseSession.getExercise();
-                String name = exercise.getName();
-                String category = exercise.getCategory();
-                List<String> primaryMuscles = exercise.getPrimaryMuscles();
+            // Create a button for the day
+            Button dayButton = new Button(this);
+            dayButton.setText(day);
+            dayButton.setTextSize(18);
+            dayButton.setPadding(0, 50, 0, 50); // Make the button large
+            dayButton.setAllCaps(false);
 
-                programDisplay.append("  - ").append(name)
-                        .append(" (").append(category).append(") ")
-                        .append(primaryMuscles.toString())
-                        .append(" | Sets: ").append(exerciseSession.getSets())
-                        .append(", Rest: ").append(exerciseSession.getRestTime()).append(" min\n");
-            }
+            // Set OnClickListener for the day button to start WorkoutSessionActivity
+            dayButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Start WorkoutSessionActivity and pass the day's exercises
+                    Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
+                    intent.putExtra("DAY_NAME", day);
+                    intent.putExtra("WORKOUT_SESSION", workoutSession);
+                    startActivity(intent);
+                }
+            });
+
+            // Add the day button to the main layout
+            daysLayout.addView(dayButton);
         }
-
-        programTextView.setText(programDisplay.toString());
     }
 
-    private Map<String, Object> getUserInput() {
-        // You can get this data from user input fields
-        // For now, we'll use hardcoded values
-        Map<String, Object> userInput = new HashMap<>();
-        userInput.put("age", 30);
-        userInput.put("height", 175);
-        userInput.put("weight", 70);
-        userInput.put("target_weight", 65);
-        userInput.put("workout_days", 5);
-        userInput.put("level", "intermediate");
-        userInput.put("equipment", "dumbbell");
-        userInput.put("availability", 1.5);
-        return userInput;
+    private void showError(String message) {
+        // Handle error display as needed
+        // For simplicity, you can use a Toast or add a TextView to the layout
     }
 }

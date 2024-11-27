@@ -1,26 +1,74 @@
 package com.example.capstone2024.ui;
 
-import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.models.Exercise;
+import com.example.capstone2024.models.ExerciseSession;
+import com.example.capstone2024.models.WorkoutSession;
+
+import java.util.List;
 
 public class WorkoutSessionActivity extends AppCompatActivity {
+
+    private String dayName;
+    private WorkoutSession workoutSession;
+    private LinearLayout exercisesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_workout_session);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        exercisesLayout = findViewById(R.id.exercisesLayout);
+
+        // Retrieve the data passed from WorkoutPlanActivity
+        dayName = getIntent().getStringExtra("DAY_NAME");
+        workoutSession = (WorkoutSession) getIntent().getSerializableExtra("WORKOUT_SESSION");
+
+        if (workoutSession != null) {
+            displayExercises();
+        } else {
+            // Handle the case when no workout session is received
+            // You can show an error message or finish the activity
+        }
+    }
+
+    private void displayExercises() {
+        List<ExerciseSession> exerciseSessions = workoutSession.getExerciseSessions();
+
+        for (ExerciseSession exerciseSession : exerciseSessions) {
+            Exercise exercise = exerciseSession.getExercise();
+            String name = exercise.getName();
+            String category = exercise.getCategory();
+            String primaryMuscles = exercise.getPrimaryMuscles().toString();
+            int sets = exerciseSession.getSets();
+            int restTime = exerciseSession.getRestTime();
+
+            // Create a button for each exercise
+            Button exerciseButton = new Button(this);
+            exerciseButton.setText(name + "\n" + category + " | Sets: " + sets + ", Rest: " + restTime + " min");
+            exerciseButton.setTextSize(16);
+            exerciseButton.setPadding(0, 30, 0, 30); // Adjust padding as needed
+            exerciseButton.setAllCaps(false);
+
+            // Set OnClickListener for the exercise button
+            exerciseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle exercise button click
+                    // For example, navigate to an ExerciseDetailActivity
+                }
+            });
+
+            // Add the exercise button to the layout
+            exercisesLayout.addView(exerciseButton);
+        }
     }
 }

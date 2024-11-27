@@ -46,10 +46,6 @@
             android:name=".ui.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".WorkoutActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Capstone2024" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
