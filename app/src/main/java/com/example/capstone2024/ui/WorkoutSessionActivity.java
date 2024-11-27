@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,31 +49,40 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         for (ExerciseSession exerciseSession : exerciseSessions) {
             Exercise exercise = exerciseSession.getExercise();
             String name = exercise.getName();
-            String category = exercise.getCategory();
-            String primaryMuscles = exercise.getPrimaryMuscles().toString();
             int sets = exerciseSession.getSets();
-            int restTime = exerciseSession.getRestTime();
+            int reps = exerciseSession.getReps(); // Assuming reps exist
+            int progressPercentage = calculateProgress(exerciseSession); // Custom function for progress
 
-            // Create a button for each exercise
-            Button exerciseButton = new Button(this);
-            exerciseButton.setText(name + "\n" + category + " | Sets: " + sets + ", Rest: " + restTime + " min");
-            exerciseButton.setTextSize(16);
-            exerciseButton.setPadding(0, 30, 0, 30); // Adjust padding as needed
-            exerciseButton.setAllCaps(false);
+            // Inflate the custom layout
+            View exerciseCard = getLayoutInflater().inflate(R.layout.exercise_card, exercisesLayout, false);
 
-            // Set OnClickListener for the exercise button
-            exerciseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Start ExerciseSessionActivity and pass the Exercise object
-                    Intent intent = new Intent(WorkoutSessionActivity.this, ExerciseSessionActivity.class);
-                    intent.putExtra("EXERCISE", exercise);
-                    startActivity(intent);
-                }
+            // Bind the data to the views
+            TextView exerciseName = exerciseCard.findViewById(R.id.exerciseName);
+            TextView exerciseDetails = exerciseCard.findViewById(R.id.exerciseDetails);
+            ProgressBar progressBar = exerciseCard.findViewById(R.id.progressBar);
+            TextView progressText = exerciseCard.findViewById(R.id.progressText);
+
+            exerciseName.setText(name);
+            exerciseDetails.setText("Sets: " + sets + " | Reps: " + reps);
+            progressBar.setProgress(progressPercentage);
+            progressText.setText(progressPercentage + "%");
+
+            // Set the OnClickListener for the card
+            exerciseCard.setOnClickListener(v -> {
+                Intent intent = new Intent(WorkoutSessionActivity.this, ExerciseSessionActivity.class);
+                intent.putExtra("EXERCISE", exercise);
+                startActivity(intent);
             });
 
-            // Add the exercise button to the layout
-            exercisesLayout.addView(exerciseButton);
+            // Add the card to the layout
+            exercisesLayout.addView(exerciseCard);
         }
+    }
+
+    private int calculateProgress(ExerciseSession session) {
+        // Placeholder for progress calculation logic
+        int totalSets = session.getSets();
+        int completedSets = session.getCompletedSets(); // Assuming you have a way to track completed sets
+        return (int) ((completedSets / (float) totalSets) * 100);
     }
 }

@@ -6,11 +6,12 @@ public class ExerciseSession implements Serializable {
     private Exercise exercise;
     private int sets;
     private int restTime; // in minutes
-
-    public ExerciseSession(Exercise exercise, int sets, int restTime) {
+    private int reps;
+    public ExerciseSession(Exercise exercise, int sets, int restTime, int reps) {
         this.exercise = exercise;
         this.sets = sets;
         this.restTime = restTime;
+        this.reps = reps;
     }
 
     // Getters and setters
@@ -25,5 +26,13 @@ public class ExerciseSession implements Serializable {
 
     public int getRestTime() {
         return restTime;
+    }
+
+    public int getCompletedSets() {
+        return 1;
+    }
+
+    public int getReps() {
+        return reps;
     }
 }

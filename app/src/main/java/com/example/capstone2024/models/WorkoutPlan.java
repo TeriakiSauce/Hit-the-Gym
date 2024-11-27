@@ -120,13 +120,13 @@ public class WorkoutPlan {
                 WorkoutSession workoutSession = program.get(day);
 
                 // Create ExerciseSession with default sets and rest time
-                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1); // 4 sets, 1 minute rest
+                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1, 10); // 4 sets, 1 minute rest
                 workoutSession.getExerciseSessions().add(exerciseSession);
 
                 // Optionally add a corresponding stretch
                 if (!muscleStretches.isEmpty()) {
                     Exercise stretchExercise = muscleStretches.get(0);
-                    ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1);
+                    ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1, 10);
                     workoutSession.getExerciseSessions().add(stretchSession);
                 }
                 dayIndex++;

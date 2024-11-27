@@ -11,6 +11,7 @@ import com.example.capstone2024.R;
 import com.example.capstone2024.models.WorkoutSession;
 
 import android.content.Intent;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,27 +44,24 @@ public class WorkoutPlanActivity extends AppCompatActivity {
             String day = entry.getKey();
             WorkoutSession workoutSession = entry.getValue();
 
-            // Create a button for the day
-            Button dayButton = new Button(this);
-            dayButton.setText(day);
-            dayButton.setTextSize(18);
-            dayButton.setPadding(0, 50, 0, 50); // Make the button large
-            dayButton.setAllCaps(false);
+            // Inflate the custom card layout
+            View dayCard = getLayoutInflater().inflate(R.layout.day_card, daysLayout, false);
 
-            // Set OnClickListener for the day button to start WorkoutSessionActivity
-            dayButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Start WorkoutSessionActivity and pass the day's exercises
-                    Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
-                    intent.putExtra("DAY_NAME", day);
-                    intent.putExtra("WORKOUT_SESSION", workoutSession);
-                    startActivity(intent);
-                }
+            // Bind data to the views
+            TextView dayNameText = dayCard.findViewById(R.id.dayName);
+            dayNameText.setText(day);
+
+            // Set OnClickListener for the card
+            dayCard.setOnClickListener(v -> {
+                // Start WorkoutSessionActivity and pass the day's exercises
+                Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
+                intent.putExtra("DAY_NAME", day);
+                intent.putExtra("WORKOUT_SESSION", workoutSession);
+                startActivity(intent);
             });
 
-            // Add the day button to the main layout
-            daysLayout.addView(dayButton);
+            // Add the card to the main layout
+            daysLayout.addView(dayCard);
         }
     }
 
