@@ -10,6 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!-- Dynamic exercise cards will be added here -->
+        <!-- Dynamic day cards will be shown here -->
     </LinearLayout>
 </ScrollView>

@@ -49,7 +49,7 @@
             android:name=".ui.workoutplan.WorkoutPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.survey.SurveyActivity"
+            android:name=".ui.usersetup.UserSetupActivity"
             android:exported="false" />
         <activity
             android:name=".ui.UserProfileActivity"

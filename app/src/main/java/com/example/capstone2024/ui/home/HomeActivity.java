@@ -2,113 +2,84 @@ package com.example.capstone2024.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
-import com.example.capstone2024.models.WorkoutPlan;
+import com.example.capstone2024.contracts.HomeContract;
 import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.presenters.HomePresenter;
 import com.example.capstone2024.ui.ProgressActivity;
-import com.example.capstone2024.ui.survey.SurveyActivity;
+import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class HomeActivity extends AppCompatActivity {
-
-    //Home Screen Buttons
-    private WorkoutPlan workoutPlan;
-    private Map<String, WorkoutSession> workoutProgram;
+public class HomeActivity extends AppCompatActivity implements HomeContract.View {
     private ImageButton homeButton;
     private ImageButton progressButton;
     private ImageButton heartButton;
     private ImageButton surveyButton;
     private ImageButton chartButton;
 
+    private HomeContract.Presenter presenter;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        try {
-            InputStream exercisesInputStream = getAssets().open("exercises.json");
-            workoutPlan = new WorkoutPlan(exercisesInputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return; // Exit if data loading fails
-        }
+        // Initialize UI
+        homeButton = findViewById(R.id.button_home);
+        progressButton = findViewById(R.id.button_progress);
+        chartButton = findViewById(R.id.button_chart);
+        heartButton = findViewById(R.id.button_heart);
+        surveyButton = findViewById(R.id.button_survey);
 
-        // User input
-        Map<String, Object> userInput = new HashMap<>();
-        userInput.put("age", 30);
-        userInput.put("height", 175);
-        userInput.put("weight", 70);
-        userInput.put("target_weight", 65);
-        userInput.put("workout_days", 5);
-        userInput.put("level", "intermediate");
-        userInput.put("equipment", "dumbbell");
-        userInput.put("availability", 1.5);
+        // Initialize Presenter
+        presenter = new HomePresenter(this, this);
 
-        // Generate the workout program
-        workoutProgram = workoutPlan.generateWorkoutProgram(userInput);
-        homeButton = (ImageButton) findViewById(R.id.button_home);
+        // Set up listeners
+        homeButton.setOnClickListener(v -> {});
+        progressButton.setOnClickListener(v -> presenter.handleProgressNavigation());
+        chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
+        heartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
+        surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
 
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        // Initialize Workout Plan
+        presenter.initializeWorkoutPlan();
+    }
 
-        progressButton = (ImageButton) findViewById(R.id.button_progress);
+    @Override
+    public void displayWorkoutProgram(Map<String, WorkoutSession> workoutProgram) {
+        // Placeholder: Logic for updating UI with workout program if needed
+    }
 
-        progressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Start SurveyActivity
-                Intent intent = new Intent(HomeActivity.this, ProgressActivity.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void navigateToSurvey() {
+        Intent intent = new Intent(HomeActivity.this, UserSetupActivity.class);
+        startActivity(intent);
+    }
 
-        chartButton = (ImageButton) findViewById(R.id.button_chart);
+    @Override
+    public void navigateToProgress() {
+        Intent intent = new Intent(HomeActivity.this, ProgressActivity.class);
+        startActivity(intent);
+    }
 
-        chartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Start ExerciseActivity
-                Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
-                intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram) {
+        Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
+        intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
+        startActivity(intent);
+    }
 
-        heartButton = (ImageButton) findViewById(R.id.button_heart);
-
-        heartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Start ExerciseActivity
-                Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
-                intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
-                startActivity(intent);
-            }
-        });
-
-        surveyButton = (ImageButton) findViewById(R.id.button_survey);
-
-        surveyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Start ExerciseActivity
-                Intent intent = new Intent(HomeActivity.this, SurveyActivity.class);
-                startActivity(intent);
-            }
-        });
-
+    @Override
+    public void showError(String message) {
+        // Example: Show a Toast
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

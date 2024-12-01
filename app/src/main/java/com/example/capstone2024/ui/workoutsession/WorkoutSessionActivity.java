@@ -7,22 +7,23 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.contracts.WorkoutSessionContract;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.models.ExerciseSession;
-import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.presenters.WorkoutSessionPresenter;
 import com.example.capstone2024.ui.exercisesession.ExerciseSessionActivity;
 
 import java.util.List;
 
-public class WorkoutSessionActivity extends AppCompatActivity {
-
+public class WorkoutSessionActivity extends AppCompatActivity implements WorkoutSessionContract.View {
     private String dayName;
-    private WorkoutSession workoutSession;
     private LinearLayout exercisesLayout;
+    private WorkoutSessionContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +32,32 @@ public class WorkoutSessionActivity extends AppCompatActivity {
 
         exercisesLayout = findViewById(R.id.exercisesLayout);
 
-        // Retrieve the data passed from WorkoutPlanActivity
-        dayName = getIntent().getStringExtra("DAY_NAME");
-        workoutSession = (WorkoutSession) getIntent().getSerializableExtra("WORKOUT_SESSION");
+        // Initialize the presenter
+        presenter = new WorkoutSessionPresenter(this);
 
-        if (workoutSession != null) {
-            displayExercises();
-        } else {
-            // Handle the case when no workout session is received
-            // You can show an error message or finish the activity
-        }
+        // Retrieve data from Intent
+        dayName = getIntent().getStringExtra("DAY_NAME");
+        Object workoutSessionData = getIntent().getSerializableExtra("WORKOUT_SESSION");
+
+        // Load workout session
+        presenter.loadWorkoutSession(dayName, workoutSessionData);
     }
 
-    private void displayExercises() {
-        List<ExerciseSession> exerciseSessions = workoutSession.getExerciseSessions();
+    @Override
+    public void displayExercises(List<ExerciseSession> exerciseSessions) {
+        exercisesLayout.removeAllViews(); // Clear any existing views
 
         for (ExerciseSession exerciseSession : exerciseSessions) {
             Exercise exercise = exerciseSession.getExercise();
             String name = exercise.getName();
             int sets = exerciseSession.getSets();
-            int reps = exerciseSession.getReps(); // Assuming reps exist
-            int progressPercentage = calculateProgress(exerciseSession); // Custom function for progress
+            int reps = exerciseSession.getReps();
+            int progressPercentage = calculateProgress(exerciseSession);
 
             // Inflate the custom layout
             View exerciseCard = getLayoutInflater().inflate(R.layout.exercise_card, exercisesLayout, false);
 
-            // Bind the data to the views
+            // Bind data to views
             TextView exerciseName = exerciseCard.findViewById(R.id.exerciseName);
             TextView exerciseDetails = exerciseCard.findViewById(R.id.exerciseDetails);
             ProgressBar progressBar = exerciseCard.findViewById(R.id.progressBar);
@@ -66,6 +67,7 @@ public class WorkoutSessionActivity extends AppCompatActivity {
             exerciseDetails.setText("Sets: " + sets + " | Reps: " + reps);
             progressBar.setProgress(progressPercentage);
             progressText.setText(progressPercentage + "%");
+
 
             // Set the OnClickListener for the card
             exerciseCard.setOnClickListener(v -> {
@@ -79,10 +81,14 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
     private int calculateProgress(ExerciseSession session) {
-        // Placeholder for progress calculation logic
         int totalSets = session.getSets();
-        int completedSets = session.getCompletedSets(); // Assuming you have a way to track completed sets
+        int completedSets = session.getCompletedSets(); // Assuming this method exists
         return (int) ((completedSets / (float) totalSets) * 100);
     }
 }

@@ -2,26 +2,28 @@ package com.example.capstone2024.ui.exercisesession;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import com.example.capstone2024.R;
-import com.example.capstone2024.models.Exercise;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
+import com.example.capstone2024.R;
+import com.example.capstone2024.contracts.ExerciseSessionContract;
+import com.example.capstone2024.models.Exercise;
+import com.example.capstone2024.presenters.ExerciseSessionPresenter;
 
-public class ExerciseSessionActivity extends AppCompatActivity {
-
-    private Exercise exercise;
-
+public class ExerciseSessionActivity extends AppCompatActivity implements ExerciseSessionContract.View {
     private TextView exerciseNameTextView;
     private ImageView exerciseImageView;
     private TextView exerciseInstructionsTextView;
     private TableLayout setsTableLayout;
+
+    private ExerciseSessionContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,89 +36,65 @@ public class ExerciseSessionActivity extends AppCompatActivity {
         exerciseInstructionsTextView = findViewById(R.id.exerciseInstructionsTextView);
         setsTableLayout = findViewById(R.id.setsTableLayout);
 
-        // Retrieve the Exercise object from the Intent
-        exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
+        // Initialize presenter
+        presenter = new ExerciseSessionPresenter(this);
 
-        if (exercise != null) {
-            displayExerciseDetails();
-            setupSetsTable();
-        } else {
-            // Handle the case when no exercise data is received
-            finish();
-        }
+        // Load exercise data from Intent
+        Exercise exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
+
+        presenter.loadExerciseSession(exercise);
     }
 
-    private void displayExerciseDetails() {
-        // Display exercise name
-        exerciseNameTextView.setText(exercise.getName());
-
-        // Set the local placeholder image
-        exerciseImageView.setImageResource(R.drawable.placeholder_image);
-
-        // Display exercise instructions
-        displayInstructions();
+    @Override
+    public void displayExerciseDetails(String name, int imageResource, String instructions) {
+        exerciseNameTextView.setText(name);
+        exerciseImageView.setImageResource(imageResource);
+        exerciseInstructionsTextView.setText(instructions);
     }
 
-    private void displayInstructions() {
-        List<String> instructions = exercise.getInstructions();
-        if (instructions != null && !instructions.isEmpty()) {
-            StringBuilder instructionsBuilder = new StringBuilder();
-            for (int i = 0; i < instructions.size(); i++) {
-                instructionsBuilder.append((i + 1) + ". " + instructions.get(i) + "\n\n");
-            }
-            exerciseInstructionsTextView.setText(instructionsBuilder.toString());
-        } else {
-            exerciseInstructionsTextView.setText("No instructions available.");
-        }
-    }
+    @Override
+    public void setupSetsTable(int numberOfSets) {
+        setsTableLayout.removeAllViews(); // Clear any existing rows
 
-    private void setupSetsTable() {
         // Add table headers
         TableRow headerRow = new TableRow(this);
-
-        TextView setTypeHeader = new TextView(this);
-        setTypeHeader.setText("Set Type");
-        setTypeHeader.setPadding(8, 8, 8, 8);
-        headerRow.addView(setTypeHeader);
-
-        TextView repsHeader = new TextView(this);
-        repsHeader.setText("Reps");
-        repsHeader.setPadding(8, 8, 8, 8);
-        headerRow.addView(repsHeader);
-
-        TextView weightHeader = new TextView(this);
-        weightHeader.setText("Weight");
-        weightHeader.setPadding(8, 8, 8, 8);
-        headerRow.addView(weightHeader);
-
+        headerRow.addView(createHeaderTextView("Set Type"));
+        headerRow.addView(createHeaderTextView("Reps"));
+        headerRow.addView(createHeaderTextView("Weight"));
         setsTableLayout.addView(headerRow);
 
-        // Add rows for each set (e.g., 4 sets)
-        int numberOfSets = 4; // Adjust as needed
+        // Add rows for sets
         for (int i = 0; i < numberOfSets; i++) {
             TableRow setRow = new TableRow(this);
 
-            // Set Type input
-            EditText setTypeInput = new EditText(this);
-            setTypeInput.setHint("Set " + (i + 1));
-            setTypeInput.setPadding(8, 8, 8, 8);
+            EditText setTypeInput = createEditText("Set " + (i + 1));
+            EditText repsInput = createEditText("Reps");
+            EditText weightInput = createEditText("Weight");
+
             setRow.addView(setTypeInput);
-
-            // Reps input
-            EditText repsInput = new EditText(this);
-            repsInput.setHint("Reps");
-            repsInput.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
-            repsInput.setPadding(8, 8, 8, 8);
             setRow.addView(repsInput);
-
-            // Weight input
-            EditText weightInput = new EditText(this);
-            weightInput.setHint("Weight");
-            weightInput.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            weightInput.setPadding(8, 8, 8, 8);
             setRow.addView(weightInput);
 
             setsTableLayout.addView(setRow);
         }
+    }
+
+    private TextView createHeaderTextView(String text) {
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setPadding(8, 8, 8, 8);
+        return textView;
+    }
+
+    private EditText createEditText(String hint) {
+        EditText editText = new EditText(this);
+        editText.setHint(hint);
+        editText.setPadding(8, 8, 8, 8);
+        return editText;
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

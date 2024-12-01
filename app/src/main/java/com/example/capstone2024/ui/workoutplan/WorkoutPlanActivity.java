@@ -1,25 +1,25 @@
 package com.example.capstone2024.ui.workoutplan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.contracts.WorkoutPlanContract;
 import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.presenters.WorkoutPlanPresenter;
 import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
-import android.content.Intent;
-import android.widget.TextView;
-
-import java.util.HashMap;
 import java.util.Map;
 
-public class WorkoutPlanActivity extends AppCompatActivity {
-
-    private Map<String, WorkoutSession> workoutProgram;
+public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPlanContract.View {
     private LinearLayout daysLayout;
+    private WorkoutPlanContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +28,16 @@ public class WorkoutPlanActivity extends AppCompatActivity {
 
         daysLayout = findViewById(R.id.daysLayout);
 
-        // Retrieve the workoutProgram from the Intent
-        workoutProgram = (HashMap<String, WorkoutSession>) getIntent().getSerializableExtra("WORKOUT_PROGRAM");
+        // Initialize the presenter
+        presenter = new WorkoutPlanPresenter(this);
 
-        if (workoutProgram != null) {
-            displayWorkoutProgram();
-        } else {
-            // Handle the case when no workout program is received
-            showError("No workout program received.");
-        }
+        // Load the workout program
+        presenter.loadWorkoutProgram(getIntent());
     }
 
-    private void displayWorkoutProgram() {
+    @Override
+    public void displayWorkoutProgram(Map<String, WorkoutSession> workoutProgram) {
+        daysLayout.removeAllViews(); // Clear existing views
         for (Map.Entry<String, WorkoutSession> entry : workoutProgram.entrySet()) {
             String day = entry.getKey();
             WorkoutSession workoutSession = entry.getValue();
@@ -53,20 +51,19 @@ public class WorkoutPlanActivity extends AppCompatActivity {
 
             // Set OnClickListener for the card
             dayCard.setOnClickListener(v -> {
-                // Start WorkoutSessionActivity and pass the day's exercises
                 Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
                 intent.putExtra("DAY_NAME", day);
                 intent.putExtra("WORKOUT_SESSION", workoutSession);
                 startActivity(intent);
             });
 
-            // Add the card to the main layout
+            // Add the card to the layout
             daysLayout.addView(dayCard);
         }
     }
 
-    private void showError(String message) {
-        // Handle error display as needed
-        // For simplicity, you can use a Toast or add a TextView to the layout
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
