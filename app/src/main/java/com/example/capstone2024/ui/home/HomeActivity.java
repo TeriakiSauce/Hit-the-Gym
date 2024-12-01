@@ -1,4 +1,4 @@
-package com.example.capstone2024.ui;
+package com.example.capstone2024.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.capstone2024.R;
 import com.example.capstone2024.models.WorkoutPlan;
 import com.example.capstone2024.models.WorkoutSession;
-import com.example.capstone2024.ui.SurveyActivity;
+import com.example.capstone2024.ui.ProgressActivity;
+import com.example.capstone2024.ui.survey.SurveyActivity;
+import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 
 import java.io.InputStream;
 import java.util.HashMap;

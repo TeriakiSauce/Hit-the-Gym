@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Capstone2024"
         tools:targetApi="31">
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.WorkoutSessionActivity"
+            android:name=".ui.workoutsession.WorkoutSessionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.SettingsActivity"
@@ -40,29 +40,20 @@
             android:name=".ui.ExerciseDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ExerciseSessionActivity"
+            android:name=".ui.exercisesession.ExerciseSessionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.WorkoutPlanActivity"
+            android:name=".ui.workoutplan.WorkoutPlanActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SurveyActivity"
+            android:name=".ui.survey.SurveyActivity"
             android:exported="false" />
         <activity
             android:name=".ui.UserProfileActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

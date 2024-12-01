@@ -18,7 +18,7 @@ public class WorkoutPlan {
         this.exercisesList = parseExercises(exercisesJsonArray);
     }
 
-    // Load exercises from JSON InputStream
+    // Load exercises from JSON
     private JSONArray loadExercises(InputStream inputStream) {
         try (Scanner scanner = new Scanner(inputStream)) {
             String jsonStr = scanner.useDelimiter("\\A").next();
@@ -45,7 +45,6 @@ public class WorkoutPlan {
                     primaryMuscles.add(primaryMusclesArray.getString(j));
                 }
             }
-            // Extract instructions
             JSONArray instructionsArray = exerciseJson.optJSONArray("instructions");
             List<String> instructions = new ArrayList<>();
             if (instructionsArray != null) {
@@ -60,10 +59,6 @@ public class WorkoutPlan {
         return exercises;
     }
 
-    // The rest of your methods, adjusted to use Exercise objects
-    // ...
-
-    // Modify generateWorkoutProgram to return Map<String, WorkoutSession>
     public Map<String, WorkoutSession> generateWorkoutProgram(Map<String, Object> userInput) {
         int workoutDays = (int) userInput.getOrDefault("workout_days", 3);
         double availability = (double) userInput.getOrDefault("availability", 1.0);
@@ -86,7 +81,7 @@ public class WorkoutPlan {
             targetExercises.put(muscle, 2 * baseTarget);
         }
 
-        // Filter exercises based on user parameters
+        // Filter exercises based on parameters
         List<Exercise> filteredExercises = filterExercisesByParameters(userInput);
 
         // Create weekly program
@@ -95,7 +90,7 @@ public class WorkoutPlan {
         return this.workoutProgram;
     }
 
-    // Adjust methods to work with Exercise objects
+
     private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays) {
         Map<String, WorkoutSession> program = new LinkedHashMap<>();
         for (int i = 0; i < workoutDays; i++) {

@@ -1,14 +1,14 @@
-package com.example.capstone2024.ui;
+package com.example.capstone2024.ui.workoutplan;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
 import android.content.Intent;
 import android.widget.TextView;

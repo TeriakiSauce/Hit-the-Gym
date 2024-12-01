@@ -1,10 +1,9 @@
-package com.example.capstone2024.ui;
+package com.example.capstone2024.ui.exercisesession;
 
 
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
