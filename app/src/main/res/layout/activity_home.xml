@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#333333"
-    android:padding="0dp">
+    android:padding="0dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,7 +99,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Push"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="14sp"
+                                    android:textSize="18sp"
                                     android:gravity="center" />
                             </LinearLayout>
 
@@ -122,7 +123,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Pull"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="14sp"
+                                    android:textSize="18sp"
                                     android:gravity="center" />
                             </LinearLayout>
 
@@ -146,7 +147,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Legs"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="14sp"
+                                    android:textSize="18sp"
                                     android:gravity="center" />
                             </LinearLayout>
 
@@ -174,16 +175,19 @@
                             android:text="Progress Tracking"
                             android:textColor="#FFFFFF"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
 
                         <ImageButton
                             android:id="@+id/button_chart"
-                            android:layout_width="214dp"
-                            android:layout_height="150dp"
+                            android:layout_width="231dp"
+                            android:layout_height="180dp"
+                            android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:contentDescription="Progress Chart"
                             android:scaleType="fitXY"
                             android:src="@drawable/chart" />
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -206,12 +210,14 @@
                             android:text="User Setup"
                             android:textColor="#FFFFFF"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
 
                         <ImageButton
                             android:id="@+id/button_survey"
-                            android:layout_width="179dp"
-                            android:layout_height="111dp"
+                            android:layout_width="174dp"
+                            android:layout_height="162dp"
+                            android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:contentDescription="Survey Icon"
                             android:scaleType="fitXY"
