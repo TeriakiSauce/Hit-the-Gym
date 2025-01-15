@@ -43,7 +43,7 @@
             android:name=".ui.exercisesession.ExerciseSessionActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.CalendarActivity"
+            android:name=".ui.WorkoutCalendarActivity"
             android:exported="false" />
         <activity
             android:name=".ui.workoutplan.WorkoutPlanActivity"

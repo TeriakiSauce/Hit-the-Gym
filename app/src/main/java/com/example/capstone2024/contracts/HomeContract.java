@@ -10,7 +10,9 @@ public interface HomeContract {
         void navigateToSurvey();
         void navigateToProgress();
         void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram);
+        void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram);
         void showError(String message);
+
     }
 
     interface Presenter {
@@ -18,5 +20,6 @@ public interface HomeContract {
         void handleSurveyNavigation();
         void handleProgressNavigation();
         void handleWorkoutPlanNavigation();
+        void handleWorkoutCalendarNavigation();
     }
 }

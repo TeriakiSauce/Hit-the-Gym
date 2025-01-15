@@ -12,6 +12,7 @@ import com.example.capstone2024.contracts.HomeContract;
 import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.HomePresenter;
 import com.example.capstone2024.ui.ProgressActivity;
+import com.example.capstone2024.ui.WorkoutCalendarActivity;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 
@@ -46,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         homeButton.setOnClickListener(v -> {});
         progressButton.setOnClickListener(v -> presenter.handleProgressNavigation());
         chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
-        heartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
+        heartButton.setOnClickListener(v -> presenter.handleWorkoutCalendarNavigation());
         surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
 
         // Initialize Workout Plan
@@ -73,6 +74,12 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     @Override
     public void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram) {
         Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
+        intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
+        startActivity(intent);
+    }
+    @Override
+    public void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram) {
+        Intent intent = new Intent(HomeActivity.this, WorkoutCalendarActivity.class);
         intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
         startActivity(intent);
     }
