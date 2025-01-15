@@ -1,9 +1,12 @@
 package com.example.capstone2024.ui.exercisesession;
 
 import static nl.dionsegijn.konfetti.core.Position.Relative;
+
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.example.capstone2024.contracts.ExerciseSessionContract;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.presenters.ExerciseSessionPresenter;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +49,10 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     private TableLayout setsTableLayout;
 
     private ExerciseSessionContract.Presenter presenter;
+    private Handler imageCycleHandler = new Handler();
+    private int currentImageIndex = 0; // Tracks which image to display (0 or 1)
+    private String exerciseName; // Used to load images
+    private boolean isCyclingImages = false; // To stop the cycling when needed
 
     private KonfettiView konfettiView = null;
     private Shape.DrawableShape drawableShape = null;
@@ -70,7 +78,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
             public void onClick(View v) {
                 if (isExpanded) {
                     // Collapse instructions
-                    exerciseInstructionsTextView.setMaxLines(3);
+                    exerciseInstructionsTextView.setMaxLines(5);
                     exerciseInstructionsTextView.setEllipsize(TextUtils.TruncateAt.END);
                     toggleInstructionsButton.setText("Show More");
                 } else {
@@ -89,14 +97,61 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         // Load exercise data from Intent
         Exercise exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
 
+        if (exercise != null) {
+            exerciseName = exercise.getName().replace(" ", "_"); // Convert exercise name to folder name
+        }
+
         presenter.loadExerciseSession(exercise);
     }
 
     @Override
-    public void displayExerciseDetails(String name, int imageResource, String instructions) {
+    public void displayExerciseDetails(String name, Drawable imageResource, String instructions) {
         exerciseNameTextView.setText(name);
-        exerciseImageView.setImageResource(imageResource);
+        exerciseImageView.setImageDrawable(imageResource);
         exerciseInstructionsTextView.setText(instructions);
+
+        startImageCycling();
+    }
+
+    private void startImageCycling() {
+        isCyclingImages = true;
+        imageCycleHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isCyclingImages) return;
+
+                // Load the next image (0 -> 1 -> 0)
+                currentImageIndex = (currentImageIndex + 1) % 2;
+
+                // Load the image dynamically from assets
+                Drawable nextImage = loadImageFromAssets(exerciseName, currentImageIndex);
+                if (nextImage != null) {
+                    exerciseImageView.setImageDrawable(nextImage);
+                }
+
+                // Schedule the next cycle
+                imageCycleHandler.postDelayed(this, 1000); // Change image every 1 second
+            }
+        }, 1000);
+    }
+
+    private Drawable loadImageFromAssets(String exerciseName, int imageIndex) {
+        try {
+            AssetManager assetManager = getAssets();
+            String imagePath = "images/" + exerciseName + "/" + imageIndex + ".jpg";
+            return Drawable.createFromStream(assetManager.open(imagePath), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop the image cycling to avoid memory leaks
+        isCyclingImages = false;
+        imageCycleHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
