@@ -28,7 +28,6 @@
                 android:id="@+id/exerciseNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Squats"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -39,10 +38,11 @@
             <ImageView
                 android:id="@+id/exerciseImageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerInside"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:contentDescription="Exercise Image"
-                android:src="@drawable/placeholder_image"
                 android:background="@color/white"
                 android:layout_marginBottom="8dp" />
 
@@ -110,7 +110,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/check_icon"
-                        android:contentDescription="Check Icon" />
+                        android:contentDescription="Check Icon"
+                        android:background="@color/white" />
                 </TableRow>
             </TableLayout>
 
