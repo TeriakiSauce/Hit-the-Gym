@@ -110,7 +110,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/check_icon"
-                        android:contentDescription="Check Icon" />
+                        android:contentDescription="Check Icon"
+                        android:background="@color/white" />
                 </TableRow>
             </TableLayout>
 

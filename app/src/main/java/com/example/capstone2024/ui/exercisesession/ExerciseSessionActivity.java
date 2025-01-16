@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -124,7 +125,12 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
                 currentImageIndex = (currentImageIndex + 1) % 2;
 
                 // Load the image dynamically from assets
-                Drawable nextImage = loadImageFromAssets(exerciseName, currentImageIndex);
+                Drawable nextImage = null;
+                try {
+                    nextImage = loadImageFromAssets(exerciseName, currentImageIndex);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 if (nextImage != null) {
                     exerciseImageView.setImageDrawable(nextImage);
                 }
@@ -135,14 +141,15 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         }, 1000);
     }
 
-    private Drawable loadImageFromAssets(String exerciseName, int imageIndex) {
+    private Drawable loadImageFromAssets(String exerciseName, int imageIndex) throws IOException {
         try {
             AssetManager assetManager = getAssets();
             String imagePath = "images/" + exerciseName + "/" + imageIndex + ".jpg";
             return Drawable.createFromStream(assetManager.open(imagePath), null);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            AssetManager assetManager = getAssets();
+            String imagePath = "images/placeholder_image.png";
+            return Drawable.createFromStream(assetManager.open(imagePath), null);
         }
     }
 
@@ -215,10 +222,10 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
 
                     completedSets[0]++;
                     konfettiView.start(party); // Trigger confetti
-                    Toast.makeText(this, "Set " + setNumber + " completed!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Set " + setNumber + " completed!", Toast.LENGTH_SHORT).show();
                 } else {
                     completedSets[0]--;
-                    Toast.makeText(this, "Set " + setNumber + " uncompleted!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Set " + setNumber + " uncompleted!", Toast.LENGTH_SHORT).show();
                 }
                 // Update progress bar
                 progressBar.setProgress(completedSets[0]);
@@ -233,38 +240,22 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         }
     }
 
-    @NonNull
-    private CheckBox getCheckBox(int i, int[] completedSets, ProgressBar progressBar) {
-        final int setNumber = i + 1;
-
-        CheckBox completionCheckBox = new CheckBox(this);
-        completionCheckBox.setPadding(8, 8, 8, 8);
-        completionCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                completedSets[0]++;
-                Toast.makeText(this, "Set " + setNumber + " completed!", Toast.LENGTH_SHORT).show();
-            } else {
-                completedSets[0]--;
-                Toast.makeText(this, "Set " + setNumber + " uncompleted!", Toast.LENGTH_SHORT).show();
-            }
-
-            // Update progress bar
-            progressBar.setProgress(completedSets[0]);
-        });
-        return completionCheckBox;
-    }
-
     private TextView createHeaderTextView(String text) {
         TextView textView = new TextView(this);
         textView.setText(text);
-        textView.setPadding(8, 8, 8, 8);
+        textView.setTextSize(14);
+        textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+        textView.setGravity(Gravity.CENTER);   // Center text horizontally
         return textView;
     }
 
     private EditText createEditText(String hint) {
         EditText editText = new EditText(this);
         editText.setHint(hint);
-        editText.setPadding(8, 8, 8, 8);
+        editText.setTextSize(14);
+        editText.setTextColor(ContextCompat.getColor(this, R.color.white));
+        editText.setHintTextColor(ContextCompat.getColor(this, R.color.gray));
+        editText.setGravity(Gravity.CENTER);   // Center text horizontally
         return editText;
     }
 
