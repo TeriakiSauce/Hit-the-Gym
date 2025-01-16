@@ -14,4 +14,6 @@
     <color name="light_text">#FFFFFF</color>
     <color name="hint_text">#B0B0B0</color>
     <color name="button_background">#1F1F1F</color>
+    <color name="blue">#0000FF</color>
+    <color name="transparent">#00000000</color>
 </resources>

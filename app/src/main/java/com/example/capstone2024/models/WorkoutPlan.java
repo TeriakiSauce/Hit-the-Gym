@@ -205,9 +205,4 @@ public class WorkoutPlan {
 
         return muscleGroups;
     }
-
-    // Getter
-    public Map<String, WorkoutSession> getWorkoutProgram() {
-        return workoutProgram;
-    }
 }

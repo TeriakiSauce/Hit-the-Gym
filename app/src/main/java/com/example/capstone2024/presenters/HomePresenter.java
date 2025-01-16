@@ -63,4 +63,12 @@ public class HomePresenter implements HomeContract.Presenter {
             view.showError("Workout plan is not initialized.");
         }
     }
+
+    public void handleWorkoutCalendarNavigation() {
+        if (workoutProgram != null) {
+            view.navigateToWorkoutCalendar(workoutProgram);
+        } else {
+            view.showError("Workout plan is not initialized.");
+        }
+    }
 }
