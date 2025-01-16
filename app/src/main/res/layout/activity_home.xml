@@ -345,15 +345,15 @@
     </LinearLayout>
 </ScrollView>
 
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/navigation_menu"
-        android:background="#0E3106" />
-    <!-- app:headerLayout="@layout/navigation_header" -->
+<!--    &lt;!&ndash; Navigation Drawer &ndash;&gt;-->
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/nav_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        app:menu="@menu/navigation_menu"-->
+<!--        android:background="#0E3106" />-->
+<!--    &lt;!&ndash; app:headerLayout="@layout/navigation_header" &ndash;&gt;-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
