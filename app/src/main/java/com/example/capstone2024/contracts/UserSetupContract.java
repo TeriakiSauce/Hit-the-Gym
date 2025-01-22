@@ -12,11 +12,11 @@ public interface UserSetupContract {
         void submitSurvey(
                 String name,
                 String age,
-                String height,
                 String currentWeight,
                 String targetWeight,
                 String workoutLevel,
-                List<String> targetBodyParts
+                List<String> targetBodyParts,
+                String equipment
         );
     }
 }
