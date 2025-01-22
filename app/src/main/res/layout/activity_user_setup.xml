@@ -26,7 +26,8 @@
             android:hint="Enter your name"
             android:background="@drawable/edittext_background"
             android:textColorHint="@color/hint_text"
-            android:textColor="@color/light_text" />
+            android:textColor="@color/light_text"
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/question2"
@@ -36,14 +37,11 @@
             android:textColor="@color/light_text"
             android:text="\n\n2. What is your age?" />
 
-        <EditText
+        <Spinner
             android:id="@+id/answer2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your age"
-            android:background="@drawable/edittext_background"
-            android:textColorHint="@color/hint_text"
-            android:textColor="@color/light_text" />
+            android:background="@drawable/spinner_outline"/>
 
         <TextView
             android:id="@+id/question3"
@@ -51,16 +49,13 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n3. What is your height?" />
+            android:text="\n\n3. What is your current weight (lbs)?" />
 
-        <EditText
+        <Spinner
             android:id="@+id/answer3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your height"
-            android:background="@drawable/edittext_background"
-            android:textColorHint="@color/hint_text"
-            android:textColor="@color/light_text" />
+            android:background="@drawable/spinner_outline"/>
 
         <TextView
             android:id="@+id/question4"
@@ -68,16 +63,13 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n4. What is your current weight?" />
+            android:text="\n\n4. What is your target weight (lbs)?" />
 
-        <EditText
+        <Spinner
             android:id="@+id/answer4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your current weight"
-            android:background="@drawable/edittext_background"
-            android:textColorHint="@color/hint_text"
-            android:textColor="@color/light_text" />
+            android:background="@drawable/spinner_outline"/>
 
         <TextView
             android:id="@+id/question5"
@@ -85,27 +77,10 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n5. What is your target weight?" />
-
-        <EditText
-            android:id="@+id/answer5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your target weight"
-            android:background="@drawable/edittext_background"
-            android:textColorHint="@color/hint_text"
-            android:textColor="@color/light_text" />
-
-        <TextView
-            android:id="@+id/question6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/light_text"
-            android:text="\n\n6. What is your workout level?" />
+            android:text="\n\n5. What is your workout level?" />
 
         <RadioGroup
-            android:id="@+id/answer6"
+            android:id="@+id/answer5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -132,61 +107,311 @@
         </RadioGroup>
 
         <TextView
+            android:id="@+id/question6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/light_text"
+            android:text="\n\n6. What body parts would you like to target?" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Biceps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Biceps"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/bicepsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_biceps"
+                android:contentDescription="Image for Biceps"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Triceps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Triceps"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/tricepsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_triceps"
+                android:contentDescription="Image for Triceps"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Forearms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forearms"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/forearmsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_forearms"
+                android:contentDescription="Image for Forearms"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Chest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chest"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/chestImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_chest"
+                android:contentDescription="Image for Chest"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Abs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abs"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/AbsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_abs"
+                android:contentDescription="Image for Abs"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Shoulders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shoulders"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/shouldersImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_shoulders"
+                android:contentDescription="Image for Shoulders"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/backImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_back"
+                android:contentDescription="Image for Back"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Glutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Glutes"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/glutesImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_glutes"
+                android:contentDescription="Image for Glutes"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Quads"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quads"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/quadsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_quads"
+                android:contentDescription="Image for Quads"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Hamstrings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hamstrings"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/hamstringsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_hamstrings"
+                android:contentDescription="Image for Hamstrings"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Calves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calves"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/calvesImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_calves"
+                android:contentDescription="Image for Calves"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/answer6Hips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hips"
+                android:textColor="@color/light_text" />
+
+            <ImageView
+                android:id="@+id/hipsImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muscles_hips"
+                android:contentDescription="Image for Hips"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <TextView
             android:id="@+id/question7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n7. What body parts would you like to target?" />
+            android:text="\n\n7. What equipment do you have access to?" />
 
-        <CheckBox
-            android:id="@+id/answer7Biceps"
+        <RadioGroup
+            android:id="@+id/answer7"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Biceps"
-            android:textColor="@color/light_text" />
+            android:layout_height="wrap_content">
 
-        <CheckBox
-            android:id="@+id/answer7Triceps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Triceps"
-            android:textColor="@color/light_text" />
+            <RadioButton
+                android:id="@+id/optionGym"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Gym"
+                android:textColor="@color/light_text" />
 
-        <CheckBox
-            android:id="@+id/answer7Chest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chest"
-            android:textColor="@color/light_text" />
+            <RadioButton
+                android:id="@+id/optionDumbbells"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Only Dumbbells"
+                android:textColor="@color/light_text" />
 
-        <CheckBox
-            android:id="@+id/answer7Abs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Abs"
-            android:textColor="@color/light_text" />
-
-        <CheckBox
-            android:id="@+id/answer7Shoulders"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shoulders"
-            android:textColor="@color/light_text" />
-
-        <CheckBox
-            android:id="@+id/answer7Glutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Glutes"
-            android:textColor="@color/light_text" />
-
-        <CheckBox
-            android:id="@+id/answer7Legs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Legs"
-            android:textColor="@color/light_text" />
+            <RadioButton
+                android:id="@+id/optionBodyWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bodyweight"
+                android:textColor="@color/light_text" />
+        </RadioGroup>
 
         <!-- Submit -->
         <Button
