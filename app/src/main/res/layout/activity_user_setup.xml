@@ -125,15 +125,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Biceps"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/bicepsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_biceps"
                 android:contentDescription="Image for Biceps"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -147,15 +154,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Triceps"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/tricepsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_triceps"
                 android:contentDescription="Image for Triceps"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -169,15 +183,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Forearms"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/forearmsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_forearms"
                 android:contentDescription="Image for Forearms"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -191,15 +212,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chest"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/chestImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_chest"
                 android:contentDescription="Image for Chest"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -213,15 +241,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Abs"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/AbsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_abs"
                 android:contentDescription="Image for Abs"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -235,15 +270,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Shoulders"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/shouldersImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_shoulders"
                 android:contentDescription="Image for Shoulders"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -257,15 +299,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Back"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/backImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_back"
                 android:contentDescription="Image for Back"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -279,15 +328,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Glutes"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/glutesImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_glutes"
                 android:contentDescription="Image for Glutes"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -301,15 +357,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quads"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/quadsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_quads"
                 android:contentDescription="Image for Quads"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -323,15 +386,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hamstrings"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/hamstringsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_hamstrings"
                 android:contentDescription="Image for Hamstrings"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -345,15 +415,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Calves"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/calvesImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_calves"
                 android:contentDescription="Image for Calves"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <LinearLayout
@@ -367,15 +444,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hips"
-                android:textColor="@color/light_text" />
+                android:textColor="@color/light_text"
+                android:layout_gravity="start" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/hipsImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/muscles_hips"
                 android:contentDescription="Image for Hips"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:layout_gravity="end" />
         </LinearLayout>
 
         <TextView
