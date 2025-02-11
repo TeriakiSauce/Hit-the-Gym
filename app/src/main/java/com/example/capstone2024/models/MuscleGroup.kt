@@ -1,4 +1,3 @@
-package com.example.capstone2024.models;
+package com.example.capstone2024.models
 
-public class MuscleGroup {
-}
+class MuscleGroup 

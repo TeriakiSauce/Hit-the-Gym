@@ -1,17 +1,11 @@
-package com.example.capstone2024.models;
+package com.example.capstone2024.models
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date
+import java.util.GregorianCalendar
 
-public class WorkoutCalendar extends GregorianCalendar {
-    private Map<Date, WorkoutPlan> workoutSchedule;
-
-    public WorkoutCalendar() {
-        super();
-        this.workoutSchedule = new HashMap<>();
-    }
+class WorkoutCalendar : GregorianCalendar() {
+    private val workoutSchedule: MutableMap<Date, WorkoutPlan> =
+        HashMap()
 
     /**
      * Adds a workout plan to the specified date.
@@ -19,8 +13,8 @@ public class WorkoutCalendar extends GregorianCalendar {
      * @param date        The date to assign the workout plan.
      * @param workoutPlan The workout plan to assign.
      */
-    public void addWorkout(Date date, WorkoutPlan workoutPlan) {
-        workoutSchedule.put(date, workoutPlan);
+    fun addWorkout(date: Date, workoutPlan: WorkoutPlan) {
+        workoutSchedule[date] = workoutPlan
     }
 
     /**
@@ -28,8 +22,8 @@ public class WorkoutCalendar extends GregorianCalendar {
      *
      * @param date The date to remove the workout plan.
      */
-    public void removeWorkout(Date date) {
-        workoutSchedule.remove(date);
+    fun removeWorkout(date: Date) {
+        workoutSchedule.remove(date)
     }
 
     /**
@@ -38,8 +32,8 @@ public class WorkoutCalendar extends GregorianCalendar {
      * @param date The date to retrieve the workout plan for.
      * @return The workout plan for the date, or null if none exists.
      */
-    public WorkoutPlan getWorkoutForDate(Date date) {
-        return workoutSchedule.get(date);
+    fun getWorkoutForDate(date: Date): WorkoutPlan? {
+        return workoutSchedule[date]
     }
 
     /**
@@ -49,15 +43,14 @@ public class WorkoutCalendar extends GregorianCalendar {
      * @param month The month to retrieve (0-based index).
      * @return A map of dates to workout plans for the specified month.
      */
-    public Map<Date, WorkoutPlan> getWorkoutPlanForMonth(int year, int month) {
-        Map<Date, WorkoutPlan> monthData = new HashMap<>();
-        for (Map.Entry<Date, WorkoutPlan> entry : workoutSchedule.entrySet()) {
-            Date date = entry.getKey();
-            if (date.getYear() == year - 1900 && date.getMonth() == month) {
-                monthData.put(date, entry.getValue());
+    fun getWorkoutPlanForMonth(year: Int, month: Int): Map<Date, WorkoutPlan> {
+        val monthData: MutableMap<Date, WorkoutPlan> = HashMap()
+        for ((date, value) in workoutSchedule) {
+            if (date.year == year - 1900 && date.month == month) {
+                monthData[date] = value
             }
         }
-        return monthData;
+        return monthData
     }
 
     /**
@@ -66,7 +59,7 @@ public class WorkoutCalendar extends GregorianCalendar {
      * @param date The date to check.
      * @return True if a workout is assigned, false otherwise.
      */
-    public boolean hasWorkout(Date date) {
-        return workoutSchedule.containsKey(date);
+    fun hasWorkout(date: Date): Boolean {
+        return workoutSchedule.containsKey(date)
     }
 }

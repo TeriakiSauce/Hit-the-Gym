@@ -1,64 +1,54 @@
-package com.example.capstone2024.presenters;
+package com.example.capstone2024.presenters
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.drawable.Drawable;
+import android.content.Context
+import android.graphics.drawable.Drawable
+import com.example.capstone2024.contracts.ExerciseSessionContract
+import com.example.capstone2024.models.Exercise
+import java.io.IOException
 
-import com.example.capstone2024.R;
-import com.example.capstone2024.contracts.ExerciseSessionContract;
-import com.example.capstone2024.models.Exercise;
-
-import java.io.IOException;
-import java.util.List;
-
-public class ExerciseSessionPresenter implements ExerciseSessionContract.Presenter {
-    private final ExerciseSessionContract.View view;
-
-    public ExerciseSessionPresenter(ExerciseSessionContract.View view) {
-        this.view = view;
-    }
-
-    @Override
-    public void loadExerciseSession(Exercise exercise) {
+class ExerciseSessionPresenter(private val view: ExerciseSessionContract.View) :
+    ExerciseSessionContract.Presenter {
+    override fun loadExerciseSession(exercise: Exercise?) {
         if (exercise != null) {
-            String name = exercise.getName(); // Exercise name corresponds to folder name
-            String imageName = name.replace(" ", "_"); // Corresponds to image directory name
-            List<String> instructions = exercise.getInstructions();
-            String instructionsText = buildInstructionsText(instructions);
+            val name = exercise.name // Exercise name corresponds to folder name
+            val imageName = name.replace(" ", "_") // Corresponds to image directory name
+            val instructions = exercise.instructions
+            val instructionsText = buildInstructionsText(instructions)
 
             // Load the first image from assets
-            Drawable firstImage = loadImageFromAssets(imageName, 0);
+            val firstImage = loadImageFromAssets(imageName, 0)
 
             if (firstImage != null) {
-                view.displayExerciseDetails(name, firstImage, instructionsText);
-                view.setupSetsTable(4); // Assuming 4 sets, adjust as needed
+                view.displayExerciseDetails(name, firstImage, instructionsText)
+                view.setupSetsTable(4) // Assuming 4 sets, adjust as needed
             } else {
-                view.showError("Failed to load exercise image.");
+                view.showError("Failed to load exercise image.")
             }
         } else {
-            view.showError("Failed to load exercise details.");
+            view.showError("Failed to load exercise details.")
         }
     }
 
-    private String buildInstructionsText(List<String> instructions) {
+    private fun buildInstructionsText(instructions: List<String>?): String {
         if (instructions == null || instructions.isEmpty()) {
-            return "No instructions available.";
+            return "No instructions available."
         }
-        StringBuilder instructionsBuilder = new StringBuilder();
-        for (int i = 0; i < instructions.size(); i++) {
-            instructionsBuilder.append((i + 1)).append(". ").append(instructions.get(i)).append("\n\n");
+        val instructionsBuilder = StringBuilder()
+        for (i in instructions.indices) {
+            instructionsBuilder.append((i + 1)).append(". ").append(instructions[i]).append("\n\n")
         }
-        return instructionsBuilder.toString();
+        return instructionsBuilder.toString()
     }
 
-    private Drawable loadImageFromAssets(String exerciseName, int imageIndex) {
+    private fun loadImageFromAssets(exerciseName: String, imageIndex: Int): Drawable? {
         try {
-            AssetManager assetManager = ((Context)view).getAssets(); // Ensure your view is a Context or modify accordingly
-            String imagePath = "images/" + exerciseName + "/" + imageIndex + ".jpg";
-            return Drawable.createFromStream(assetManager.open(imagePath), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null; // Return null if the image is not found or an error occurs
+            val assetManager =
+                (view as Context).assets // Ensure your view is a Context or modify accordingly
+            val imagePath = "images/$exerciseName/$imageIndex.jpg"
+            return Drawable.createFromStream(assetManager.open(imagePath), null)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null // Return null if the image is not found or an error occurs
         }
     }
 }

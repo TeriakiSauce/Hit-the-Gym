@@ -1,74 +1,59 @@
-package com.example.capstone2024.presenters;
+package com.example.capstone2024.presenters
 
-import android.content.Context;
+import android.content.Context
+import com.example.capstone2024.contracts.HomeContract
+import com.example.capstone2024.models.WorkoutPlan
+import com.example.capstone2024.models.WorkoutSession
 
-import com.example.capstone2024.contracts.HomeContract;
-import com.example.capstone2024.models.WorkoutPlan;
-import com.example.capstone2024.models.WorkoutSession;
+class HomePresenter(private val view: HomeContract.View, private val context: Context) :
+    HomeContract.Presenter {
+    private var workoutProgram: Map<String, WorkoutSession>? = null
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-public class HomePresenter implements HomeContract.Presenter {
-    private final HomeContract.View view;
-    private final Context context;
-    private Map<String, WorkoutSession> workoutProgram;
-
-    public HomePresenter(HomeContract.View view, Context context) {
-        this.view = view;
-        this.context = context;
-    }
-
-    @Override
-    public void initializeWorkoutPlan() {
+    override fun initializeWorkoutPlan() {
         try {
-            InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream);
+            val exercisesInputStream = context.assets.open("exercises.json")
+            val workoutPlan = WorkoutPlan(exercisesInputStream)
 
             // Simulate user input
-            Map<String, Object> userInput = new HashMap<>();
-            userInput.put("age", 30);
-            userInput.put("height", 175);
-            userInput.put("weight", 70);
-            userInput.put("target_weight", 65);
-            userInput.put("workout_days", 5);
-            userInput.put("level", "intermediate");
-            userInput.put("equipment", "dumbbell");
-            userInput.put("availability", 1.5);
+            val userInput: MutableMap<String?, Any> = HashMap()
+            userInput["age"] = 30
+            userInput["height"] = 175
+            userInput["weight"] = 70
+            userInput["target_weight"] = 65
+            userInput["workout_days"] = 5
+            userInput["level"] = "intermediate"
+            userInput["equipment"] = "dumbbell"
+            userInput["availability"] = 1.5
 
-            workoutProgram = workoutPlan.generateWorkoutProgram(userInput);
-            view.displayWorkoutProgram(workoutProgram);
-        } catch (Exception e) {
-            e.printStackTrace();
-            view.showError("Failed to load workout plan.");
+            workoutProgram = workoutPlan.generateWorkoutProgram(userInput)
+            view.displayWorkoutProgram(workoutProgram)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            view.showError("Failed to load workout plan.")
         }
     }
 
-    @Override
-    public void handleSurveyNavigation() {
-        view.navigateToSurvey();
+    override fun handleSurveyNavigation() {
+        view.navigateToSurvey()
     }
 
-    @Override
-    public void handleProgressNavigation() {
-        view.navigateToProgress();
+    override fun handleProgressNavigation() {
+        view.navigateToProgress()
     }
 
-    @Override
-    public void handleWorkoutPlanNavigation() {
+    override fun handleWorkoutPlanNavigation() {
         if (workoutProgram != null) {
-            view.navigateToWorkoutPlan(workoutProgram);
+            view.navigateToWorkoutPlan(workoutProgram)
         } else {
-            view.showError("Workout plan is not initialized.");
+            view.showError("Workout plan is not initialized.")
         }
     }
 
-    public void handleWorkoutCalendarNavigation() {
+    override fun handleWorkoutCalendarNavigation() {
         if (workoutProgram != null) {
-            view.navigateToWorkoutCalendar(workoutProgram);
+            view.navigateToWorkoutCalendar(workoutProgram)
         } else {
-            view.showError("Workout plan is not initialized.");
+            view.showError("Workout plan is not initialized.")
         }
     }
 }

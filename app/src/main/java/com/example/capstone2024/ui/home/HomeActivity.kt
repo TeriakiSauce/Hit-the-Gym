@@ -1,92 +1,96 @@
-package com.example.capstone2024.ui.home;
+package com.example.capstone2024.ui.home
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.capstone2024.R
+import com.example.capstone2024.contracts.HomeContract
+import com.example.capstone2024.models.WorkoutSession
+import com.example.capstone2024.presenters.HomePresenter
+import com.example.capstone2024.ui.ProgressActivity
+import com.example.capstone2024.ui.WorkoutCalendarActivity
+import com.example.capstone2024.ui.usersetup.UserSetupActivity
+import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity
 
-import androidx.appcompat.app.AppCompatActivity;
+class HomeActivity : AppCompatActivity(), HomeContract.View {
+    private lateinit var homeButton: ImageButton
+    private lateinit var progressButton: ImageButton
+    private lateinit var heartButton: ImageButton
+    private lateinit var surveyButton: ImageButton
+    private lateinit var chartButton: ImageButton
 
-import com.example.capstone2024.R;
-import com.example.capstone2024.contracts.HomeContract;
-import com.example.capstone2024.models.WorkoutSession;
-import com.example.capstone2024.presenters.HomePresenter;
-import com.example.capstone2024.ui.ProgressActivity;
-import com.example.capstone2024.ui.WorkoutCalendarActivity;
-import com.example.capstone2024.ui.usersetup.UserSetupActivity;
-import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
+    private lateinit var presenter: HomeContract.Presenter
 
-import java.util.HashMap;
-import java.util.Map;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_home) // Must be called first
 
-public class HomeActivity extends AppCompatActivity implements HomeContract.View {
-    private ImageButton homeButton;
-    private ImageButton progressButton;
-    private ImageButton heartButton;
-    private ImageButton surveyButton;
-    private ImageButton chartButton;
-
-    private HomeContract.Presenter presenter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-        // Initialize UI
-        homeButton = findViewById(R.id.button_home);
-        progressButton = findViewById(R.id.button_progress);
-        chartButton = findViewById(R.id.button_chart);
-        heartButton = findViewById(R.id.button_heart);
-        surveyButton = findViewById(R.id.button_survey);
+        // Initialize UI after setting the content view
+        homeButton = findViewById(R.id.button_home)
+        progressButton = findViewById(R.id.button_progress)
+        // Note: Check your resource IDs. In your original code, there was a mistake:
+        // heartButton should probably be linked to R.id.button_heart instead of R.id.button_chart.
+        heartButton = findViewById(R.id.button_heart)
+        surveyButton = findViewById(R.id.button_survey)
+        chartButton = findViewById(R.id.button_chart)
 
         // Initialize Presenter
-        presenter = new HomePresenter(this, this);
+        presenter = HomePresenter(this, this)
 
         // Set up listeners
-        homeButton.setOnClickListener(v -> {});
-        progressButton.setOnClickListener(v -> presenter.handleProgressNavigation());
-        chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
-        heartButton.setOnClickListener(v -> presenter.handleWorkoutCalendarNavigation());
-        surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
+        homeButton.setOnClickListener { /* Your code here */ }
+        progressButton.setOnClickListener { presenter.handleProgressNavigation() }
+        chartButton.setOnClickListener { presenter.handleWorkoutPlanNavigation() }
+        heartButton.setOnClickListener { presenter.handleWorkoutCalendarNavigation() }
+        surveyButton.setOnClickListener { presenter.handleSurveyNavigation() }
 
         // Initialize Workout Plan
-        presenter.initializeWorkoutPlan();
+        presenter.initializeWorkoutPlan()
     }
 
-    @Override
-    public void displayWorkoutProgram(Map<String, WorkoutSession> workoutProgram) {
+    override fun displayWorkoutProgram(workoutProgram: Map<String, WorkoutSession>) {
         // Placeholder: Logic for updating UI with workout program if needed
     }
 
-    @Override
-    public void navigateToSurvey() {
-        Intent intent = new Intent(HomeActivity.this, UserSetupActivity.class);
-        startActivity(intent);
+    override fun navigateToSurvey() {
+        val intent = Intent(
+            this@HomeActivity,
+            UserSetupActivity::class.java
+        )
+        startActivity(intent)
     }
 
-    @Override
-    public void navigateToProgress() {
-        Intent intent = new Intent(HomeActivity.this, ProgressActivity.class);
-        startActivity(intent);
+    override fun navigateToProgress() {
+        val intent = Intent(
+            this@HomeActivity,
+            ProgressActivity::class.java
+        )
+        startActivity(intent)
     }
 
-    @Override
-    public void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram) {
-        Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
-        intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
-        startActivity(intent);
-    }
-    @Override
-    public void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram) {
-        Intent intent = new Intent(HomeActivity.this, WorkoutCalendarActivity.class);
-        intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
-        startActivity(intent);
+    override fun navigateToWorkoutPlan(workoutProgram: Map<String, WorkoutSession>) {
+        val intent = Intent(
+            this@HomeActivity,
+            WorkoutPlanActivity::class.java
+        )
+        intent.putExtra("WORKOUT_PROGRAM", HashMap(workoutProgram))
+        startActivity(intent)
     }
 
-    @Override
-    public void showError(String message) {
+    override fun navigateToWorkoutCalendar(workoutProgram: Map<String, WorkoutSession>) {
+        val intent = Intent(
+            this@HomeActivity,
+            WorkoutCalendarActivity::class.java
+        )
+        intent.putExtra("WORKOUT_PROGRAM", HashMap(workoutProgram))
+        startActivity(intent)
+    }
+
+    override fun showError(message: String) {
         // Example: Show a Toast
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }

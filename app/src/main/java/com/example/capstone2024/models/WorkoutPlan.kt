@@ -1,208 +1,241 @@
-package com.example.capstone2024.models;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+package com.example.capstone2024.models
 
-import java.io.InputStream;
-import java.util.*;
-import java.util.Set;
+import org.json.JSONArray
+import org.json.JSONException
+import java.io.InputStream
+import java.util.Collections
+import java.util.Locale
+import java.util.Scanner
+import kotlin.collections.Set
+import kotlin.math.max
+import kotlin.math.min
 
-public class WorkoutPlan {
+class WorkoutPlan(exercisesInputStream: InputStream) {
+    private val exercisesJsonArray: JSONArray
+    private val exercisesList: List<Exercise> // List of Exercise objects
+    private var workoutProgram: Map<String, WorkoutSession>? = null // Map of day to WorkoutSession
 
-    private JSONArray exercisesJsonArray;
-    private List<Exercise> exercisesList; // List of Exercise objects
-    private Map<String, WorkoutSession> workoutProgram; // Map of day to WorkoutSession
-
-    public WorkoutPlan(InputStream exercisesInputStream) throws JSONException {
-        this.exercisesJsonArray = loadExercises(exercisesInputStream);
-        this.exercisesList = parseExercises(exercisesJsonArray);
+    init {
+        this.exercisesJsonArray = loadExercises(exercisesInputStream)
+        this.exercisesList = parseExercises(exercisesJsonArray)
     }
 
     // Load exercises from JSON
-    private JSONArray loadExercises(InputStream inputStream) {
-        try (Scanner scanner = new Scanner(inputStream)) {
-            String jsonStr = scanner.useDelimiter("\\A").next();
-            return new JSONArray(jsonStr);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new JSONArray();
+    private fun loadExercises(inputStream: InputStream): JSONArray {
+        try {
+            Scanner(inputStream).use { scanner ->
+                val jsonStr = scanner.useDelimiter("\\A").next()
+                return JSONArray(jsonStr)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return JSONArray()
         }
     }
 
     // Parse JSONArray into List<Exercise>
-    private List<Exercise> parseExercises(JSONArray jsonArray) throws JSONException {
-        List<Exercise> exercises = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject exerciseJson = jsonArray.getJSONObject(i);
-            String name = exerciseJson.optString("name");
-            String level = exerciseJson.optString("level", "beginner");
-            String equipment = exerciseJson.optString("equipment", "bodyweight");
-            String category = exerciseJson.optString("category", "");
-            JSONArray primaryMusclesArray = exerciseJson.optJSONArray("primaryMuscles");
-            List<String> primaryMuscles = new ArrayList<>();
+    @Throws(JSONException::class)
+    private fun parseExercises(jsonArray: JSONArray): List<Exercise> {
+        val exercises: MutableList<Exercise> = ArrayList()
+        for (i in 0 until jsonArray.length()) {
+            val exerciseJson = jsonArray.getJSONObject(i)
+            val name = exerciseJson.optString("name")
+            val level = exerciseJson.optString("level", "beginner")
+            val equipment = exerciseJson.optString("equipment", "bodyweight")
+            val category = exerciseJson.optString("category", "")
+            val primaryMusclesArray = exerciseJson.optJSONArray("primaryMuscles")
+            val primaryMuscles: MutableList<String> = ArrayList()
             if (primaryMusclesArray != null) {
-                for (int j = 0; j < primaryMusclesArray.length(); j++) {
-                    primaryMuscles.add(primaryMusclesArray.getString(j));
+                for (j in 0 until primaryMusclesArray.length()) {
+                    primaryMuscles.add(primaryMusclesArray.getString(j))
                 }
             }
-            JSONArray instructionsArray = exerciseJson.optJSONArray("instructions");
-            List<String> instructions = new ArrayList<>();
+            val instructionsArray = exerciseJson.optJSONArray("instructions")
+            val instructions: MutableList<String> = ArrayList()
             if (instructionsArray != null) {
-                for (int j = 0; j < instructionsArray.length(); j++) {
-                    instructions.add(instructionsArray.getString(j));
+                for (j in 0 until instructionsArray.length()) {
+                    instructions.add(instructionsArray.getString(j))
                 }
             }
             // Create Exercise object
-            Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles, instructions);
-            exercises.add(exercise);
+            val exercise = Exercise(name, level, equipment, category, primaryMuscles, instructions)
+            exercises.add(exercise)
         }
-        return exercises;
+        return exercises
     }
 
-    public Map<String, WorkoutSession> generateWorkoutProgram(Map<String, Object> userInput) {
-        int workoutDays = (int) userInput.getOrDefault("workout_days", 3);
-        double availability = (double) userInput.getOrDefault("availability", 1.0);
+    fun generateWorkoutProgram(userInput: Map<String?, Any>): Map<String, WorkoutSession> {
+        val workoutDays = userInput.getOrDefault("workout_days", 3) as Int
+        val availability = userInput.getOrDefault("availability", 1.0) as Double
 
-        Map<String, Set<String>> muscleGroupsMap = classifyMuscleGroups();
-        Set<String> largeMuscles = muscleGroupsMap.get("large");
-        Set<String> mediumMuscles = muscleGroupsMap.get("medium");
-        Set<String> smallMuscles = muscleGroupsMap.get("small");
+        val muscleGroupsMap = classifyMuscleGroups()
+        val largeMuscles = muscleGroupsMap["large"]
+        val mediumMuscles = muscleGroupsMap["medium"]
+        val smallMuscles = muscleGroupsMap["small"]
 
         // Adjust workout targets based on availability
-        int baseTarget = Math.max(1, (int) availability);
-        Map<String, Integer> targetExercises = new HashMap<>();
-        for (String muscle : largeMuscles) {
-            targetExercises.put(muscle, 4 * baseTarget);
+        val baseTarget = max(1.0, availability.toInt().toDouble()).toInt()
+        val targetExercises: MutableMap<String, Int> = HashMap()
+        for (muscle in largeMuscles!!) {
+            targetExercises[muscle] = 4 * baseTarget
         }
-        for (String muscle : mediumMuscles) {
-            targetExercises.put(muscle, 3 * baseTarget);
+        for (muscle in mediumMuscles!!) {
+            targetExercises[muscle] = 3 * baseTarget
         }
-        for (String muscle : smallMuscles) {
-            targetExercises.put(muscle, 2 * baseTarget);
+        for (muscle in smallMuscles!!) {
+            targetExercises[muscle] = 2 * baseTarget
         }
 
         // Filter exercises based on parameters
-        List<Exercise> filteredExercises = filterExercisesByParameters(userInput);
+        val filteredExercises = filterExercisesByParameters(userInput)
 
         // Create weekly program
-        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays);
+        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays)
 
-        return this.workoutProgram;
+        return workoutProgram!!
     }
 
 
-    private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays) {
-        Map<String, WorkoutSession> program = new LinkedHashMap<>();
-        for (int i = 0; i < workoutDays; i++) {
-            program.put("Day " + (i + 1), new WorkoutSession(new ArrayList<>()));
+    private fun createWeeklyProgram(
+        exercises: List<Exercise>,
+        targetExercises: Map<String, Int>,
+        workoutDays: Int
+    ): Map<String, WorkoutSession> {
+        val program: MutableMap<String, WorkoutSession> = LinkedHashMap()
+        for (i in 0 until workoutDays) {
+            program["Day " + (i + 1)] = WorkoutSession(ArrayList())
         }
 
-        int dayIndex = 0;
+        var dayIndex = 0
 
-        for (Map.Entry<String, Integer> entry : targetExercises.entrySet()) {
-            String muscleGroup = entry.getKey();
-            int targetCount = entry.getValue();
+        for ((muscleGroup, targetCount) in targetExercises) {
+            val muscleExercises = filterExercisesByMuscle(exercises, setOf(muscleGroup))
+            val muscleStretches = findStretches(exercises, setOf(muscleGroup))
+            Collections.shuffle(muscleExercises)
+            Collections.shuffle(muscleStretches)
 
-            List<Exercise> muscleExercises = filterExercisesByMuscle(exercises, Collections.singleton(muscleGroup));
-            List<Exercise> muscleStretches = findStretches(exercises, Collections.singleton(muscleGroup));
-            Collections.shuffle(muscleExercises);
-            Collections.shuffle(muscleStretches);
+            val selectedExercises = muscleExercises.subList(
+                0,
+                min(targetCount.toDouble(), muscleExercises.size.toDouble()).toInt()
+            )
 
-            List<Exercise> selectedExercises = muscleExercises.subList(0, Math.min(targetCount, muscleExercises.size()));
-
-            for (Exercise exercise : selectedExercises) {
-                String day = "Day " + ((dayIndex % workoutDays) + 1);
-                WorkoutSession workoutSession = program.get(day);
+            for (exercise in selectedExercises) {
+                val day = "Day " + ((dayIndex % workoutDays) + 1)
+                val workoutSession = program[day]
 
                 // Create ExerciseSession with default sets and rest time
-                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1, 10); // 4 sets, 1 minute rest
-                workoutSession.getExerciseSessions().add(exerciseSession);
+                val exerciseSession = ExerciseSession(exercise, 4, 1, 10) // 4 sets, 1 minute rest
+                workoutSession!!.exerciseSessions.add(exerciseSession)
 
                 // Optionally add a corresponding stretch
                 if (!muscleStretches.isEmpty()) {
-                    Exercise stretchExercise = muscleStretches.get(0);
-                    ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1, 10);
-                    workoutSession.getExerciseSessions().add(stretchSession);
+                    val stretchExercise = muscleStretches[0]
+                    val stretchSession = ExerciseSession(stretchExercise!!, 1, 1, 10)
+                    workoutSession.exerciseSessions.add(stretchSession)
                 }
-                dayIndex++;
+                dayIndex++
             }
         }
 
-        return program;
+        return program
     }
 
     // Update filter methods to work with Exercise objects
-    private List<Exercise> filterExercisesByParameters(Map<String, Object> userInput) {
-        String level = (String) userInput.getOrDefault("level", "beginner");
-        String equipment = (String) userInput.getOrDefault("equipment", "bodyweight");
-        int age = (int) userInput.getOrDefault("age", 30);
-        double cardioRatio = ((int) userInput.get("target_weight") < (int) userInput.get("weight")) ? 0.3 : 0.2;
-        Set<String> blacklist = (age > 50) ? new HashSet<>(Collections.singletonList("deadlift")) : new HashSet<>();
+    private fun filterExercisesByParameters(userInput: Map<String?, Any>): List<Exercise> {
+        val level = userInput.getOrDefault("level", "beginner") as String
+        val equipment = userInput.getOrDefault("equipment", "bodyweight") as String
+        val age = userInput.getOrDefault("age", 30) as Int
+        val cardioRatio: Double = if ((userInput["target_weight"] as? Int ?: 0) < (userInput["weight"] as? Int ?: 0)) 0.3 else 0.2
+        val blacklist: Set<String> = if ((age > 50)) HashSet(listOf("deadlift")) else HashSet()
 
-        List<Exercise> filteredExercises = new ArrayList<>();
+        val filteredExercises: MutableList<Exercise> = ArrayList()
 
-        for (Exercise exercise : exercisesList) {
+        for (exercise in exercisesList) {
             // Level filtering
-            String exerciseLevel = exercise.getLevel();
-            if ("advanced".equals(exerciseLevel) && !"advanced".equals(level)) continue;
-            if ("intermediate".equals(exerciseLevel) && "beginner".equals(level)) continue;
+            val exerciseLevel = exercise.level
+            if ("advanced" == exerciseLevel && "advanced" != level) continue
+            if ("intermediate" == exerciseLevel && "beginner" == level) continue
 
             // Equipment filtering
-            String exerciseEquipment = exercise.getEquipment();
-            if (!exerciseEquipment.equalsIgnoreCase(equipment)) continue;
+            val exerciseEquipment = exercise.equipment
+            if (!exerciseEquipment.equals(equipment, ignoreCase = true)) continue
 
             // Blacklist filtering
-            String exerciseName = exercise.getName().toLowerCase();
-            if (blacklist.contains(exerciseName)) continue;
+            val exerciseName = exercise.name.lowercase(Locale.getDefault())
+            if (blacklist.contains(exerciseName)) continue
 
             // Cardio vs. strength filtering
-            String category = exercise.getCategory();
-            double randomValue = Math.random();
-            if ("cardio".equalsIgnoreCase(category) && randomValue > cardioRatio) continue;
-            if ("strength".equalsIgnoreCase(category) && randomValue < cardioRatio) continue;
+            val category = exercise.category
+            val randomValue = Math.random()
+            if ("cardio".equals(category, ignoreCase = true) && randomValue > cardioRatio) continue
+            if ("strength".equals(
+                    category,
+                    ignoreCase = true
+                ) && randomValue < cardioRatio
+            ) continue
 
-            filteredExercises.add(exercise);
+            filteredExercises.add(exercise)
         }
 
-        return filteredExercises;
+        return filteredExercises
     }
 
-    private List<Exercise> filterExercisesByMuscle(List<Exercise> exercises, Set<String> muscleGroups) {
-        List<Exercise> filteredExercises = new ArrayList<>();
-        for (Exercise exercise : exercises) {
-            List<String> primaryMuscles = exercise.getPrimaryMuscles();
-            Set<String> muscleIntersection = new HashSet<>(primaryMuscles);
-            muscleIntersection.retainAll(muscleGroups);
+    private fun filterExercisesByMuscle(
+        exercises: List<Exercise>,
+        muscleGroups: Set<String>
+    ): List<Exercise> {
+        val filteredExercises: MutableList<Exercise> = ArrayList()
+        for (exercise in exercises) {
+            val primaryMuscles = exercise.primaryMuscles
+            val muscleIntersection: MutableSet<String> = HashSet(primaryMuscles)
+            muscleIntersection.retainAll(muscleGroups)
             if (!muscleIntersection.isEmpty()) {
-                filteredExercises.add(exercise);
+                filteredExercises.add(exercise)
             }
         }
-        return filteredExercises;
+        return filteredExercises
     }
 
-    private List<Exercise> findStretches(List<Exercise> exercises, Set<String> muscleGroups) {
-        List<Exercise> stretches = new ArrayList<>();
-        for (Exercise exercise : exercises) {
-            List<String> primaryMuscles = exercise.getPrimaryMuscles();
-            Set<String> muscleIntersection = new HashSet<>(primaryMuscles);
-            muscleIntersection.retainAll(muscleGroups);
-            if (!muscleIntersection.isEmpty() && "stretch".equalsIgnoreCase(exercise.getCategory())) {
-                stretches.add(exercise);
+    private fun findStretches(
+        exercises: List<Exercise>,
+        muscleGroups: Set<String>
+    ): List<Exercise?> {
+        val stretches: MutableList<Exercise?> = ArrayList()
+        for (exercise in exercises) {
+            val primaryMuscles = exercise.primaryMuscles
+            val muscleIntersection: MutableSet<String> = HashSet(primaryMuscles)
+            muscleIntersection.retainAll(muscleGroups)
+            if (!muscleIntersection.isEmpty() && "stretch".equals(
+                    exercise.category,
+                    ignoreCase = true
+                )
+            ) {
+                stretches.add(exercise)
             }
         }
-        return stretches;
+        return stretches
     }
 
-    private Map<String, Set<String>> classifyMuscleGroups() {
-        Set<String> largeMuscles = new HashSet<>(Arrays.asList("chest", "back", "quadriceps", "hamstrings", "glutes", "shoulders"));
-        Set<String> mediumMuscles = new HashSet<>(Arrays.asList("biceps", "triceps", "abdominals"));
-        Set<String> smallMuscles = new HashSet<>(Arrays.asList("calves", "forearms", "neck", "adductors", "abductors"));
+    private fun classifyMuscleGroups(): Map<String, Set<String>> {
+        val largeMuscles: Set<String> = HashSet(
+            mutableListOf(
+                "chest",
+                "back",
+                "quadriceps",
+                "hamstrings",
+                "glutes",
+                "shoulders"
+            )
+        )
+        val mediumMuscles: Set<String> = HashSet(mutableListOf("biceps", "triceps", "abdominals"))
+        val smallMuscles: Set<String> =
+            HashSet(mutableListOf("calves", "forearms", "neck", "adductors", "abductors"))
 
-        Map<String, Set<String>> muscleGroups = new HashMap<>();
-        muscleGroups.put("large", largeMuscles);
-        muscleGroups.put("medium", mediumMuscles);
-        muscleGroups.put("small", smallMuscles);
+        val muscleGroups: MutableMap<String, Set<String>> = HashMap()
+        muscleGroups["large"] = largeMuscles
+        muscleGroups["medium"] = mediumMuscles
+        muscleGroups["small"] = smallMuscles
 
-        return muscleGroups;
+        return muscleGroups
     }
 }
