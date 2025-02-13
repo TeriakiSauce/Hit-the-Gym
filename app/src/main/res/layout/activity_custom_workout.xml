@@ -5,6 +5,53 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CustomWorkoutActivity">
+    android:background="@color/black"
+    tools:context=".ui.customworkout.CustomWorkoutActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_marginBottom="70dp">
+
+        <LinearLayout
+            android:id="@+id/customWorkoutLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- "Add Exercise" Button -->
+            <Button
+                android:id="@+id/addExerciseButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Exercise"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/dark_gray"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Exercise List (Starts Empty) -->
+            <LinearLayout
+                android:id="@+id/exercisesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/saveWorkoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Workout"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/dark_gray"
+        android:paddingHorizontal="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

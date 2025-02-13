@@ -16,4 +16,5 @@
     <color name="button_background">#1F1F1F</color>
     <color name="blue">#0000FF</color>
     <color name="transparent">#00000000</color>
+    <color name="dark_gray">#1E1E1E</color>
 </resources>

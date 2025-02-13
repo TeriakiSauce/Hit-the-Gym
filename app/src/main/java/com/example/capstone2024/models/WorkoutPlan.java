@@ -205,4 +205,8 @@ public class WorkoutPlan {
 
         return muscleGroups;
     }
+
+    public List<Exercise> getExercisesList() {
+        return exercisesList;
+    }
 }

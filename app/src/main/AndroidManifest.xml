@@ -28,7 +28,7 @@
             android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.CustomWorkoutActivity"
+            android:name=".ui.customworkout.CustomWorkoutActivity"
             android:exported="false" />
         <activity
             android:name=".ui.AchievementActivity"
@@ -41,6 +41,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.exercisesession.ExerciseSessionActivity"
+            android:exported="false" />
+        <activity android:name=".ui.exercisesearch.ExerciseSearchActivity"
             android:exported="false" />
         <activity
             android:name=".ui.WorkoutCalendarActivity"

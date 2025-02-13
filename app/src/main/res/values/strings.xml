@@ -48,4 +48,5 @@
     <string name="exercise_name">Exercise Name</string>
     <string name="exercise_image">Exercise Image</string>
     <string name="exercise_description">Exercise Description</string>
+    <string name="search_clear_button">Search Clear Button</string>
 </resources>

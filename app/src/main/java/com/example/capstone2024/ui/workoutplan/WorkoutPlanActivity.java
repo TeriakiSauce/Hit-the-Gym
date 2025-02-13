@@ -3,6 +3,7 @@ package com.example.capstone2024.ui.workoutplan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.WorkoutPlanContract;
 import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.WorkoutPlanPresenter;
+import com.example.capstone2024.ui.customworkout.CustomWorkoutActivity;
 import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
 import java.util.Map;
@@ -21,18 +23,27 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
     private LinearLayout daysLayout;
     private WorkoutPlanContract.Presenter presenter;
 
+    private Button createCustomWorkoutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_plan);
 
         daysLayout = findViewById(R.id.daysLayout);
+        createCustomWorkoutButton = findViewById(R.id.createCustomWorkoutButton);
 
         // Initialize the presenter
         presenter = new WorkoutPlanPresenter(this);
 
         // Load the workout program
         presenter.loadWorkoutProgram(getIntent());
+
+        // Set click listener for the "Create Custom Workout" button
+        createCustomWorkoutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(WorkoutPlanActivity.this, CustomWorkoutActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
