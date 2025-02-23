@@ -71,4 +71,9 @@ public class HomePresenter implements HomeContract.Presenter {
             view.showError("Workout plan is not initialized.");
         }
     }
+
+    @Override
+    public void handleDatabaseNavigation() {
+        view.navigateToDatabase();
+    }
 }

@@ -1,10 +1,10 @@
 package com.example.capstone2024.models;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import com.example.capstone2024.contracts.UserSetupContract;
 
 import java.util.List;
 
@@ -12,12 +12,26 @@ import java.util.List;
 @TypeConverters(Converters.class)
 public class UserSetup {
 
-    @PrimaryKey private int id;
+    @ColumnInfo(name="id")
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name="name")
     private String name;
+
+    @ColumnInfo(name="age")
     private String age;
+
+    @ColumnInfo(name="currentWeight")
     private String currentWeight;
+
+    @ColumnInfo(name="targetWeight")
     private String targetWeight;
+
+    @ColumnInfo(name="workoutLevel")
     private String workoutLevel;
+
+    @ColumnInfo(name="targetBodyParts")
     private List<String> targetBodyParts;
     private String equipment;
 

@@ -13,6 +13,7 @@ import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.HomePresenter;
 import com.example.capstone2024.ui.ProgressActivity;
 import com.example.capstone2024.ui.WorkoutCalendarActivity;
+import com.example.capstone2024.ui.database.DatabaseActivity;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 
@@ -25,6 +26,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     private ImageButton heartButton;
     private ImageButton surveyButton;
     private ImageButton chartButton;
+    private ImageButton databaseButton;
 
     private HomeContract.Presenter presenter;
 
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         chartButton = findViewById(R.id.button_chart);
         heartButton = findViewById(R.id.button_heart);
         surveyButton = findViewById(R.id.button_survey);
+        databaseButton = findViewById(R.id.button_database);
 
         // Initialize Presenter
         presenter = new HomePresenter(this, this);
@@ -49,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
         heartButton.setOnClickListener(v -> presenter.handleWorkoutCalendarNavigation());
         surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
+        databaseButton.setOnClickListener(v -> presenter.handleDatabaseNavigation());
 
         // Initialize Workout Plan
         presenter.initializeWorkoutPlan();
@@ -81,6 +85,12 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     public void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram) {
         Intent intent = new Intent(HomeActivity.this, WorkoutCalendarActivity.class);
         intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToDatabase() {
+        Intent intent = new Intent(HomeActivity.this, DatabaseActivity.class);
         startActivity(intent);
     }
 

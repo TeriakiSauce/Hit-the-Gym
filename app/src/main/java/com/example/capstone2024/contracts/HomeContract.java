@@ -11,6 +11,8 @@ public interface HomeContract {
         void navigateToProgress();
         void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram);
         void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram);
+        void navigateToDatabase();
+
         void showError(String message);
 
     }
@@ -21,5 +23,6 @@ public interface HomeContract {
         void handleProgressNavigation();
         void handleWorkoutPlanNavigation();
         void handleWorkoutCalendarNavigation();
+        void handleDatabaseNavigation();
     }
 }
