@@ -19,6 +19,14 @@ public class UserSetupViewModel extends AndroidViewModel {
         repository.insert(user);
     }
 
+    public void updateUser(UserSetup user) {
+        repository.update(user);
+    }
+
+    public void deleteUser(UserSetup user) {
+        repository.delete(user);
+    }
+
     public LiveData<List<UserSetup>> getAllUsers() {
         return allUsers;
     }

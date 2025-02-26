@@ -17,7 +17,6 @@ public abstract class UserSetupDatabase extends RoomDatabase{
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     UserSetupDatabase.class, "userSetup_database")
-                            .allowMainThreadQueries()  // TEMPORARY: Remove in production!
                             .build();
                 }
             }
