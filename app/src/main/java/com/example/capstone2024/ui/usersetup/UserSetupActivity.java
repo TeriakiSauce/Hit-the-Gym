@@ -13,9 +13,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.UserSetupContract;
 import com.example.capstone2024.models.UserSetup;
+import com.example.capstone2024.models.UserSetupViewModel;
 import com.example.capstone2024.presenters.UserSetupPresenter;
 import com.example.capstone2024.ui.home.HomeActivity;
 import android.widget.ArrayAdapter;
@@ -38,6 +41,9 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
 
         // Initialize model
         userSetup = new UserSetup();
+
+        // Initialize database
+        UserSetupViewModel userSetupViewModel = new ViewModelProvider(this).get(UserSetupViewModel.class);
 
         // Initialize spinner dropdown questions
         spinnerSetup(Metric.AGE);
@@ -91,6 +97,9 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
             int equipmentId = equipmentGroup.getCheckedRadioButtonId();
             RadioButton selectedEquipment = findViewById(equipmentId);
             userSetup.setEquipment(selectedEquipment != null ? selectedEquipment.getText().toString() : "");
+
+            // Update Database
+            userSetupViewModel.insertUser(userSetup);
 
             // Delegate validation and submission to the presenter
             presenter.submitSurvey(userSetup.getName(), userSetup.getAge(),

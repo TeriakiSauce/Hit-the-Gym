@@ -304,6 +304,7 @@
                             android:src="@drawable/user_setup" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
             </LinearLayout>
         </ScrollView>
 

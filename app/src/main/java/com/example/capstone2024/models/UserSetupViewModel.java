@@ -1,0 +1,33 @@
+package com.example.capstone2024.models;
+
+import android.app.Application;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import java.util.List;
+
+public class UserSetupViewModel extends AndroidViewModel {
+    private UserSetupRepository repository;
+    private LiveData<List<UserSetup>> allUsers;
+
+    public UserSetupViewModel(Application application) {
+        super(application);
+        repository = new UserSetupRepository(application);
+        allUsers = repository.getAllUsers();
+    }
+
+    public void insertUser(UserSetup user) {
+        repository.insert(user);
+    }
+
+    public void updateUser(UserSetup user) {
+        repository.update(user);
+    }
+
+    public void deleteUser(UserSetup user) {
+        repository.delete(user);
+    }
+
+    public LiveData<List<UserSetup>> getAllUsers() {
+        return allUsers;
+    }
+}
