@@ -274,7 +274,6 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     app:cardBackgroundColor="#1E1E1E"
                     app:cardCornerRadius="8dp">
 
@@ -306,40 +305,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Temporary Database Section -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="#1E1E1E"
-                    app:cardCornerRadius="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/background_with_color"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Database"
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_gravity="center"/>
-
-                        <ImageButton
-                            android:id="@+id/button_database"
-                            android:layout_width="160dp"
-                            android:layout_height="160dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:contentDescription="Database Icon"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/database" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>
 
