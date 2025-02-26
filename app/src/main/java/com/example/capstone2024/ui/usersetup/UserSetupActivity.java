@@ -34,8 +34,6 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         AGE, WEIGHT_CURR, WEIGHT_TARG;
     }
 
-    //UserSetupViewModel userSetupViewModel = new ViewModelProvider(this).get(UserSetupViewModel.class);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +41,9 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
 
         // Initialize model
         userSetup = new UserSetup();
+
+        // Initialize database
+        UserSetupViewModel userSetupViewModel = new ViewModelProvider(this).get(UserSetupViewModel.class);
 
         // Initialize spinner dropdown questions
         spinnerSetup(Metric.AGE);
@@ -98,7 +99,7 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
             userSetup.setEquipment(selectedEquipment != null ? selectedEquipment.getText().toString() : "");
 
             // Update Database
-            //userSetupViewModel.insertUser(userSetup);
+            userSetupViewModel.insertUser(userSetup);
 
             // Delegate validation and submission to the presenter
             presenter.submitSurvey(userSetup.getName(), userSetup.getAge(),
