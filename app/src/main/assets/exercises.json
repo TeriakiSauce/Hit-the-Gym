@@ -2414,34 +2414,6 @@
     "id": "Body_Tricep_Press"
   },
   {
-    "name": "Bodyweight Flyes",
-    "force": "push",
-    "level": "intermediate",
-    "mechanic": "isolation",
-    "equipment": "e-z curl bar",
-    "primaryMuscles": [
-      "chest"
-    ],
-    "secondaryMuscles": [
-      "abdominals",
-      "shoulders",
-      "triceps"
-    ],
-    "instructions": [
-      "Position two equally loaded EZ bars on the ground next to each other. Ensure they are able to roll.",
-      "Assume a push-up position over the bars, supporting your weight on your toes and hands with your arms extended and body straight.",
-      "Place your hands on the bars. This will be your starting position.",
-      "Using a slow and controlled motion, move your hands away from the midline of your body, rolling the bars apart. Inhale during this portion of the motion.",
-      "After moving the bars as far apart as you can, return to the starting position by pulling them back together. Exhale as you perform this movement."
-    ],
-    "category": "strength",
-    "images": [
-      "Bodyweight_Flyes/0.jpg",
-      "Bodyweight_Flyes/1.jpg"
-    ],
-    "id": "Bodyweight_Flyes"
-  },
-  {
     "name": "Bodyweight Mid Row",
     "force": "pull",
     "level": "intermediate",
@@ -2710,85 +2682,7 @@
     ],
     "id": "Box_Squat_with_Bands"
   },
-  {
-    "name": "Box Squat with Chains",
-    "force": "push",
-    "level": "expert",
-    "mechanic": "compound",
-    "equipment": "barbell",
-    "primaryMuscles": [
-      "quadriceps"
-    ],
-    "secondaryMuscles": [
-      "abductors",
-      "adductors",
-      "calves",
-      "glutes",
-      "hamstrings",
-      "lower back"
-    ],
-    "instructions": [
-      "Begin in a power rack with a box at the appropriate height behind you. Typically, you would aim for a box height that brings you to a parallel squat, but you can train higher or lower if desired.",
-      "To set up the chains, begin by looping the leader chain over the sleeves of the bar. The heavy chain should be attached using a snap hook. Adjust the length of the lead chain so that a few links are still on the floor at the top of the movement.",
-      "Begin by stepping under the bar and placing it across the back of the shoulders. Squeeze your shoulder blades together and rotate your elbows forward, attempting to bend the bar across your shoulders. Remove the bar from the rack, creating a tight arch in your lower back, and step back into position. Place your feet wider for more emphasis on the back, glutes, adductors, and hamstrings, or closer together for more quad development. Keep your head facing forward.",
-      "With your back, shoulders, and core tight, push your knees and butt out and you begin your descent. Sit back with your hips until you are seated on the box. Ideally, your shins should be perpendicular to the ground. Pause when you reach the box, and relax the hip flexors. Never bounce off of a box.",
-      "Keeping the weight on your heels and pushing your feet and knees out, drive upward off of the box as you lead the movement with your head. Continue upward, maintaining tightness head to toe."
-    ],
-    "category": "strength",
-    "images": [
-      "Box_Squat_with_Chains/0.jpg",
-      "Box_Squat_with_Chains/1.jpg"
-    ],
-    "id": "Box_Squat_with_Chains"
-  },
-  {
-    "name": "Brachialis-SMR",
-    "force": "static",
-    "level": "intermediate",
-    "mechanic": null,
-    "equipment": "foam roll",
-    "primaryMuscles": [
-      "biceps"
-    ],
-    "secondaryMuscles": [],
-    "instructions": [
-      "Lie on your side, with your upper arm against the foam roller. The upper arm should be more or less aligned with your body, with the outside of the bicep pressed against the foam roller.",
-      "Raise your hips off of the floor, supporting your weight on your arm and on your feet. Hold for 10-30 seconds, and then switch sides."
-    ],
-    "category": "stretching",
-    "images": [
-      "Brachialis-SMR/0.jpg",
-      "Brachialis-SMR/1.jpg"
-    ],
-    "id": "Brachialis-SMR"
-  },
-  {
-    "name": "Bradford/Rocky Presses",
-    "force": "push",
-    "level": "beginner",
-    "mechanic": "compound",
-    "equipment": "barbell",
-    "primaryMuscles": [
-      "shoulders"
-    ],
-    "secondaryMuscles": [
-      "triceps"
-    ],
-    "instructions": [
-      "Sit on a Military Press Bench with a bar at shoulder level with a pronated grip (palms facing forward). Tip: Your grip should be wider than shoulder width and it should create a 90-degree angle between the forearm and the upper arm as the barbell goes down. This is your starting position.",
-      "Once you pick up the barbell with the correct grip, lift the bar up over your head by locking your arms.",
-      "Now lower the bar down to the back of the head slowly as you inhale.",
-      "Lift the bar back up to the starting position as you exhale.",
-      "Lower the bar down to the starting position slowly as you inhale. This is one repetition.",
-      "Alternate in this manner until you complete the recommended amount of repetitions."
-    ],
-    "category": "strength",
-    "images": [
-      "Bradford_Rocky_Presses/0.jpg",
-      "Bradford_Rocky_Presses/1.jpg"
-    ],
-    "id": "Bradford_Rocky_Presses"
-  },
+
   {
     "name": "Butt-Ups",
     "force": "pull",
@@ -12487,31 +12381,6 @@
     "id": "One-Arm_Dumbbell_Row"
   },
   {
-    "name": "One-Arm Flat Bench Dumbbell Flye",
-    "force": "push",
-    "level": "beginner",
-    "mechanic": "isolation",
-    "equipment": "dumbbell",
-    "primaryMuscles": [
-      "chest"
-    ],
-    "secondaryMuscles": [],
-    "instructions": [
-      "Lie down on a flat bench with a dumbbell in one hand resting on top of your thigh. The palm of your hand with the dumbbell in it should be at a neutral grip.",
-      "By using your thighs to help you get the dumbbell up, clean the dumbbell so that you can hold it in front of you with your lifting arm being fully extended. Remember to maintain a neutral grip with this exercise. Your non lifting hand should be to the side holding the flat bench for better support. This will be your starting position.",
-      "Your arm with the weight should have a slight bend on your elbow in order to prevent stress at the biceps tendon. Begin by lowering your arm with the weight in it out in a wide arc until you feel a stretch on your chest. Breathe in as you perform this portion of the movement. Tip: Keep in mind that throughout the movement, your lifting arm should remain stationary; the movement should only occur at the shoulder joint.",
-      "Return your lifting arm back to the starting position as you squeeze your chest muscles and breathe out. Tip: Make sure to use the same arc of motion used to lower the weights.",
-      "Hold for a second at the contracted position and repeat the movement for the prescribed amount of repetitions.",
-      "Switch arms and repeat the exercise."
-    ],
-    "category": "strength",
-    "images": [
-      "One-Arm_Flat_Bench_Dumbbell_Flye/0.jpg",
-      "One-Arm_Flat_Bench_Dumbbell_Flye/1.jpg"
-    ],
-    "id": "One-Arm_Flat_Bench_Dumbbell_Flye"
-  },
-  {
     "name": "One-Arm High-Pulley Cable Side Bends",
     "force": "pull",
     "level": "beginner",
@@ -15280,32 +15149,6 @@
     "id": "Reverse_Flyes"
   },
   {
-    "name": "Reverse Flyes With External Rotation",
-    "force": "pull",
-    "level": "intermediate",
-    "mechanic": "isolation",
-    "equipment": "dumbbell",
-    "primaryMuscles": [
-      "shoulders"
-    ],
-    "secondaryMuscles": [],
-    "instructions": [
-      "To begin, lie down on an incline bench set at a 30-degree angle with the chest and stomach pressing against the incline.",
-      "Have the dumbbells in each hand with the palms facing down to the floor. Your arms should be in front of you so that they are perpendicular to the angle of the bench. Tip: Your elbows should have a slight bend. The legs should be stationary while applying pressure with the ball of your toes (your heels should not be touching the floor). This is the starting position.",
-      "Maintaining the slight bend of the elbows, move the weights out and away from each other in an arc motion while exhaling.",
-      "As you lift the weight, your wrist should externally rotate by 90-degrees so that you go from a palms down (pronated) grip to a palms facing each other (neutral) grip. Tip: Try to squeeze your shoulder blades together to get the best results from this exercise.",
-      "The arms should be elevated until they are level with the head.",
-      "Feel the contraction and slowly lower the weights back down to the starting position while inhaling.",
-      "Repeat for the recommended amount of repetitions."
-    ],
-    "category": "strength",
-    "images": [
-      "Reverse_Flyes_With_External_Rotation/0.jpg",
-      "Reverse_Flyes_With_External_Rotation/1.jpg"
-    ],
-    "id": "Reverse_Flyes_With_External_Rotation"
-  },
-  {
     "name": "Reverse Grip Bent-Over Rows",
     "force": "pull",
     "level": "intermediate",
@@ -17897,29 +17740,6 @@
       "Sled_Push/1.jpg"
     ],
     "id": "Sled_Push"
-  },
-  {
-    "name": "Sled Reverse Flye",
-    "force": "pull",
-    "level": "beginner",
-    "mechanic": "isolation",
-    "equipment": "other",
-    "primaryMuscles": [
-      "shoulders"
-    ],
-    "secondaryMuscles": [],
-    "instructions": [
-      "Attach dual handles to a sled connected by a rope or chain. Load the sled to a light weight.",
-      "Face the sled, backing up until there is some tension in the line. Take both handles at arms length at about waist level. Bend the knees slightly and keep your chest and head up. This will be your starting position.",
-      "Without flexing the elbow, pull the handles upward and apart, performing a reverse fly with some external rotation. Your palms should be facing forward as you do this.",
-      "Return to the starting position, taking a couple steps back to take the slack out of the line."
-    ],
-    "category": "strength",
-    "images": [
-      "Sled_Reverse_Flye/0.jpg",
-      "Sled_Reverse_Flye/1.jpg"
-    ],
-    "id": "Sled_Reverse_Flye"
   },
   {
     "name": "Sled Row",

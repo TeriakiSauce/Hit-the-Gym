@@ -90,7 +90,9 @@ public class WorkoutPlan {
         return this.workoutProgram;
     }
 
-
+    /**
+     * Create a weekly program based on target exercises and workout days.
+     */
     private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays) {
         Map<String, WorkoutSession> program = new LinkedHashMap<>();
         for (int i = 0; i < workoutDays; i++) {
@@ -131,7 +133,11 @@ public class WorkoutPlan {
         return program;
     }
 
-    // Update filter methods to work with Exercise objects
+    /**
+     * Filters based on user's level, age, available equipment and muscle groups.
+     * @param userInput USer input data
+     * @return list of compatible exercises
+     */
     private List<Exercise> filterExercisesByParameters(Map<String, Object> userInput) {
         String level = (String) userInput.getOrDefault("level", "beginner");
         String equipment = (String) userInput.getOrDefault("equipment", "bodyweight");
@@ -180,6 +186,9 @@ public class WorkoutPlan {
         return filteredExercises;
     }
 
+    /**
+     * Finds stretching exercises for specified muscle groups.
+     */
     private List<Exercise> findStretches(List<Exercise> exercises, Set<String> muscleGroups) {
         List<Exercise> stretches = new ArrayList<>();
         for (Exercise exercise : exercises) {

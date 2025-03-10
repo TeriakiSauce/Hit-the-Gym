@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -58,6 +60,11 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     private KonfettiView konfettiView = null;
     private Shape.DrawableShape drawableShape = null;
 
+    private ProgressBar restProgressBar;
+    private CountDownTimer currentRestTimer; // Global timer for all sets
+    private TextView timeRemainingTextView;
+    private FrameLayout timerContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +75,9 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         exerciseImageView = findViewById(R.id.exerciseImageView);
         exerciseInstructionsTextView = findViewById(R.id.exerciseInstructionsTextView);
         setsTableLayout = findViewById(R.id.setsTableLayout);
+        timerContainer = findViewById(R.id.timerContainer);
+        restProgressBar = findViewById(R.id.restProgressBar);
+        timeRemainingTextView = findViewById(R.id.timeRemainingTextView);
 
         Button toggleInstructionsButton = findViewById(R.id.toggleInstructionsButton);
 
@@ -156,7 +166,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Stop the image cycling to avoid memory leaks
+        // Stop the image cycling
         isCyclingImages = false;
         imageCycleHandler.removeCallbacksAndMessages(null);
     }
@@ -168,6 +178,8 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         ProgressBar progressBar = findViewById(R.id.exerciseProgressBar);
         progressBar.setMax(numberOfSets); // Set the maximum value to the total number of sets
         progressBar.setProgress(0); // Start with 0 completed sets
+
+        restProgressBar = findViewById(R.id.restProgressBar);
 
         setsTableLayout.removeAllViews(); // Clear any existing rows
 
@@ -206,6 +218,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
 
                 // Get Position of button
                 if (isChecked) {
+                    resetGlobalTimer();
                     int[] location = new int[2];
                     buttonView.getLocationOnScreen(location); // Get button coordinates on screen
                     float x = location[0] + buttonView.getWidth() / 2f; // Center of the button
@@ -225,6 +238,13 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
                     //Toast.makeText(this, "Set " + setNumber + " completed!", Toast.LENGTH_SHORT).show();
                 } else {
                     completedSets[0]--;
+                    // Check if any checkboxes remain checked.
+
+                    timerContainer.setVisibility(View.GONE);
+                    restProgressBar.setProgress(100);
+                    timeRemainingTextView.setText("02:00");
+
+
                     //Toast.makeText(this, "Set " + setNumber + " uncompleted!", Toast.LENGTH_SHORT).show();
                 }
                 // Update progress bar
@@ -239,7 +259,36 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
             setsTableLayout.addView(setRow);
         }
     }
+    private void resetGlobalTimer() {
+        // Cancel any existing timer
+        if (currentRestTimer != null) {
+            currentRestTimer.cancel();
+        }
+        // Show the timer container
+        timerContainer.setVisibility(View.VISIBLE);
 
+        // Start a new 2-minute countdown
+        currentRestTimer = new CountDownTimer(120000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Calculate progress (100 means full, 0 means empty)
+                int progress = (int) ((millisUntilFinished / 120000f) * 100);
+                restProgressBar.setProgress(progress);
+
+                // Format remaining time as mm:ss and update the TextView
+                int minutes = (int) (millisUntilFinished / 60000);
+                int seconds = (int) ((millisUntilFinished % 60000) / 1000);
+                timeRemainingTextView.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+            @Override
+            public void onFinish() {
+                restProgressBar.setProgress(0);
+                timeRemainingTextView.setText("Time for the next set!");
+                // Optionally hide the timer if finished:
+                // timerContainer.setVisibility(View.GONE);
+            }
+        }.start();
+    }
     private TextView createHeaderTextView(String text) {
         TextView textView = new TextView(this);
         textView.setText(text);
