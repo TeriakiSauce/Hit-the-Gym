@@ -26,6 +26,26 @@
         android:layout_marginTop="4dp"
         android:textColor="@android:color/darker_gray" />
 
+    <!-- New TextView for exercise category -->
+    <TextView
+        android:id="@+id/exerciseCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category: "
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <!-- New TextView for primary muscles -->
+    <TextView
+        android:id="@+id/exercisePrimaryMuscles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Primary Muscles: "
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/darker_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

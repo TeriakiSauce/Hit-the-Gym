@@ -60,14 +60,18 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             // Bind data to views
             TextView exerciseName = exerciseCard.findViewById(R.id.exerciseName);
             TextView exerciseDetails = exerciseCard.findViewById(R.id.exerciseDetails);
+            TextView exerciseCategory = exerciseCard.findViewById(R.id.exerciseCategory);
+            TextView exercisePrimaryMuscles = exerciseCard.findViewById(R.id.exercisePrimaryMuscles);
             ProgressBar progressBar = exerciseCard.findViewById(R.id.progressBar);
             TextView progressText = exerciseCard.findViewById(R.id.progressText);
 
+            // Set the text for the views
             exerciseName.setText(name);
             exerciseDetails.setText("Sets: " + sets + " | Reps: " + reps);
+            exerciseCategory.setText("Category: " + capitalizeFirstLetter(exercise.getCategory()));
+            exercisePrimaryMuscles.setText("Primary Muscle: " +  capitalizeFirstLetter(exercise.getPrimaryMuscles()));
             progressBar.setProgress(progressPercentage);
             progressText.setText(progressPercentage + "%");
-
 
             // Set the OnClickListener for the card
             exerciseCard.setOnClickListener(v -> {
@@ -86,9 +90,13 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    private String capitalizeFirstLetter(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+
     private int calculateProgress(ExerciseSession session) {
         int totalSets = session.getSets();
-        int completedSets = session.getCompletedSets(); // Assuming this method exists
+        int completedSets = session.getCompletedSets();
         return (int) ((completedSets / (float) totalSets) * 100);
     }
 }
