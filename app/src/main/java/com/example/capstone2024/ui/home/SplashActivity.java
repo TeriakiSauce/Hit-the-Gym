@@ -1,6 +1,8 @@
 package com.example.capstone2024.ui.home;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.ui.usersetup.UserSetupActivity;
+
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorSet;
 import android.content.Intent;
@@ -56,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             // Start HomeActivity after animation
-            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            startActivity(new Intent(SplashActivity.this, UserSetupActivity.class));
             finish();
         }, 2000);
     }
