@@ -1,4 +1,7 @@
 package com.example.capstone2024.models;
+import android.content.Context;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,10 +16,23 @@ public class WorkoutPlan {
     private List<Exercise> exercisesList; // List of Exercise objects
     private Map<String, WorkoutSession> workoutProgram; // Map of day to WorkoutSession
     private UserSetupDatabaseHelper databaseHelper;
+    private Context context;
 
-    public WorkoutPlan(InputStream exercisesInputStream) throws JSONException {
+    public WorkoutPlan(InputStream exercisesInputStream, Context context) throws JSONException {
         this.exercisesJsonArray = loadExercises(exercisesInputStream);
         this.exercisesList = parseExercises(exercisesJsonArray);
+        this.context = context;
+    }
+    public void printAllUsers() {
+        // Initialize the database helper (which uses our modified client)
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
+        // Get the list of users synchronously
+        List<UserSetup> users = helper.fetchAllUsersSync();
+
+        // Print out each user (this uses the toString method you added)
+        for (UserSetup user : users) {
+            Toast.makeText(context, user.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Load exercises from JSON
@@ -64,6 +80,7 @@ public class WorkoutPlan {
     }
 
     public Map<String, WorkoutSession> generateWorkoutProgram(Map<String, Object> userInput) {
+        printAllUsers();
         int workoutDays = (int) userInput.getOrDefault("workout_days", 5);
 
         Map<String, Set<String>> muscleGroupsMap = classifyMuscleGroups();

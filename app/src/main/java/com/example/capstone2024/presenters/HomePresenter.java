@@ -1,6 +1,7 @@
 package com.example.capstone2024.presenters;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.example.capstone2024.contracts.HomeContract;
 import com.example.capstone2024.models.UserSetup;
@@ -18,31 +19,19 @@ public class HomePresenter implements HomeContract.Presenter {
     private final HomeContract.View view;
     private final Context context;
     private Map<String, WorkoutSession> workoutProgram;
-    private UserSetupDatabaseHelper databaseHelper;
-    private List<UserSetup> userList;
+
 
     public HomePresenter(HomeContract.View view, Context context) {
         this.view = view;
         this.context = context;
-
-        databaseHelper = new UserSetupDatabaseHelper(context);
-        userList = new ArrayList<>();
     }
 
     @Override
     public void initializeWorkoutPlan() {
         try {
             InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream);
+            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, this.context);
 
-            databaseHelper.getAllUsers(new UserSetupDatabaseHelper.OnUsersLoadedListener() {
-                @Override
-                public void onUsersLoaded(List<UserSetup> users) {
-                    // Store the users in the list
-                    userList.clear();  // Clear previous data (if any)
-                    userList.addAll(users);  // Add fetched users to the list
-                }
-            });
 
             // Simulate user input
             Map<String, Object> userInput = new HashMap<>();

@@ -122,7 +122,7 @@ public class ExerciseSearchActivity extends AppCompatActivity {
         // WIth no database yet, we will need to create a list of exercises by creating a temporary workout plan
         Context context = getApplicationContext();
         InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-        WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream);
+        WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, context);
         return workoutPlan.getExercisesList();
     }
 }
