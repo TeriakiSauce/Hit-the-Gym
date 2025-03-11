@@ -15,7 +15,6 @@ public class UserSetupDatabaseHelper {
 
     private UserSetupDao userDao;
     private Context context;
-
     public UserSetupDatabaseHelper(Context context) {
         // Initialize DAO by getting it from the AppDatabase instance
         UserSetupDatabase db = UserSetupDatabaseClient.getInstance(context).getAppDatabase();
@@ -24,12 +23,7 @@ public class UserSetupDatabaseHelper {
     }
 
     public void insertUser(UserSetup user) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                userDao.insert(user);
-            }
-        }).start(); // Use a background thread to insert data into the database
+        new Thread(() -> userDao.insert(user)).start(); // Use a background thread to insert data into the database
     }
 
     public List<UserSetup> getAllUsersSync() {
@@ -38,13 +32,10 @@ public class UserSetupDatabaseHelper {
 
     public List<UserSetup> fetchAllUsersSync() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<UserSetup>> future = executor.submit(new Callable<List<UserSetup>>() {
-            @Override
-            public List<UserSetup> call() {
-                // Use the synchronous DAO method defined in your helper
-                UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
-                return helper.getAllUsersSync();
-            }
+        Future<List<UserSetup>> future = executor.submit(() -> {
+            // Use the synchronous DAO method defined in your helper
+            UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
+            return helper.getAllUsersSync();
         });
 
         try {
@@ -57,10 +48,5 @@ public class UserSetupDatabaseHelper {
             executor.shutdown();
         }
     }
-
-    public interface OnUsersLoadedListener {
-        void onUsersLoaded(List<UserSetup> users);
-    }
-
 }
 

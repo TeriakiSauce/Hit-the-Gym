@@ -110,19 +110,6 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
                     userSetup.getCurrentWeight(), userSetup.getTargetWeight(),
                     userSetup.getWorkoutLevel(), userSetup.getTargetBodyParts(), userSetup.getEquipment());
         });
-
-//        ArrayList<UserSetup> userList = new ArrayList<>();
-//        databaseHelper.getAllUsers(new UserSetupDatabaseHelper.OnUsersLoadedListener() {
-//            @Override
-//            public void onUsersLoaded(List<UserSetup> users) {
-//                // Store the users in the list
-//                userList.clear();  // Clear previous data (if any)
-//                userList.addAll(users);  // Add fetched users to the list
-//            }
-//        });
-//
-//        Toast.makeText(this, userList.toString(), Toast.LENGTH_SHORT).show();
-
     }
 
     public void spinnerSetup(Metric metric) {
