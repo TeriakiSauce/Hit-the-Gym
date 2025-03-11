@@ -12,6 +12,7 @@ public class WorkoutPlan {
     private JSONArray exercisesJsonArray;
     private List<Exercise> exercisesList; // List of Exercise objects
     private Map<String, WorkoutSession> workoutProgram; // Map of day to WorkoutSession
+    private UserSetupDatabaseHelper databaseHelper;
 
     public WorkoutPlan(InputStream exercisesInputStream) throws JSONException {
         this.exercisesJsonArray = loadExercises(exercisesInputStream);
