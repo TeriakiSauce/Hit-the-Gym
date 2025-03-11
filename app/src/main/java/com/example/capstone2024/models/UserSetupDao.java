@@ -19,8 +19,8 @@ public interface UserSetupDao {
     void delete(UserSetup user);
 
     @Query("SELECT * FROM user_setup")
-    LiveData<List<UserSetup>> getAllUsers();  // Change return type to LiveData
+    List<UserSetup> getAllUsers();
 
     @Query("SELECT * FROM user_setup WHERE id = :userId")
-    LiveData<UserSetup> getUserById(int userId);  // Change to LiveData
+    UserSetup getUserById(int userId);
 }

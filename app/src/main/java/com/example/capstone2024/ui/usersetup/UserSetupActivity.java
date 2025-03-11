@@ -18,7 +18,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.UserSetupContract;
 import com.example.capstone2024.models.UserSetup;
-import com.example.capstone2024.models.UserSetupViewModel;
+import com.example.capstone2024.models.UserSetupDao;
+import com.example.capstone2024.models.UserSetupDatabase;
+import com.example.capstone2024.models.UserSetupDatabaseClient;
+import com.example.capstone2024.models.UserSetupDatabaseHelper;
 import com.example.capstone2024.presenters.UserSetupPresenter;
 import com.example.capstone2024.ui.home.HomeActivity;
 import android.widget.ArrayAdapter;
@@ -30,6 +33,7 @@ import java.util.List;
 public class UserSetupActivity extends AppCompatActivity implements UserSetupContract.View {
     private UserSetupContract.Presenter presenter;
     private UserSetup userSetup;
+    private UserSetupDatabaseHelper databaseHelper;
     public enum Metric {
         AGE, WEIGHT_CURR, WEIGHT_TARG;
     }
@@ -43,7 +47,7 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         userSetup = new UserSetup();
 
         // Initialize database
-        UserSetupViewModel userSetupViewModel = new ViewModelProvider(this).get(UserSetupViewModel.class);
+        databaseHelper = new UserSetupDatabaseHelper(this);
 
         // Initialize spinner dropdown questions
         spinnerSetup(Metric.AGE);
@@ -99,7 +103,7 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
             userSetup.setEquipment(selectedEquipment != null ? selectedEquipment.getText().toString() : "");
 
             // Update Database
-            userSetupViewModel.insertUser(userSetup);
+            databaseHelper.insertUser(userSetup);
 
             // Delegate validation and submission to the presenter
             presenter.submitSurvey(userSetup.getName(), userSetup.getAge(),

@@ -9,19 +9,4 @@ import androidx.room.TypeConverters;
 @TypeConverters(Converters.class)  // Register the TypeConverter
 public abstract class UserSetupDatabase extends RoomDatabase{
     public abstract UserSetupDao userSetupDao();
-    private static UserSetupDatabase INSTANCE;
-
-    public static UserSetupDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (UserSetupDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    UserSetupDatabase.class, "userSetup_database")
-                            .build();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
 }
