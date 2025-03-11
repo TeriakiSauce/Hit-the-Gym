@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -58,6 +60,12 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     private KonfettiView konfettiView = null;
     private Shape.DrawableShape drawableShape = null;
 
+    private ProgressBar restProgressBar;
+    private CountDownTimer currentRestTimer; // Global timer for all sets
+    private TextView timeRemainingTextView;
+    private FrameLayout timerContainer;
+    private Exercise exercise;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +76,9 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         exerciseImageView = findViewById(R.id.exerciseImageView);
         exerciseInstructionsTextView = findViewById(R.id.exerciseInstructionsTextView);
         setsTableLayout = findViewById(R.id.setsTableLayout);
+        timerContainer = findViewById(R.id.timerContainer);
+        restProgressBar = findViewById(R.id.restProgressBar);
+        timeRemainingTextView = findViewById(R.id.timeRemainingTextView);
 
         Button toggleInstructionsButton = findViewById(R.id.toggleInstructionsButton);
 
@@ -96,12 +107,11 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         presenter = new ExerciseSessionPresenter(this);
 
         // Load exercise data from Intent
-        Exercise exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
+        this.exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
 
         if (exercise != null) {
             exerciseName = exercise.getName().replace(" ", "_"); // Convert exercise name to folder name
         }
-
         presenter.loadExerciseSession(exercise);
     }
 
@@ -156,7 +166,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Stop the image cycling to avoid memory leaks
+        // Stop the image cycling
         isCyclingImages = false;
         imageCycleHandler.removeCallbacksAndMessages(null);
     }
@@ -169,21 +179,29 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         progressBar.setMax(numberOfSets); // Set the maximum value to the total number of sets
         progressBar.setProgress(0); // Start with 0 completed sets
 
+        restProgressBar = findViewById(R.id.restProgressBar);
         setsTableLayout.removeAllViews(); // Clear any existing rows
 
-        // Find the KonfettiView and initialize parameters
-        final Drawable drawable =
-                ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart);
-        drawableShape = ImageUtil.loadDrawable(drawable, true, true);
-        konfettiView = findViewById(R.id.konfettiView);
-        konfettiView.bringToFront();
-        EmitterConfig emitterConfig = new Emitter(100L, TimeUnit.MILLISECONDS).max(100);
+        // Determine if weight input should be included
+        boolean includeWeight = false;
+        String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
+        if (equipment != null &&
+                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell"))) {
+            includeWeight = true;
+        }
 
-        // Add table headers
+        // Create header row: always add a cell for Weight.
         TableRow headerRow = new TableRow(this);
         headerRow.addView(createHeaderTextView("Set Type"));
         headerRow.addView(createHeaderTextView("Reps"));
-        headerRow.addView(createHeaderTextView("Weight"));
+        if (includeWeight) {
+            headerRow.addView(createHeaderTextView("Weight"));
+        } else {
+            // Add an invisible header cell to maintain spacing.
+            TextView emptyHeader = createHeaderTextView("");
+            emptyHeader.setVisibility(View.INVISIBLE);
+            headerRow.addView(emptyHeader);
+        }
         headerRow.addView(createHeaderTextView("Complete"));
         setsTableLayout.addView(headerRow);
 
@@ -196,50 +214,86 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
 
             EditText setTypeInput = createEditText("Set " + (i + 1));
             EditText repsInput = createEditText("Reps");
-            EditText weightInput = createEditText("Weight");
-
-            final int setNumber = i + 1;
-
-            CheckBox completionCheckBox = new CheckBox(this);
-            completionCheckBox.setPadding(8, 8, 8, 8);
-            completionCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-                // Get Position of button
-                if (isChecked) {
-                    int[] location = new int[2];
-                    buttonView.getLocationOnScreen(location); // Get button coordinates on screen
-                    float x = location[0] + buttonView.getWidth() / 2f; // Center of the button
-                    float y = location[1] + buttonView.getHeight() / 2f;
-
-                    Party party =
-                            new PartyFactory(emitterConfig)
-                                    .spread(360)
-                                    .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
-                                    .colors(Arrays.asList(0x00FF00))
-                                    .setSpeedBetween(0f, 30f)
-                                    .position(new Relative(x / buttonView.getRootView().getWidth(), y / buttonView.getRootView().getHeight()))
-                                    .build();
-
-                    completedSets[0]++;
-                    konfettiView.start(party); // Trigger confetti
-                    //Toast.makeText(this, "Set " + setNumber + " completed!", Toast.LENGTH_SHORT).show();
-                } else {
-                    completedSets[0]--;
-                    //Toast.makeText(this, "Set " + setNumber + " uncompleted!", Toast.LENGTH_SHORT).show();
-                }
-                // Update progress bar
-                progressBar.setProgress(completedSets[0]);
-            });
 
             setRow.addView(setTypeInput);
             setRow.addView(repsInput);
-            setRow.addView(weightInput);
-            setRow.addView(completionCheckBox);
 
+            if (includeWeight) {
+                EditText weightInput = createEditText("Weight");
+                setRow.addView(weightInput);
+            } else {
+                // Add an invisible view to keep the column spacing consistent.
+                TextView emptyCell = createHeaderTextView("");
+                emptyCell.setVisibility(View.INVISIBLE);
+                setRow.addView(emptyCell);
+            }
+
+            CheckBox completionCheckBox = new CheckBox(this);
+            completionCheckBox.setPadding(8, 8, 8, 8);
+            final int setNumber = i + 1;
+            completionCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    resetGlobalTimer();
+                    int[] location = new int[2];
+                    buttonView.getLocationOnScreen(location);
+                    float x = location[0] + buttonView.getWidth() / 2f;
+                    float y = location[1] + buttonView.getHeight() / 2f;
+
+                    Party party = new PartyFactory(new Emitter(100L, TimeUnit.MILLISECONDS).max(100))
+                            .spread(360)
+                            .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
+                            .colors(Arrays.asList(0x00FF00))
+                            .setSpeedBetween(0f, 30f)
+                            .position(new nl.dionsegijn.konfetti.core.Position.Relative(
+                                    x / buttonView.getRootView().getWidth(),
+                                    y / buttonView.getRootView().getHeight()))
+                            .build();
+
+                    completedSets[0]++;
+                    konfettiView.start(party);
+                } else {
+                    completedSets[0]--;
+                    timerContainer.setVisibility(View.GONE);
+                    restProgressBar.setProgress(100);
+                    timeRemainingTextView.setText("02:00");
+                }
+                progressBar.setProgress(completedSets[0]);
+            });
+
+            setRow.addView(completionCheckBox);
             setsTableLayout.addView(setRow);
         }
     }
+    private void resetGlobalTimer() {
+        // Cancel any existing timer
+        if (currentRestTimer != null) {
+            currentRestTimer.cancel();
+        }
+        // Show the timer container
+        timerContainer.setVisibility(View.VISIBLE);
 
+        // Start a new 2-minute countdown
+        currentRestTimer = new CountDownTimer(120000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Calculate progress (100 means full, 0 means empty)
+                int progress = (int) ((millisUntilFinished / 120000f) * 100);
+                restProgressBar.setProgress(progress);
+
+                // Format remaining time as mm:ss and update the TextView
+                int minutes = (int) (millisUntilFinished / 60000);
+                int seconds = (int) ((millisUntilFinished % 60000) / 1000);
+                timeRemainingTextView.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+            @Override
+            public void onFinish() {
+                restProgressBar.setProgress(0);
+                timeRemainingTextView.setText("Time for the next set!");
+                // Optionally hide the timer if finished:
+                // timerContainer.setVisibility(View.GONE);
+            }
+        }.start();
+    }
     private TextView createHeaderTextView(String text) {
         TextView textView = new TextView(this);
         textView.setText(text);

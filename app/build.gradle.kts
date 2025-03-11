@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.room.runtime)
     implementation(libs.room.runtime)
+    implementation(libs.room.common)
     annotationProcessor(libs.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.room.testing)

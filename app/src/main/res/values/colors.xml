@@ -17,4 +17,6 @@
     <color name="blue">#0000FF</color>
     <color name="transparent">#00000000</color>
     <color name="dark_gray">#1E1E1E</color>
+    <color name="start_green">#C5E8B7</color>
+    <color name="end_green">#2EB62C</color>
 </resources>

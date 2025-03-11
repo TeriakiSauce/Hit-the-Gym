@@ -1,19 +1,25 @@
 package com.example.capstone2024.presenters;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.example.capstone2024.contracts.HomeContract;
+import com.example.capstone2024.models.UserSetup;
+import com.example.capstone2024.models.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.WorkoutPlan;
 import com.example.capstone2024.models.WorkoutSession;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomePresenter implements HomeContract.Presenter {
     private final HomeContract.View view;
     private final Context context;
     private Map<String, WorkoutSession> workoutProgram;
+
 
     public HomePresenter(HomeContract.View view, Context context) {
         this.view = view;
@@ -24,7 +30,8 @@ public class HomePresenter implements HomeContract.Presenter {
     public void initializeWorkoutPlan() {
         try {
             InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream);
+            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, this.context);
+
 
             // Simulate user input
             Map<String, Object> userInput = new HashMap<>();

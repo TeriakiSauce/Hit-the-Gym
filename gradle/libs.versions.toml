@@ -16,6 +16,7 @@ activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.6.0"
+roomCommon = "2.6.1"
 
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -43,6 +44,7 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 konfetti = { module = "nl.dionsegijn:konfetti-xml", version = "2.0.5" }
+room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

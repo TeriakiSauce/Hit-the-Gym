@@ -1,4 +1,7 @@
 package com.example.capstone2024.models;
+import android.content.Context;
+import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,10 +15,24 @@ public class WorkoutPlan {
     private JSONArray exercisesJsonArray;
     private List<Exercise> exercisesList; // List of Exercise objects
     private Map<String, WorkoutSession> workoutProgram; // Map of day to WorkoutSession
+    private UserSetupDatabaseHelper databaseHelper;
+    private Context context;
 
-    public WorkoutPlan(InputStream exercisesInputStream) throws JSONException {
+    public WorkoutPlan(InputStream exercisesInputStream, Context context) throws JSONException {
         this.exercisesJsonArray = loadExercises(exercisesInputStream);
         this.exercisesList = parseExercises(exercisesJsonArray);
+        this.context = context;
+    }
+    public void printAllUsers() {
+        // Initialize the database helper (which uses our modified client)
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
+        // Get the list of users synchronously
+        List<UserSetup> users = helper.fetchAllUsersSync();
+
+        // Print out each user (this uses the toString method you added)
+        for (UserSetup user : users) {
+            Toast.makeText(context, user.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Load exercises from JSON
@@ -38,11 +55,12 @@ public class WorkoutPlan {
             String level = exerciseJson.optString("level", "beginner");
             String equipment = exerciseJson.optString("equipment", "bodyweight");
             String category = exerciseJson.optString("category", "");
-            JSONArray primaryMusclesArray = exerciseJson.optJSONArray("primaryMuscles");
-            List<String> primaryMuscles = new ArrayList<>();
-            if (primaryMusclesArray != null) {
-                for (int j = 0; j < primaryMusclesArray.length(); j++) {
-                    primaryMuscles.add(primaryMusclesArray.getString(j));
+            String primaryMuscles = exerciseJson.optJSONArray("primaryMuscles").getString(0);
+            JSONArray secondaryMusclesArray = exerciseJson.optJSONArray("secondaryMuscles");
+            List<String> secondaryMuscles = new ArrayList<>();
+            if (secondaryMusclesArray != null) {
+                for (int j = 0; j < secondaryMusclesArray.length(); j++) {
+                    secondaryMuscles.add(secondaryMusclesArray.getString(j));
                 }
             }
             JSONArray instructionsArray = exerciseJson.optJSONArray("instructions");
@@ -52,53 +70,73 @@ public class WorkoutPlan {
                     instructions.add(instructionsArray.getString(j));
                 }
             }
+            String mechanic = exerciseJson.optString("mechanic", "");
+
             // Create Exercise object
-            Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles, instructions);
+            Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles, secondaryMuscles, instructions, mechanic);
             exercises.add(exercise);
         }
         return exercises;
     }
 
     public Map<String, WorkoutSession> generateWorkoutProgram(Map<String, Object> userInput) {
-        int workoutDays = (int) userInput.getOrDefault("workout_days", 3);
-        double availability = (double) userInput.getOrDefault("availability", 1.0);
+        printAllUsers();
+        int workoutDays = (int) userInput.getOrDefault("workout_days", 5);
 
         Map<String, Set<String>> muscleGroupsMap = classifyMuscleGroups();
         Set<String> largeMuscles = muscleGroupsMap.get("large");
         Set<String> mediumMuscles = muscleGroupsMap.get("medium");
         Set<String> smallMuscles = muscleGroupsMap.get("small");
 
-        // Adjust workout targets based on availability
-        int baseTarget = Math.max(1, (int) availability);
         Map<String, Integer> targetExercises = new HashMap<>();
+
         for (String muscle : largeMuscles) {
-            targetExercises.put(muscle, 4 * baseTarget);
+            targetExercises.put(muscle, 2);
         }
         for (String muscle : mediumMuscles) {
-            targetExercises.put(muscle, 3 * baseTarget);
+            targetExercises.put(muscle, 2);
         }
         for (String muscle : smallMuscles) {
-            targetExercises.put(muscle, 2 * baseTarget);
+            targetExercises.put(muscle, 1);
         }
 
         // Filter exercises based on parameters
         List<Exercise> filteredExercises = filterExercisesByParameters(userInput);
 
         // Create weekly program
-        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays);
+        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays, userInput);
 
         return this.workoutProgram;
     }
 
-
-    private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays) {
+    /**
+     * Create a weekly program based on target exercises and workout days.
+     */
+    private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays, Map<String, Object> userInput) {
         Map<String, WorkoutSession> program = new LinkedHashMap<>();
         for (int i = 0; i < workoutDays; i++) {
             program.put("Day " + (i + 1), new WorkoutSession(new ArrayList<>()));
         }
 
-        int dayIndex = 0;
+        // Add one cardio exercise at the beginning of each workout day as warmup
+        for (int day = 0; day < workoutDays; day++) {
+            WorkoutSession session = program.get("Day " + (day + 1));
+            List<Exercise> cardioExercises = new ArrayList<>();
+            for (Exercise ex : exercises) {
+                if ("cardio".equalsIgnoreCase(ex.getCategory())) {
+                    cardioExercises.add(ex);
+                }
+            }
+            if (!cardioExercises.isEmpty()) {
+                Collections.shuffle(cardioExercises);
+                Exercise warmup = cardioExercises.get(0);
+                ExerciseSession warmupSession = new ExerciseSession(warmup, 1, 1, 10);
+                session.getExerciseSessions().add(0, warmupSession);
+            }
+        }
 
+        // Distribute muscle-specific exercises and add stretches.
+        int dayIndex = 0;
         for (Map.Entry<String, Integer> entry : targetExercises.entrySet()) {
             String muscleGroup = entry.getKey();
             int targetCount = entry.getValue();
@@ -113,80 +151,137 @@ public class WorkoutPlan {
             for (Exercise exercise : selectedExercises) {
                 String day = "Day " + ((dayIndex % workoutDays) + 1);
                 WorkoutSession workoutSession = program.get(day);
-
-                // Create ExerciseSession with default sets and rest time
-                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1, 10); // 4 sets, 1 minute rest
+                // Create main exercise session (default 4 sets)
+                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1, 10);
                 workoutSession.getExerciseSessions().add(exerciseSession);
 
-                // Optionally add a corresponding stretch
-                if (!muscleStretches.isEmpty()) {
-                    Exercise stretchExercise = muscleStretches.get(0);
-                    ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1, 10);
-                    workoutSession.getExerciseSessions().add(stretchSession);
+                // Add a stretch for the muscle group used in compound exercises
+                if ("compound".equalsIgnoreCase(exercise.getMechanic())) {
+                    if (!muscleStretches.isEmpty()) {
+                        Exercise stretchExercise = muscleStretches.get(0);
+                        ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1, 10);
+                        workoutSession.getExerciseSessions().add(stretchSession);
+
+                        // For seniors, add an extra stretch
+                        int age = (int) userInput.getOrDefault("age", 30);
+                        if (age > 65 && muscleStretches.size() > 1) {
+                            Exercise extraStretch = muscleStretches.get(1);
+                            ExerciseSession extraStretchSession = new ExerciseSession(extraStretch, 1, 1, 10);
+                            workoutSession.getExerciseSessions().add(extraStretchSession);
+                        }
+                    }
                 }
                 dayIndex++;
+            }
+        }
+
+        // Ensure one compound exercise per session
+        for (int day = 0; day < workoutDays; day++) {
+            WorkoutSession session = program.get("Day " + (day + 1));
+            boolean hasCompound = false;
+            for (ExerciseSession es : session.getExerciseSessions()) {
+                if ("compound".equalsIgnoreCase(es.getExercise().getCategory())) {
+                    hasCompound = true;
+                    break;
+                }
+            }
+            if (!hasCompound) {
+                List<Exercise> compoundExercises = new ArrayList<>();
+                for (Exercise ex : exercises) {
+                    if ("compound".equalsIgnoreCase(ex.getCategory())) {
+                        compoundExercises.add(ex);
+                    }
+                }
+                if (!compoundExercises.isEmpty()) {
+                    Collections.shuffle(compoundExercises);
+                    Exercise compound = compoundExercises.get(0);
+                    ExerciseSession compoundSession = new ExerciseSession(compound, 3, 1, 10);
+                    session.getExerciseSessions().add(compoundSession);
+                }
             }
         }
 
         return program;
     }
 
-    // Update filter methods to work with Exercise objects
+    /**
+     * Filters based on user's level, age, available equipment and muscle groups.
+     * @param userInput USer input data
+     * @return list of compatible exercises
+     */
     private List<Exercise> filterExercisesByParameters(Map<String, Object> userInput) {
-        String level = (String) userInput.getOrDefault("level", "beginner");
-        String equipment = (String) userInput.getOrDefault("equipment", "bodyweight");
+        String level = ((String) userInput.getOrDefault("level", "beginner")).toLowerCase();
+        String equipment = ((String) userInput.getOrDefault("equipment", "bodyweight")).toLowerCase();
         int age = (int) userInput.getOrDefault("age", 30);
-        double cardioRatio = ((int) userInput.get("target_weight") < (int) userInput.get("weight")) ? 0.3 : 0.2;
-        Set<String> blacklist = (age > 50) ? new HashSet<>(Collections.singletonList("deadlift")) : new HashSet<>();
+        int currentWeight = (int) userInput.getOrDefault("weight", 0);
+        int targetWeight = (int) userInput.getOrDefault("target_weight", 0);
+        // Determine goal: lose weight if target is less than current weight, else gain weight.
+        String weightGoal = (targetWeight < currentWeight) ? "lose" : "gain";
+        // Retrieve targeted muscle groups if provided (assumed to be lowercase strings)
+        Set<String> targetMuscleGroups = (Set<String>) userInput.getOrDefault("target_muscle_groups", new HashSet<String>());
 
         List<Exercise> filteredExercises = new ArrayList<>();
 
         for (Exercise exercise : exercisesList) {
-            // Level filtering
+            // Level filtering: Only allow exercises at or below the user's level.
             String exerciseLevel = exercise.getLevel();
-            if ("advanced".equals(exerciseLevel) && !"advanced".equals(level)) continue;
-            if ("intermediate".equals(exerciseLevel) && "beginner".equals(level)) continue;
+            if ("advanced".equals(exerciseLevel) && !"advanced".equals(level))
+                continue;
+            if ("intermediate".equals(exerciseLevel) && "beginner".equals(level))
+                continue;
 
-            // Equipment filtering
-            String exerciseEquipment = exercise.getEquipment();
-            if (!exerciseEquipment.equalsIgnoreCase(equipment)) continue;
+            // Age filtering:
+            if (age < 12 && !exercise.getEquipment().equalsIgnoreCase("bodyweight"))
+                continue;
+            if (age < 16 && exercise.getEquipment().equalsIgnoreCase("barbell"))
+                continue;
 
-            // Blacklist filtering
-            String exerciseName = exercise.getName().toLowerCase();
-            if (blacklist.contains(exerciseName)) continue;
+            // Equipment filtering:
+            if ("bodyweight".equals(equipment)) {
+                if (!exercise.getEquipment().equalsIgnoreCase("bodyweight"))
+                    continue;
+            } else if ("dumbbells".equals(equipment)) {
+                if (!(exercise.getEquipment().equalsIgnoreCase("bodyweight") || exercise.getEquipment().equalsIgnoreCase("dumbbells")))
+                    continue;
+            }
 
-            // Cardio vs. strength filtering
-            String category = exercise.getCategory();
-            double randomValue = Math.random();
-            if ("cardio".equalsIgnoreCase(category) && randomValue > cardioRatio) continue;
-            if ("strength".equalsIgnoreCase(category) && randomValue < cardioRatio) continue;
-
+            // Target muscle group filtering:
+            if (!targetMuscleGroups.isEmpty()) {
+                String primaryMuscles = exercise.getPrimaryMuscles();
+                boolean targetsSelected = false;
+                if (targetMuscleGroups.contains(primaryMuscles))
+                {
+                    break;
+                }
+                if (!targetsSelected)
+                    continue;
+            }
             filteredExercises.add(exercise);
         }
-
         return filteredExercises;
     }
 
     private List<Exercise> filterExercisesByMuscle(List<Exercise> exercises, Set<String> muscleGroups) {
         List<Exercise> filteredExercises = new ArrayList<>();
         for (Exercise exercise : exercises) {
-            List<String> primaryMuscles = exercise.getPrimaryMuscles();
-            Set<String> muscleIntersection = new HashSet<>(primaryMuscles);
-            muscleIntersection.retainAll(muscleGroups);
-            if (!muscleIntersection.isEmpty()) {
+            String primaryMuscle = exercise.getPrimaryMuscles();
+            if (primaryMuscle != null && muscleGroups.contains(primaryMuscle.toLowerCase())) {
                 filteredExercises.add(exercise);
             }
         }
         return filteredExercises;
     }
 
+    /**
+     * Finds stretching exercises for specified muscle groups.
+     */
     private List<Exercise> findStretches(List<Exercise> exercises, Set<String> muscleGroups) {
         List<Exercise> stretches = new ArrayList<>();
         for (Exercise exercise : exercises) {
-            List<String> primaryMuscles = exercise.getPrimaryMuscles();
-            Set<String> muscleIntersection = new HashSet<>(primaryMuscles);
-            muscleIntersection.retainAll(muscleGroups);
-            if (!muscleIntersection.isEmpty() && "stretch".equalsIgnoreCase(exercise.getCategory())) {
+            String primaryMuscle = exercise.getPrimaryMuscles();
+            if (primaryMuscle != null
+                    && muscleGroups.contains(primaryMuscle.toLowerCase())
+                    && "stretching".equalsIgnoreCase(exercise.getCategory())) {
                 stretches.add(exercise);
             }
         }

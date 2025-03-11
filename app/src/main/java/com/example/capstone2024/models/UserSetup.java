@@ -101,4 +101,18 @@ public class UserSetup {
     public String getEquipment(){
         return equipment;
     }
+
+    @Override
+    public String toString() {
+        return "UserSetup{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", currentWeight='" + currentWeight + '\'' +
+                ", targetWeight='" + targetWeight + '\'' +
+                ", workoutLevel='" + workoutLevel + '\'' +
+                ", targetBodyParts=" + targetBodyParts +
+                ", equipment='" + equipment + '\'' +
+                '}';
+    }
 }
