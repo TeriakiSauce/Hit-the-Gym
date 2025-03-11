@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.capstone2024"
-        minSdk = 24
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -68,4 +68,5 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+    implementation(libs.core.splashscreen)
 }
