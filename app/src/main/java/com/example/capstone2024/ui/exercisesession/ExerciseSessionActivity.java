@@ -29,6 +29,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.ExerciseSessionContract;
+import com.example.capstone2024.database.ExerciseSessionWithExercise;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.presenters.ExerciseSessionPresenter;
 
@@ -54,7 +56,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     private ExerciseSessionContract.Presenter presenter;
     private Handler imageCycleHandler = new Handler();
     private int currentImageIndex = 0; // Tracks which image to display (0 or 1)
-    private String exerciseName; // Used to load images
+    private String imageName; // Used to load images
     private boolean isCyclingImages = false; // To stop the cycling when needed
 
     private KonfettiView konfettiView = null;
@@ -106,13 +108,15 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         // Initialize presenter
         presenter = new ExerciseSessionPresenter(this);
 
-        // Load exercise data from Intent
-        this.exercise = (Exercise) getIntent().getSerializableExtra("EXERCISE");
+        // Load session ID from intent
+        int sessionId = (int) getIntent().getSerializableExtra("EXERCISE_ID");
 
-        if (exercise != null) {
-            exerciseName = exercise.getName().replace(" ", "_"); // Convert exercise name to folder name
-        }
-        presenter.loadExerciseSession(exercise);
+        // Get exercise session from database and load exercise
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
+        ExerciseSessionWithExercise session = helper.getExerciseSessionWithExerciseById(sessionId);
+        this.exercise = session.getExercise();
+        this.imageName = exercise.getName().replace(" ", "_");;
+        presenter.loadExerciseSession(session);
     }
 
     @Override
@@ -137,7 +141,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
                 // Load the image dynamically from assets
                 Drawable nextImage = null;
                 try {
-                    nextImage = loadImageFromAssets(exerciseName, currentImageIndex);
+                    nextImage = loadImageFromAssets(imageName, currentImageIndex);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

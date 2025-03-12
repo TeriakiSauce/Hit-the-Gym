@@ -75,7 +75,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             // Set the OnClickListener for the card
             exerciseCard.setOnClickListener(v -> {
                 Intent intent = new Intent(WorkoutSessionActivity.this, ExerciseSessionActivity.class);
-                intent.putExtra("EXERCISE", exercise);
+                intent.putExtra("EXERCISE_ID", exerciseSession.getId());
                 startActivity(intent);
             });
 

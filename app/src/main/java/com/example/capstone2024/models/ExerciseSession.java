@@ -18,17 +18,19 @@ public class ExerciseSession implements Serializable {
     private int workoutSessionId;
     @ColumnInfo(name = "exercise_id")
     private int exerciseId;
+    @ColumnInfo (name = "completed_sets")
+    private int completedSets;
     private int sets;
     private int restTime; // in minutes
     private int reps;
 
-    private int completedSets;
     public ExerciseSession(int workoutSessionId, int exerciseId, int sets, int restTime, int reps) {
         this.workoutSessionId = workoutSessionId;
         this.exerciseId = exerciseId;
         this.sets = sets;
         this.restTime = restTime;
         this.reps = reps;
+        this.completedSets = 0;
     }
 
     // Getters and setters

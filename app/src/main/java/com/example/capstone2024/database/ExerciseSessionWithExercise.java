@@ -39,4 +39,8 @@ public class ExerciseSessionWithExercise implements Serializable {
     public int getCompletedSets() {
         return exerciseSession.getCompletedSets();
     }
+    public int getId() {
+        return exerciseSession.getId();
+    }
+
 }

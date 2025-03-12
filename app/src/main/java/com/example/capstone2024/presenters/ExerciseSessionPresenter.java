@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.ExerciseSessionContract;
+import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.models.Exercise;
 
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class ExerciseSessionPresenter implements ExerciseSessionContract.Present
     }
 
     @Override
-    public void loadExerciseSession(Exercise exercise) {
+    public void loadExerciseSession(ExerciseSessionWithExercise session) {
+        Exercise exercise = session.getExercise();
+
         if (exercise != null) {
             String name = exercise.getName(); // Exercise name corresponds to folder name
             String imageName = name.replace(" ", "_"); // Corresponds to image directory name

@@ -139,5 +139,26 @@ public class UserSetupDatabaseHelper {
     public void insertExerciseSession(ExerciseSession exerciseSession) {
         new Thread(() -> exerciseSessionDao.insertExerciseSession(exerciseSession)).start();
     }
+
+    public void updateExerciseSession(ExerciseSession exerciseSession) {
+        new Thread(() -> {
+            exerciseSessionDao.updateExerciseSession(exerciseSession);
+        }).start();
+    }
+
+    public ExerciseSessionWithExercise getExerciseSessionWithExerciseById(int id) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<ExerciseSessionWithExercise> future = executor.submit(() ->
+                exerciseSessionDao.getExerciseSessionWithExerciseById(id)
+        );
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executor.shutdown();
+        }
+    }
 }
 

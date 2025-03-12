@@ -2,6 +2,7 @@ package com.example.capstone2024.contracts;
 
 import android.graphics.drawable.Drawable;
 
+import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.models.Exercise;
 
 import java.util.List;
@@ -14,6 +15,6 @@ public interface ExerciseSessionContract {
     }
 
     interface Presenter {
-        void loadExerciseSession(Exercise exercise);
+        void loadExerciseSession(ExerciseSessionWithExercise session);
     }
 }
