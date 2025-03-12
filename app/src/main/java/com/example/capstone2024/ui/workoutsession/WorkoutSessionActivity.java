@@ -1,16 +1,18 @@
 package com.example.capstone2024.ui.workoutsession;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
@@ -18,7 +20,9 @@ import com.example.capstone2024.contracts.WorkoutSessionContract;
 import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.Exercise;
+import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.presenters.WorkoutSessionPresenter;
+import com.example.capstone2024.ui.exercisesearch.ExerciseSearchActivity;
 import com.example.capstone2024.ui.exercisesession.ExerciseSessionActivity;
 
 import java.util.List;
@@ -27,6 +31,8 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     private String dayName;
     private LinearLayout exercisesLayout;
     private WorkoutSessionContract.Presenter presenter;
+    private Button addExerciseButton;
+    private ActivityResultLauncher<Intent> exerciseSearchLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,30 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         setContentView(R.layout.activity_workout_session);
 
         exercisesLayout = findViewById(R.id.exercisesLayout);
+        addExerciseButton = findViewById(R.id.addExerciseButton);
+
+        // Initialize the exerciseSearchLauncher
+        exerciseSearchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            ExerciseSession selectedExercise =
+                                    (ExerciseSession) data.getSerializableExtra("SELECTED_EXERCISE");
+                            if (selectedExercise != null) {
+                                presenter.addExerciseSession(selectedExercise);
+                            }
+                        }
+                    }
+                }
+        );
+
+        // Set up the OnClickListener for the "Add Exercise" button
+        addExerciseButton.setOnClickListener(v -> {
+            Intent intent = new Intent(WorkoutSessionActivity.this, ExerciseSearchActivity.class);
+            exerciseSearchLauncher.launch(intent);
+        });
 
         // Initialize the presenter
         presenter = new WorkoutSessionPresenter(this);
@@ -43,6 +73,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
 
         // Load workout session
         presenter.loadWorkoutSession(dayName);
+
     }
 
     @Override
@@ -84,7 +115,6 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             TextView exerciseDetails = exerciseCard.findViewById(R.id.exerciseDetails);
             TextView exerciseCategory = exerciseCard.findViewById(R.id.exerciseCategory);
             TextView exercisePrimaryMuscles = exerciseCard.findViewById(R.id.exercisePrimaryMuscles);
-            ProgressBar progressBar = exerciseCard.findViewById(R.id.progressBar);
             TextView progressText = exerciseCard.findViewById(R.id.progressText);
 
             // Set the text for the views
@@ -92,11 +122,17 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             exerciseDetails.setText("Sets: " + sets + " | Reps: " + reps);
             exerciseCategory.setText("Category: " + capitalizeFirstLetter(exercise.getCategory()));
             exercisePrimaryMuscles.setText("Primary Muscle: " +  capitalizeFirstLetter(exercise.getPrimaryMuscles()));
-            progressBar.setProgress(progressPercentage);
             progressText.setText(progressPercentage + "%");
 
             // If 100% complete, set a green outline, otherwise use default
             exerciseCard.setActivated(progressPercentage == 100);
+
+            // Bind the remove button
+            Button removeButton = exerciseCard.findViewById(R.id.removeExerciseButton);
+            removeButton.setOnClickListener(v -> {
+                // Call the presenter method to remove the exercise session
+                presenter.removeExerciseSession(exerciseSession.getId());
+            });
 
             // Set the OnClickListener for the card
             exerciseCard.setOnClickListener(v -> {
@@ -113,6 +149,11 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     @Override
     public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private String capitalizeFirstLetter(String input) {

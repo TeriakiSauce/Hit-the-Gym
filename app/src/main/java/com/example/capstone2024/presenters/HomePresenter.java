@@ -29,18 +29,26 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void initializeWorkoutPlan() {
-        try {
-            InputStream exercisesInputStream = context.getAssets().open("exercises.json");
+        // First, try to load an existing workout program from the database.
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
+        Map<String, WorkoutSessionWithExercises> storedProgram = helper.getStoredWorkoutProgram();
 
-            Map<String, Object> userInput = fetchUserInput();
-
-            WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, this.context, userInput);
-
-            workoutProgram = workoutPlan.generateWorkoutProgram();
+        // If the stored program exists and is not empty, use it.
+        if (storedProgram != null && !storedProgram.isEmpty()) {
+            workoutProgram = storedProgram;
             view.displayWorkoutProgram(workoutProgram);
-        } catch (Exception e) {
-            e.printStackTrace();
-            view.showError("Failed to load workout plan.");
+        } else {
+            // Otherwise, generate a new workout plan from the JSON file.
+            try {
+                InputStream exercisesInputStream = context.getAssets().open("exercises.json");
+                Map<String, Object> userInput = fetchUserInput();
+                WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, context, userInput);
+                workoutProgram = workoutPlan.generateWorkoutProgram();
+                view.displayWorkoutProgram(workoutProgram);
+            } catch (Exception e) {
+                e.printStackTrace();
+                view.showError("Failed to load workout plan.");
+            }
         }
     }
     private Map<String, Object> fetchUserInput() {

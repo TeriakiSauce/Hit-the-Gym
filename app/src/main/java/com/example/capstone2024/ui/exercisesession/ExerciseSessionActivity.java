@@ -202,7 +202,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         boolean includeWeight = false;
         String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
         if (equipment != null &&
-                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable"))) {
+                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable") || equipment.equalsIgnoreCase("other"))) {
             includeWeight = true;
         }
 

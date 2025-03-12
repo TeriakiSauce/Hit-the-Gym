@@ -18,9 +18,11 @@
         android:progressDrawable="@drawable/rounded_progress_bar"
         android:layout_marginBottom="16dp" />
 
+    <!-- Use layout_weight for the ScrollView so it doesn't fill the entire screen -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
             android:id="@+id/exercisesLayout"
             android:layout_width="match_parent"
@@ -29,4 +31,16 @@
             <!-- Dynamic day cards will be shown here -->
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/addExerciseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Exercise"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/dark_gray"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.example.capstone2024.ui.exercisesearch;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,30 +12,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.models.ExerciseSession;
-import com.example.capstone2024.models.WorkoutPlan;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ExerciseSearchActivity extends AppCompatActivity {
     private EditText searchInput;
     private LinearLayout exercisesListLayout;
     private ImageView clearSearchButton;
-    private List<Exercise> allExercises; // Stores all exercises
-    private List<Exercise> filteredExercises; // Stores filtered exercises
+    private UserSetupDatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,88 +41,74 @@ public class ExerciseSearchActivity extends AppCompatActivity {
         clearSearchButton = findViewById(R.id.clearSearchButton);
         exercisesListLayout = findViewById(R.id.exercisesListLayout);
 
-        // Fetch all exercises
-        try {
-            allExercises = fetchExercisesFromDatabase();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        filteredExercises = new ArrayList<>(allExercises); // Initialize with all exercises
+        // Initialize database helper
+        helper = new UserSetupDatabaseHelper(getApplicationContext());
 
-        // Populate initial list
-        displayExercises(filteredExercises);
+        // Load initial list of exercises (returns all exercises)
+        performSearch("");
 
-        // Add search functionality
+        // Add text watcher for search input
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterExercises(s.toString());
-                if (s.length() > 0) {
-                    clearSearchButton.setVisibility(View.VISIBLE); // Show button
+                String query = s.toString();
+                if (query.isEmpty()) {
+                    clearSearchButton.setVisibility(View.GONE);
                 } else {
-                    clearSearchButton.setVisibility(View.GONE); // Hide button
+                    clearSearchButton.setVisibility(View.VISIBLE);
                 }
+                performSearch(query);
             }
-
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+}
         });
 
-        // Clear button functionality
+        // Clears text and resets search results.
         clearSearchButton.setOnClickListener(v -> {
-            searchInput.setText(""); // Clear text
-            filterExercises(""); // Reset exercise list
-            clearSearchButton.setVisibility(View.GONE); // Hide button
+            searchInput.setText("");
+            performSearch("");
+            clearSearchButton.setVisibility(View.GONE);
         });
     }
 
-    private void displayExercises(List<Exercise> exercises) {
-        exercisesListLayout.removeAllViews(); // Clear previous views
+    // Search for exercises based on the query asynchronously
+    private void performSearch(String query) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
+            // This method should query the database using the DAO's searchExercises method.
+            List<Exercise> searchResults = helper.searchExercises(query);
+            mainHandler.post(() -> displayExercises(searchResults));
+        });
+        executor.shutdown();
+    }
 
+    // Display the search results as cards
+    private void displayExercises(List<Exercise> exercises) {
+        exercisesListLayout.removeAllViews();
+        if (exercises == null || exercises.isEmpty()) {
+            Toast.makeText(this, "No exercises found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         for (Exercise exercise : exercises) {
             View exerciseCard = getLayoutInflater().inflate(R.layout.exercise_search_card, exercisesListLayout, false);
-
             TextView exerciseName = exerciseCard.findViewById(R.id.exerciseName);
             Button addButton = exerciseCard.findViewById(R.id.addExerciseButton);
-
             exerciseName.setText(exercise.getName());
-
             addButton.setOnClickListener(v -> {
-                ExerciseSession selectedExercise = new ExerciseSession(1,exercise.getId(), 4, 1, 10);
-                Intent intent = new Intent();
-                intent.putExtra("SELECTED_EXERCISE", selectedExercise);
-                setResult(RESULT_OK, intent);
+                // Create an ExerciseSession with default values.
+                // The workout_session_id here is set to 1 as a placeholder.
+                ExerciseSession selectedExercise = new ExerciseSession(1, exercise.getId(), 4, 1, 10);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("SELECTED_EXERCISE", selectedExercise);
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             });
-
             exercisesListLayout.addView(exerciseCard);
         }
-    }
-
-    private void filterExercises(String query) {
-        filteredExercises.clear();
-
-        for (Exercise exercise : allExercises) {
-            if (exercise.getName().toLowerCase().contains(query.toLowerCase())) {
-                filteredExercises.add(exercise);
-            }
-        }
-
-        displayExercises(filteredExercises);
-    }
-
-
-    private List<Exercise> fetchExercisesFromDatabase() throws JSONException, IOException {
-        // WIth no database yet, we will need to create a list of exercises by creating a temporary workout plan
-        Context context = getApplicationContext();
-        InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-        Map<String, Object> userInput = new HashMap<>();
-        WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, context, userInput);
-        return workoutPlan.getExercisesList();
     }
 }

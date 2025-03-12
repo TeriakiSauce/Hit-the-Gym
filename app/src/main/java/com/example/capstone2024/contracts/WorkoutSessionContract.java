@@ -9,9 +9,13 @@ public interface WorkoutSessionContract {
     interface View {
         void displayExercises(List<ExerciseSessionWithExercise> exerciseSessions);
         void showError(String message);
+        void showMessage(String message);
     }
 
     interface Presenter {
         void loadWorkoutSession(String dayName);
+        void addExerciseSession(ExerciseSession exerciseSession);
+        void removeExerciseSession(int exerciseSessionId);
+        void createEmptyWorkoutSession(String dayName);
     }
 }
