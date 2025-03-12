@@ -1,17 +1,34 @@
 package com.example.capstone2024.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Entity(tableName = "exercises")
+@TypeConverters(Converters.class)
 public class Exercise implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private int id;
+    @ColumnInfo(name = "name")
     private final String name;
+    @ColumnInfo(name = "level")
     private final String level;
+    @ColumnInfo(name = "equipment")
     private final String equipment;
+    @ColumnInfo(name = "category")
     private final String category;
+    @ColumnInfo(name = "primary_muscles")
     private final String primaryMuscles;
+    @ColumnInfo(name = "secondary_muscles")
     private final List<String> secondaryMuscles;
-
+    @ColumnInfo(name = "instructions")
     private final List<String> instructions;
+    @ColumnInfo(name = "mechanic")
     private final String mechanic;
 
     public Exercise(String name, String level, String equipment, String category, String primaryMuscles, List<String> secondaryMuscles, List<String> instructions, String mechanic) {
@@ -56,4 +73,11 @@ public class Exercise implements Serializable {
         return mechanic;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

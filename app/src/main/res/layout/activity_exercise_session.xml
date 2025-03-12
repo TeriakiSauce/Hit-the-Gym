@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- KonfettiView -->
+    <!-- Wrap with Konfetti -->
     <nl.dionsegijn.konfetti.xml.KonfettiView
         android:id="@+id/konfettiView"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Exercise Name Section -->
+            <!-- Exercise Name -->
             <TextView
                 android:id="@+id/exerciseNameTextView"
                 android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="8dp" />
 
-            <!-- Exercise Image Section -->
+            <!-- Exercise Image -->
             <ImageView
                 android:id="@+id/exerciseImageView"
                 android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                 android:background="@color/white"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Exercise Instructions Section -->
+            <!-- Exercise Instructions -->
             <TextView
                 android:id="@+id/exerciseInstructionsTextView"
                 android:layout_width="match_parent"

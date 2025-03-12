@@ -23,7 +23,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ExerciseSearchActivity extends AppCompatActivity {
@@ -94,7 +96,7 @@ public class ExerciseSearchActivity extends AppCompatActivity {
             exerciseName.setText(exercise.getName());
 
             addButton.setOnClickListener(v -> {
-                ExerciseSession selectedExercise = new ExerciseSession(exercise, 4, 1, 10);
+                ExerciseSession selectedExercise = new ExerciseSession(1,exercise.getId(), 4, 1, 10);
                 Intent intent = new Intent();
                 intent.putExtra("SELECTED_EXERCISE", selectedExercise);
                 setResult(RESULT_OK, intent);
@@ -122,7 +124,8 @@ public class ExerciseSearchActivity extends AppCompatActivity {
         // WIth no database yet, we will need to create a list of exercises by creating a temporary workout plan
         Context context = getApplicationContext();
         InputStream exercisesInputStream = context.getAssets().open("exercises.json");
-        WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, context);
+        Map<String, Object> userInput = new HashMap<>();
+        WorkoutPlan workoutPlan = new WorkoutPlan(exercisesInputStream, context, userInput);
         return workoutPlan.getExercisesList();
     }
 }

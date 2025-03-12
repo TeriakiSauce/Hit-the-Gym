@@ -1,10 +1,12 @@
-package com.example.capstone2024.models;
+package com.example.capstone2024.database;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-import androidx.lifecycle.LiveData;
+
+import com.example.capstone2024.models.UserSetup;
+
 import java.util.List;
 
 @Dao

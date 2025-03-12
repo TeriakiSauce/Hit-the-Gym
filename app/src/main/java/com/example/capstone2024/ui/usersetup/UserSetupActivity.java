@@ -13,15 +13,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.UserSetupContract;
 import com.example.capstone2024.models.UserSetup;
-import com.example.capstone2024.models.UserSetupDao;
-import com.example.capstone2024.models.UserSetupDatabase;
-import com.example.capstone2024.models.UserSetupDatabaseClient;
-import com.example.capstone2024.models.UserSetupDatabaseHelper;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.presenters.UserSetupPresenter;
 import com.example.capstone2024.ui.home.HomeActivity;
 import android.widget.ArrayAdapter;
