@@ -8,8 +8,23 @@
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@android:color/white</item>
-        <item name="android:statusBarColor">@color/black</item>
-        <!-- Customize text appearances, button styles, etc. as needed -->
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Capstone2024" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+    <!-- Splash screen -->
+    <style name="Theme.AnimatedSplashScreen" parent="Theme.Material3.DayNight.NoActionBar"/>
+
+    <style name="Theme.App.Starting" parent="Theme.Capstone2024">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.AnimatedSplashScreen</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
     </style>
 </resources>

@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.window.SplashScreen;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.HomeContract;
@@ -31,6 +32,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SplashScreen splashScreen = getSplashScreen();
         setContentView(R.layout.activity_home);
 
         // Initialize UI
