@@ -69,9 +69,9 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             // Start HomeActivity after animation
-            if (users.isEmpty()){
+            if (users.isEmpty()) {
                 startActivity(new Intent(SplashActivity.this, UserSetupActivity.class));
-            } else{
+            } else {
                 startActivity(new Intent(SplashActivity.this, HomeActivity.class));
             }
             finish();
