@@ -182,6 +182,14 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         restProgressBar = findViewById(R.id.restProgressBar);
         setsTableLayout.removeAllViews(); // Clear any existing rows
 
+        // Find the KonfettiView and initialize parameters
+        final Drawable drawable =
+                ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart);
+        drawableShape = ImageUtil.loadDrawable(drawable, true, true);
+        konfettiView = findViewById(R.id.konfettiView);
+        konfettiView.bringToFront();
+        EmitterConfig emitterConfig = new Emitter(100L, TimeUnit.MILLISECONDS).max(100);
+
         // Determine if weight input should be included
         boolean includeWeight = false;
         String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
