@@ -10,6 +10,7 @@ import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
             animatorSet.start();
         });
 
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             // Start HomeActivity after animation
             if (users.isEmpty()){
                 startActivity(new Intent(SplashActivity.this, UserSetupActivity.class));
