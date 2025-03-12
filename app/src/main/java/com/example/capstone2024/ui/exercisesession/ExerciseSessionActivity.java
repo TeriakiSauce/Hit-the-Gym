@@ -32,7 +32,9 @@ import com.example.capstone2024.contracts.ExerciseSessionContract;
 import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.Exercise;
+import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.presenters.ExerciseSessionPresenter;
+import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -67,6 +69,8 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     private TextView timeRemainingTextView;
     private FrameLayout timerContainer;
     private Exercise exercise;
+    private ExerciseSession exerciseSession;
+    private UserSetupDatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +116,9 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         int sessionId = (int) getIntent().getSerializableExtra("EXERCISE_ID");
 
         // Get exercise session from database and load exercise
-        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
+        helper = new UserSetupDatabaseHelper(this);
         ExerciseSessionWithExercise session = helper.getExerciseSessionWithExerciseById(sessionId);
+        this.exerciseSession = session.getExerciseSession();
         this.exercise = session.getExercise();
         this.imageName = exercise.getName().replace(" ", "_");;
         presenter.loadExerciseSession(session);
@@ -180,8 +185,8 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
 
         // Initialize progress bar
         ProgressBar progressBar = findViewById(R.id.exerciseProgressBar);
-        progressBar.setMax(numberOfSets); // Set the maximum value to the total number of sets
-        progressBar.setProgress(0); // Start with 0 completed sets
+        progressBar.setMax(exerciseSession.getSets()); // Set the maximum value to the total number of sets
+        progressBar.setProgress(exerciseSession.getCompletedSets()); // Start with 0 completed sets
 
         restProgressBar = findViewById(R.id.restProgressBar);
         setsTableLayout.removeAllViews(); // Clear any existing rows
@@ -192,13 +197,12 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         drawableShape = ImageUtil.loadDrawable(drawable, true, true);
         konfettiView = findViewById(R.id.konfettiView);
         konfettiView.bringToFront();
-        EmitterConfig emitterConfig = new Emitter(100L, TimeUnit.MILLISECONDS).max(100);
 
         // Determine if weight input should be included
         boolean includeWeight = false;
         String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
         if (equipment != null &&
-                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell"))) {
+                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable"))) {
             includeWeight = true;
         }
 
@@ -221,7 +225,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         final int[] completedSets = {0};
 
         // Add rows for sets
-        for (int i = 0; i < numberOfSets; i++) {
+        for (int i = 0; i < exerciseSession.getSets(); i++) {
             TableRow setRow = new TableRow(this);
 
             EditText setTypeInput = createEditText("Set " + (i + 1));
@@ -240,42 +244,65 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
                 setRow.addView(emptyCell);
             }
 
-            CheckBox completionCheckBox = new CheckBox(this);
-            completionCheckBox.setPadding(8, 8, 8, 8);
-            final int setNumber = i + 1;
-            completionCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    resetGlobalTimer();
-                    int[] location = new int[2];
-                    buttonView.getLocationOnScreen(location);
-                    float x = location[0] + buttonView.getWidth() / 2f;
-                    float y = location[1] + buttonView.getHeight() / 2f;
-
-                    Party party = new PartyFactory(new Emitter(100L, TimeUnit.MILLISECONDS).max(100))
-                            .spread(360)
-                            .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
-                            .colors(Arrays.asList(0x00FF00))
-                            .setSpeedBetween(0f, 30f)
-                            .position(new nl.dionsegijn.konfetti.core.Position.Relative(
-                                    x / buttonView.getRootView().getWidth(),
-                                    y / buttonView.getRootView().getHeight()))
-                            .build();
-
-                    completedSets[0]++;
-                    konfettiView.start(party);
-                } else {
-                    completedSets[0]--;
-                    timerContainer.setVisibility(View.GONE);
-                    restProgressBar.setProgress(100);
-                    timeRemainingTextView.setText("02:00");
-                }
-                progressBar.setProgress(completedSets[0]);
-            });
+            CheckBox completionCheckBox = getCheckBox(i, completedSets, progressBar);
 
             setRow.addView(completionCheckBox);
             setsTableLayout.addView(setRow);
         }
     }
+
+    @NonNull
+    private CheckBox getCheckBox(int i, int[] completedSets, ProgressBar progressBar) {
+        CheckBox completionCheckBox = new CheckBox(this);
+        completionCheckBox.setPadding(8, 8, 8, 8);
+
+        // Temporarily remove the listener
+        completionCheckBox.setOnCheckedChangeListener(null);
+
+        // Check any already completed sets
+        completionCheckBox.setChecked(i < exerciseSession.getCompletedSets());
+
+        completionCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                resetGlobalTimer();
+                int[] location = new int[2];
+                buttonView.getLocationOnScreen(location);
+                float x = location[0] + buttonView.getWidth() / 2f;
+                float y = location[1] + buttonView.getHeight() / 2f;
+
+                Party party = new PartyFactory(new Emitter(100L, TimeUnit.MILLISECONDS).max(100))
+                        .spread(360)
+                        .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
+                        .colors(Arrays.asList(0x00FF00))
+                        .setSpeedBetween(0f, 30f)
+                        .position(new Relative(
+                                x / buttonView.getRootView().getWidth(),
+                                y / buttonView.getRootView().getHeight()))
+                        .build();
+
+                completedSets[0]++;
+                konfettiView.start(party);
+                // Update exerciseSession's progress and persist change
+                exerciseSession.setCompletedSets(completedSets[0]);
+                new Thread(() -> {
+                    helper.updateExerciseSession(exerciseSession);
+                }).start();
+            } else {
+                completedSets[0]--;
+                timerContainer.setVisibility(View.GONE);
+                restProgressBar.setProgress(100);
+                timeRemainingTextView.setText("02:00");
+                // Update exerciseSession's progress and persist change
+                exerciseSession.setCompletedSets(completedSets[0]);
+                new Thread(() -> {
+                    helper.updateExerciseSession(exerciseSession);
+                }).start();
+            }
+            progressBar.setProgress(completedSets[0]);
+        });
+        return completionCheckBox;
+    }
+
     private void resetGlobalTimer() {
         // Cancel any existing timer
         if (currentRestTimer != null) {

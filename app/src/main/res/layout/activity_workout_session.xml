@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/black"
     android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/exercisesLayout"
+    <!-- Overall progress bar at the top -->
+    <ProgressBar
+        android:id="@+id/overallProgressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <!-- Dynamic day cards will be shown here -->
-    </LinearLayout>
-</ScrollView>
+        android:max="100"
+        android:progress="0"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/rounded_progress_bar"
+        android:layout_marginBottom="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/exercisesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Dynamic day cards will be shown here -->
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
