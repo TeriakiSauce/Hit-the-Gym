@@ -1,6 +1,8 @@
 package com.example.capstone2024.ui.home;
 
 import com.example.capstone2024.R;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
+import com.example.capstone2024.models.UserSetup;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 
 import android.animation.ObjectAnimator;
@@ -12,11 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
+        // Get the list of users synchronously
+        List<UserSetup> users = helper.fetchAllUsersSync();
+
+        // Get the views
         setContentView(R.layout.activity_splash);
         ImageView splashLogo = findViewById(R.id.splash_logo);
         TextView splashText = findViewById(R.id.splash_text);
@@ -58,7 +68,11 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             // Start HomeActivity after animation
-            startActivity(new Intent(SplashActivity.this, UserSetupActivity.class));
+            if (users.isEmpty()){
+                startActivity(new Intent(SplashActivity.this, UserSetupActivity.class));
+            } else{
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            }
             finish();
         }, 2000);
     }
