@@ -9,7 +9,7 @@ import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.models.UserSetup;
 import com.example.capstone2024.models.WorkoutSession;
 
-@Database(entities = {UserSetup.class, Exercise.class, WorkoutSession.class, ExerciseSession.class}, version = 4, exportSchema = false)
+@Database(entities = {UserSetup.class, Exercise.class, WorkoutSession.class, ExerciseSession.class}, version = 5, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class UserSetupDatabase extends RoomDatabase{
     public abstract UserSetupDao userSetupDao();

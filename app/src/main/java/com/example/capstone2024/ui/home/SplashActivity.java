@@ -24,9 +24,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
-        // Get the list of users synchronously
+        // Get the list of users asynchronously
         List<UserSetup> users = helper.fetchAllUsersSync();
-
+        System.out.println(users);
         // Get the views
         setContentView(R.layout.activity_splash);
         ImageView splashLogo = findViewById(R.id.splash_logo);

@@ -18,4 +18,8 @@ public interface ExerciseDao {
 
     @Query("SELECT * FROM exercises")
     List<Exercise> getAllExercises();
+
+    // Search by exercise name
+    @Query("SELECT * FROM exercises WHERE lower(name) LIKE '%' || lower(:query) || '%'")
+    List<Exercise> searchExercises(String query);
 }

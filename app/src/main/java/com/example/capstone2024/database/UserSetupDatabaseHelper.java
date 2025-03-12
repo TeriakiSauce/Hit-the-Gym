@@ -7,6 +7,7 @@ import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.models.UserSetup;
 import com.example.capstone2024.models.WorkoutSession;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,6 +157,26 @@ public class UserSetupDatabaseHelper {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            executor.shutdown();
+        }
+    }
+    public void deleteExerciseSession(int exerciseSessionId) {
+        new Thread(() -> {
+            exerciseSessionDao.deleteExerciseSessionById(exerciseSessionId);
+        }).start();
+    }
+
+    public List<Exercise> searchExercises(String query) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<List<Exercise>> future = executor.submit(() ->
+                exerciseDao.searchExercises(query)
+        );
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         } finally {
             executor.shutdown();
         }

@@ -75,4 +75,5 @@ public class CustomWorkoutActivity extends AppCompatActivity implements CustomWo
     public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
 }

@@ -2,13 +2,14 @@ package com.example.capstone2024.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(tableName = "exercises")
+@Entity(tableName = "exercises", indices = {@Index(value = "name")})
 @TypeConverters(Converters.class)
 public class Exercise implements Serializable {
     @PrimaryKey(autoGenerate = true)
