@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.WorkoutPlanContract;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
+import com.example.capstone2024.database.WorkoutSessionWithExercises;
 import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.WorkoutPlanPresenter;
 import com.example.capstone2024.ui.customworkout.CustomWorkoutActivity;
@@ -22,8 +24,8 @@ import java.util.Map;
 public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPlanContract.View {
     private LinearLayout daysLayout;
     private WorkoutPlanContract.Presenter presenter;
-
     private Button createCustomWorkoutButton;
+    private UserSetupDatabaseHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +33,14 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
         setContentView(R.layout.activity_workout_plan);
 
         daysLayout = findViewById(R.id.daysLayout);
+
         createCustomWorkoutButton = findViewById(R.id.createCustomWorkoutButton);
 
         // Initialize the presenter
         presenter = new WorkoutPlanPresenter(this);
 
         // Load the workout program
-        presenter.loadWorkoutProgram(getIntent());
+        presenter.loadWorkoutProgram();
 
         // Set click listener for the "Create Custom Workout" button
         createCustomWorkoutButton.setOnClickListener(v -> {
@@ -47,11 +50,11 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
     }
 
     @Override
-    public void displayWorkoutProgram(Map<String, WorkoutSession> workoutProgram) {
+    public void displayWorkoutProgram(Map<String, WorkoutSessionWithExercises> workoutProgram) {
         daysLayout.removeAllViews(); // Clear existing views
-        for (Map.Entry<String, WorkoutSession> entry : workoutProgram.entrySet()) {
+        for (Map.Entry<String, WorkoutSessionWithExercises> entry : workoutProgram.entrySet()) {
             String day = entry.getKey();
-            WorkoutSession workoutSession = entry.getValue();
+            WorkoutSessionWithExercises workoutSession = entry.getValue();
 
             // Inflate the custom card layout
             View dayCard = getLayoutInflater().inflate(R.layout.day_card, daysLayout, false);
@@ -64,7 +67,6 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
             dayCard.setOnClickListener(v -> {
                 Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
                 intent.putExtra("DAY_NAME", day);
-                intent.putExtra("WORKOUT_SESSION", workoutSession);
                 startActivity(intent);
             });
 

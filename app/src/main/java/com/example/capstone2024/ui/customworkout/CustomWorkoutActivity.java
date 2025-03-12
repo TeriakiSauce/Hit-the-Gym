@@ -64,7 +64,8 @@ public class CustomWorkoutActivity extends AppCompatActivity implements CustomWo
             View exerciseCard = getLayoutInflater().inflate(R.layout.exercise_card, exercisesLayout, false);
 
             TextView exerciseName = exerciseCard.findViewById(R.id.exerciseName);
-            exerciseName.setText(exerciseSession.getExercise().getName());
+            // Temporarily disable the exercise name while working on DB
+            //exerciseName.setText(exerciseSession.getExercise().getName());
 
             exercisesLayout.addView(exerciseCard);
         }

@@ -1,6 +1,9 @@
 package com.example.capstone2024.models;
 import android.content.Context;
-import android.widget.Toast;
+
+import com.example.capstone2024.database.ExerciseSessionWithExercise;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
+import com.example.capstone2024.database.WorkoutSessionWithExercises;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,30 +12,23 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.*;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WorkoutPlan {
 
     private JSONArray exercisesJsonArray;
     private List<Exercise> exercisesList; // List of Exercise objects
-    private Map<String, WorkoutSession> workoutProgram; // Map of day to WorkoutSession
+    private Map<String, WorkoutSessionWithExercises> workoutProgram; // Map of day to WorkoutSession
     private UserSetupDatabaseHelper databaseHelper;
     private Context context;
 
-    public WorkoutPlan(InputStream exercisesInputStream, Context context) throws JSONException {
+    private Map<String, Object> userInput;
+
+    public WorkoutPlan(InputStream exercisesInputStream, Context context, Map<String, Object> userInput) throws JSONException {
         this.exercisesJsonArray = loadExercises(exercisesInputStream);
         this.exercisesList = parseExercises(exercisesJsonArray);
         this.context = context;
-    }
-    public void printAllUsers() {
-        // Initialize the database helper (which uses our modified client)
-        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
-        // Get the list of users synchronously
-        List<UserSetup> users = helper.fetchAllUsersSync();
-
-        // Print out each user (this uses the toString method you added)
-        for (UserSetup user : users) {
-            Toast.makeText(context, user.toString(), Toast.LENGTH_SHORT).show();
-        }
+        this.userInput = userInput;
     }
 
     // Load exercises from JSON
@@ -49,6 +45,7 @@ public class WorkoutPlan {
     // Parse JSONArray into List<Exercise>
     private List<Exercise> parseExercises(JSONArray jsonArray) throws JSONException {
         List<Exercise> exercises = new ArrayList<>();
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject exerciseJson = jsonArray.getJSONObject(i);
             String name = exerciseJson.optString("name");
@@ -75,13 +72,14 @@ public class WorkoutPlan {
             // Create Exercise object
             Exercise exercise = new Exercise(name, level, equipment, category, primaryMuscles, secondaryMuscles, instructions, mechanic);
             exercises.add(exercise);
+            helper.insertExercise(exercise);
         }
-        return exercises;
+        return helper.fetchAllExercisesSync();
     }
 
-    public Map<String, WorkoutSession> generateWorkoutProgram(Map<String, Object> userInput) {
-        printAllUsers();
-        int workoutDays = (int) userInput.getOrDefault("workout_days", 5);
+    public Map<String, WorkoutSessionWithExercises> generateWorkoutProgram() {
+
+        int workoutDays = 5;
 
         Map<String, Set<String>> muscleGroupsMap = classifyMuscleGroups();
         Set<String> largeMuscles = muscleGroupsMap.get("large");
@@ -104,7 +102,7 @@ public class WorkoutPlan {
         List<Exercise> filteredExercises = filterExercisesByParameters(userInput);
 
         // Create weekly program
-        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays, userInput);
+        this.workoutProgram = createWeeklyProgram(filteredExercises, targetExercises, workoutDays);
 
         return this.workoutProgram;
     }
@@ -112,26 +110,31 @@ public class WorkoutPlan {
     /**
      * Create a weekly program based on target exercises and workout days.
      */
-    private Map<String, WorkoutSession> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays, Map<String, Object> userInput) {
-        Map<String, WorkoutSession> program = new LinkedHashMap<>();
+    private Map<String, WorkoutSessionWithExercises> createWeeklyProgram(List<Exercise> exercises, Map<String, Integer> targetExercises, int workoutDays) {
+        Map<String, WorkoutSessionWithExercises> program = new LinkedHashMap<>();
         for (int i = 0; i < workoutDays; i++) {
-            program.put("Day " + (i + 1), new WorkoutSession(new ArrayList<>()));
+            WorkoutSession tempSession = new WorkoutSession(i + 1);
+            program.put("Day " + (i + 1), new WorkoutSessionWithExercises(tempSession));
         }
 
         // Add one cardio exercise at the beginning of each workout day as warmup
         for (int day = 0; day < workoutDays; day++) {
-            WorkoutSession session = program.get("Day " + (day + 1));
+            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
             List<Exercise> cardioExercises = new ArrayList<>();
+            // Collect all cardio exercises
             for (Exercise ex : exercises) {
                 if ("cardio".equalsIgnoreCase(ex.getCategory())) {
                     cardioExercises.add(ex);
                 }
             }
+            // Choose a random cardio exercise and add it to the beginning of the session
             if (!cardioExercises.isEmpty()) {
                 Collections.shuffle(cardioExercises);
                 Exercise warmup = cardioExercises.get(0);
-                ExerciseSession warmupSession = new ExerciseSession(warmup, 1, 1, 10);
-                session.getExerciseSessions().add(0, warmupSession);
+                System.out.println(warmup);
+                ExerciseSession warmupSession = new ExerciseSession(session.getId(), warmup.getId(), 1, 1, 10);
+                ExerciseSessionWithExercise warmupExercise = new ExerciseSessionWithExercise(warmupSession, warmup);
+                session.getExerciseSessions().add(0, warmupExercise);
             }
         }
 
@@ -150,24 +153,27 @@ public class WorkoutPlan {
 
             for (Exercise exercise : selectedExercises) {
                 String day = "Day " + ((dayIndex % workoutDays) + 1);
-                WorkoutSession workoutSession = program.get(day);
+                WorkoutSessionWithExercises workoutSession = program.get(day);
                 // Create main exercise session (default 4 sets)
-                ExerciseSession exerciseSession = new ExerciseSession(exercise, 4, 1, 10);
-                workoutSession.getExerciseSessions().add(exerciseSession);
+                ExerciseSession exerciseSession = new ExerciseSession(workoutSession.getId(), exercise.getId(), 4, 1, 10);
+                ExerciseSessionWithExercise exerciseExercise = new ExerciseSessionWithExercise(exerciseSession, exercise);
+                workoutSession.getExerciseSessions().add(exerciseExercise);
 
                 // Add a stretch for the muscle group used in compound exercises
                 if ("compound".equalsIgnoreCase(exercise.getMechanic())) {
                     if (!muscleStretches.isEmpty()) {
-                        Exercise stretchExercise = muscleStretches.get(0);
-                        ExerciseSession stretchSession = new ExerciseSession(stretchExercise, 1, 1, 10);
-                        workoutSession.getExerciseSessions().add(stretchSession);
+                        Exercise stretch = muscleStretches.get(0);
+                        ExerciseSession stretchSession = new ExerciseSession(workoutSession.getId(),stretch.getId(), 1, 1, 10);
+                        ExerciseSessionWithExercise stretchExercise = new ExerciseSessionWithExercise(stretchSession, stretch);
+                        workoutSession.getExerciseSessions().add(stretchExercise);
 
                         // For seniors, add an extra stretch
-                        int age = (int) userInput.getOrDefault("age", 30);
+                        int age = Integer.parseInt(userInput.getOrDefault("age", "30").toString());
                         if (age > 65 && muscleStretches.size() > 1) {
                             Exercise extraStretch = muscleStretches.get(1);
-                            ExerciseSession extraStretchSession = new ExerciseSession(extraStretch, 1, 1, 10);
-                            workoutSession.getExerciseSessions().add(extraStretchSession);
+                            ExerciseSession extraStretchSession = new ExerciseSession(workoutSession.getId(), extraStretch.getId(), 1, 1, 10);
+                            ExerciseSessionWithExercise extraStretchExercise = new ExerciseSessionWithExercise(extraStretchSession, extraStretch);
+                            workoutSession.getExerciseSessions().add(extraStretchExercise);
                         }
                     }
                 }
@@ -177,9 +183,9 @@ public class WorkoutPlan {
 
         // Ensure one compound exercise per session
         for (int day = 0; day < workoutDays; day++) {
-            WorkoutSession session = program.get("Day " + (day + 1));
+            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
             boolean hasCompound = false;
-            for (ExerciseSession es : session.getExerciseSessions()) {
+            for (ExerciseSessionWithExercise es : session.getExerciseSessions()) {
                 if ("compound".equalsIgnoreCase(es.getExercise().getCategory())) {
                     hasCompound = true;
                     break;
@@ -195,12 +201,20 @@ public class WorkoutPlan {
                 if (!compoundExercises.isEmpty()) {
                     Collections.shuffle(compoundExercises);
                     Exercise compound = compoundExercises.get(0);
-                    ExerciseSession compoundSession = new ExerciseSession(compound, 3, 1, 10);
-                    session.getExerciseSessions().add(compoundSession);
+                    ExerciseSession compoundSession = new ExerciseSession(session.getId(), compound.getId(), 3, 1, 10);
+                    ExerciseSessionWithExercise compoundExercise = new ExerciseSessionWithExercise(compoundSession, compound);
+                    session.getExerciseSessions().add(compoundExercise);
                 }
             }
+            UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
+            int workoutSessionId = helper.insertWorkoutSession(session.workoutSession);
+            for (ExerciseSessionWithExercise es : session.getExerciseSessions()) {
+                System.out.println(es + " " + workoutSessionId);
+                es.getExerciseSession().setWorkoutSessionId(workoutSessionId);
+                helper.insertExerciseSession(es.getExerciseSession());
+            }
         }
-
+        System.out.println(program);
         return program;
     }
 
@@ -210,16 +224,25 @@ public class WorkoutPlan {
      * @return list of compatible exercises
      */
     private List<Exercise> filterExercisesByParameters(Map<String, Object> userInput) {
+        // Get User Input Data
         String level = ((String) userInput.getOrDefault("level", "beginner")).toLowerCase();
+        System.out.println(level);
         String equipment = ((String) userInput.getOrDefault("equipment", "bodyweight")).toLowerCase();
-        int age = (int) userInput.getOrDefault("age", 30);
-        int currentWeight = (int) userInput.getOrDefault("weight", 0);
-        int targetWeight = (int) userInput.getOrDefault("target_weight", 0);
+        System.out.println(equipment);
+        int age = Integer.parseInt(userInput.getOrDefault("age", "30").toString());
+        System.out.println(age);
+        int currentWeight = Integer.parseInt(userInput.getOrDefault("current_weight", "0").toString());
+        System.out.println(currentWeight);
+        int targetWeight = Integer.parseInt(userInput.getOrDefault("target_weight", "0").toString());
+        System.out.println(targetWeight);
         // Determine goal: lose weight if target is less than current weight, else gain weight.
         String weightGoal = (targetWeight < currentWeight) ? "lose" : "gain";
         // Retrieve targeted muscle groups if provided (assumed to be lowercase strings)
-        Set<String> targetMuscleGroups = (Set<String>) userInput.getOrDefault("target_muscle_groups", new HashSet<String>());
-
+        ArrayList<String> targetMuscleGroups = (ArrayList<String>) userInput.getOrDefault("targetBodyParts", new ArrayList<String>());
+        // Cast all muscle groups to lower case
+        targetMuscleGroups = targetMuscleGroups.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toCollection(ArrayList::new));
         List<Exercise> filteredExercises = new ArrayList<>();
 
         for (Exercise exercise : exercisesList) {
@@ -231,31 +254,20 @@ public class WorkoutPlan {
                 continue;
 
             // Age filtering:
-            if (age < 12 && !exercise.getEquipment().equalsIgnoreCase("bodyweight"))
+            if (age < 12 && !exercise.getEquipment().equalsIgnoreCase("body only"))
                 continue;
             if (age < 16 && exercise.getEquipment().equalsIgnoreCase("barbell"))
                 continue;
 
             // Equipment filtering:
             if ("bodyweight".equals(equipment)) {
-                if (!exercise.getEquipment().equalsIgnoreCase("bodyweight"))
+                if (!exercise.getEquipment().equalsIgnoreCase("body only"))
                     continue;
-            } else if ("dumbbells".equals(equipment)) {
-                if (!(exercise.getEquipment().equalsIgnoreCase("bodyweight") || exercise.getEquipment().equalsIgnoreCase("dumbbells")))
+            } else if ("only dumbbells".equals(equipment)) {
+                if (!(exercise.getEquipment().equalsIgnoreCase("body only") || exercise.getEquipment().equalsIgnoreCase("dumbbell")))
                     continue;
             }
 
-            // Target muscle group filtering:
-            if (!targetMuscleGroups.isEmpty()) {
-                String primaryMuscles = exercise.getPrimaryMuscles();
-                boolean targetsSelected = false;
-                if (targetMuscleGroups.contains(primaryMuscles))
-                {
-                    break;
-                }
-                if (!targetsSelected)
-                    continue;
-            }
             filteredExercises.add(exercise);
         }
         return filteredExercises;

@@ -1,4 +1,4 @@
-package com.example.capstone2024.models;
+package com.example.capstone2024.database;
 
 import android.content.Context;
 

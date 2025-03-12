@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.WorkoutSessionContract;
+import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.models.Exercise;
-import com.example.capstone2024.models.ExerciseSession;
 import com.example.capstone2024.presenters.WorkoutSessionPresenter;
 import com.example.capstone2024.ui.exercisesession.ExerciseSessionActivity;
 
@@ -37,17 +37,16 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
 
         // Retrieve data from Intent
         dayName = getIntent().getStringExtra("DAY_NAME");
-        Object workoutSessionData = getIntent().getSerializableExtra("WORKOUT_SESSION");
 
         // Load workout session
-        presenter.loadWorkoutSession(dayName, workoutSessionData);
+        presenter.loadWorkoutSession(dayName);
     }
 
     @Override
-    public void displayExercises(List<ExerciseSession> exerciseSessions) {
+    public void displayExercises(List<ExerciseSessionWithExercise> exerciseSessions) {
         exercisesLayout.removeAllViews(); // Clear any existing views
 
-        for (ExerciseSession exerciseSession : exerciseSessions) {
+        for (ExerciseSessionWithExercise exerciseSession : exerciseSessions) {
             Exercise exercise = exerciseSession.getExercise();
             String name = exercise.getName();
             int sets = exerciseSession.getSets();
@@ -94,7 +93,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
-    private int calculateProgress(ExerciseSession session) {
+    private int calculateProgress(ExerciseSessionWithExercise session) {
         int totalSets = session.getSets();
         int completedSets = session.getCompletedSets();
         return (int) ((completedSets / (float) totalSets) * 100);

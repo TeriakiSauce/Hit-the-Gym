@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.HomeContract;
-import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.database.WorkoutSessionWithExercises;
 import com.example.capstone2024.presenters.HomePresenter;
 import com.example.capstone2024.ui.ProgressActivity;
 import com.example.capstone2024.ui.WorkoutCalendarActivity;
@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     }
 
     @Override
-    public void displayWorkoutProgram(Map<String, WorkoutSession> workoutProgram) {
+    public void displayWorkoutProgram(Map<String, WorkoutSessionWithExercises> workoutProgram) {
         // Placeholder: Logic for updating UI with workout program if needed
     }
 
@@ -72,13 +72,13 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     }
 
     @Override
-    public void navigateToWorkoutPlan(Map<String, WorkoutSession> workoutProgram) {
+    public void navigateToWorkoutPlan(Map<String, WorkoutSessionWithExercises> workoutProgram) {
         Intent intent = new Intent(HomeActivity.this, WorkoutPlanActivity.class);
         intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
         startActivity(intent);
     }
     @Override
-    public void navigateToWorkoutCalendar(Map<String, WorkoutSession> workoutProgram) {
+    public void navigateToWorkoutCalendar(Map<String, WorkoutSessionWithExercises> workoutProgram) {
         Intent intent = new Intent(HomeActivity.this, WorkoutCalendarActivity.class);
         intent.putExtra("WORKOUT_PROGRAM", new HashMap<>(workoutProgram));
         startActivity(intent);

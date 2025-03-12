@@ -33,6 +33,8 @@ public class UserSetup {
 
     @ColumnInfo(name="targetBodyParts")
     private List<String> targetBodyParts;
+
+    @ColumnInfo(name="equipment")
     private String equipment;
 
     public UserSetup() {
