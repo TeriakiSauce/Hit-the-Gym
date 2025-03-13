@@ -6,7 +6,22 @@
         <item
             android:id="@+id/nav_user"
             android:icon="@drawable/ic_user"
-            android:title="User"/>
+            android:title="Profile"/>
+
+        <item
+            android:id="@+id/nav_user_setup"
+            android:icon="@drawable/ic_heart"
+            android:title="User Setup"/>
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home"/>
+
+    </group>
+
+    <!-- Workout Section -->
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_progress"
@@ -14,21 +29,13 @@
             android:title="Progress"/>
 
         <item
-            android:id="@+id/nav_user_setup"
-            android:icon="@drawable/ic_logout"
-            android:title="User Setup"/>
-    </group>
-
-    <!-- Workout Section -->
-    <group android:checkableBehavior="single">
-        <item
             android:id="@+id/nav_workout_plans"
-            android:icon="@drawable/ic_workout"
+            android:icon="@drawable/ic_heart"
             android:title="Workout Plans"/>
 
         <item
             android:id="@+id/nav_create_workout"
-            android:icon="@drawable/ic_create_workout"
+            android:icon="@android:drawable/ic_menu_edit"
             android:title="Create Workout"/>
     </group>
 
