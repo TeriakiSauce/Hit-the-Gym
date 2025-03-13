@@ -353,6 +353,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="#040404"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
         app:headerLayout="@layout/activity_nav_header"
         app:menu="@menu/navigation_menu"/>
 

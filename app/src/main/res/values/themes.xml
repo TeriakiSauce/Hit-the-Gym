@@ -27,4 +27,10 @@
         <item name="postSplashScreenTheme">@style/Theme.AnimatedSplashScreen</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
     </style>
+
+    <style name="NavigationDrawerTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>
