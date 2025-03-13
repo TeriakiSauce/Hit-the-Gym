@@ -98,6 +98,8 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                     startActivity(new Intent(HomeActivity.this, WorkoutPlanActivity.class));
                 } else if (id == R.id.nav_create_workout) {
                     startActivity(new Intent(HomeActivity.this, WorkoutSessionActivity.class));
+                } else if (id == R.id.nav_calendar) {
+                    startActivity(new Intent(HomeActivity.this, WorkoutCalendarActivity.class));
                 } else if (id == R.id.nav_settings) {
                     startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 }

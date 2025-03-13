@@ -37,6 +37,11 @@
             android:id="@+id/nav_create_workout"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Create Workout"/>
+
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/pull_image"
+            android:title="Calendar"/>
     </group>
 
     <!-- Settings -->
@@ -49,7 +54,6 @@
 
     <!-- Dark Mode Toggle -->
 
-    <item/>
     <item/>
     <item/>
     <item/>
