@@ -15,14 +15,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.HomeContract;
 import com.example.capstone2024.database.WorkoutSessionWithExercises;
+import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.HomePresenter;
 import com.example.capstone2024.ui.ProgressActivity;
+import com.example.capstone2024.ui.SettingsActivity;
 import com.example.capstone2024.ui.UserProfileActivity;
 import com.example.capstone2024.ui.WorkoutCalendarActivity;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 //import com.example.capstone2024.ui.createworkout.CreateWorkoutActivity;
 //import com.example.capstone2024.ui.settings.SettingsActivity;
+import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashMap;
@@ -94,9 +97,9 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                 } else if (id == R.id.nav_workout_plans) {
                     startActivity(new Intent(HomeActivity.this, WorkoutPlanActivity.class));
                 //} else if (id == R.id.nav_create_workout) {
-                 //   startActivity(new Intent(HomeActivity.this, CreateWorkoutActivity.class));
-                //} else if (id == R.id.nav_settings) {
-                //    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+                //    startActivity(new Intent(HomeActivity.this, WorkoutSessionActivity.class));
+                } else if (id == R.id.nav_settings) {
+                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 }
 
                 // Close the drawer after selection

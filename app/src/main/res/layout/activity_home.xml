@@ -355,4 +355,5 @@
         android:background="#040404"
         app:headerLayout="@layout/activity_nav_header"
         app:menu="@menu/navigation_menu"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
