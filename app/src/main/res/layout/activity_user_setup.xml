@@ -11,19 +11,20 @@
         android:padding="16dp">
 
         <!-- Questions -->
+
         <TextView
             android:id="@+id/question1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n1. What is your full name?" />
+            android:text="\n1. Enter your full name" />
 
         <EditText
             android:id="@+id/answer1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your name"
+            android:hint="Type name here"
             android:background="@drawable/edittext_background"
             android:textColorHint="@color/hint_text"
             android:textColor="@color/light_text"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n2. What is your age?" />
+            android:text="\n\n2. Enter your age" />
 
         <Spinner
             android:id="@+id/answer2"
@@ -44,18 +45,51 @@
             android:background="@drawable/spinner_outline"/>
 
         <TextView
+            android:id="@+id/weightUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/light_text"
+            android:text="\n\n Choose your preferred unit of measurement" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupWeightUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioKg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kg"
+                android:textColor="@color/light_text" />
+
+            <RadioButton
+                android:id="@+id/radioLb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lb"
+                android:textColor="@color/light_text" />
+        </RadioGroup>
+
+        <TextView
             android:id="@+id/question3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n3. What is your current weight (lbs)?" />
+            android:text="\n3. Enter your current weight" />
 
-        <Spinner
+
+        <EditText
             android:id="@+id/answer3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/spinner_outline"/>
+            android:hint="Input weight here"
+            android:background="@drawable/edittext_background"
+            android:textColorHint="@color/hint_text"
+            android:textColor="@color/light_text"
+            android:inputType="numberDecimal"/>
 
         <TextView
             android:id="@+id/question4"
@@ -63,13 +97,17 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n4. What is your target weight (lbs)?" />
+            android:text="\n\n4. Enter your target weight" />
 
-        <Spinner
+        <EditText
             android:id="@+id/answer4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/spinner_outline"/>
+            android:hint="Input weight here"
+            android:background="@drawable/edittext_background"
+            android:textColorHint="@color/hint_text"
+            android:textColor="@color/light_text"
+            android:inputType="numberDecimal"/>
 
         <TextView
             android:id="@+id/question5"
@@ -77,7 +115,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n5. What is your workout level?" />
+            android:text="\n\n5. Enter your workout level" />
 
         <RadioGroup
             android:id="@+id/answer5"
@@ -112,7 +150,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n6. What body parts would you like to target?" />
+            android:text="\n\n6. Select the body parts you would like to hit" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -468,7 +506,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/light_text"
-            android:text="\n\n7. What equipment do you have access to?" />
+            android:text="\n\n7. Select the equipment you have access to" />
 
         <RadioGroup
             android:id="@+id/answer7"
@@ -502,6 +540,7 @@
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Submit"
             android:backgroundTint="@color/button_background"
             android:textColor="@color/light_text" />

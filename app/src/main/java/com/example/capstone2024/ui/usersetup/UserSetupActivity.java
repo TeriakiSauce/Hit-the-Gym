@@ -30,9 +30,6 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
     private UserSetupContract.Presenter presenter;
     private UserSetup userSetup;
     private UserSetupDatabaseHelper databaseHelper;
-    public enum Metric {
-        AGE, WEIGHT_CURR, WEIGHT_TARG;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +42,13 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         // Initialize database
         databaseHelper = new UserSetupDatabaseHelper(this);
 
-        // Initialize spinner dropdown questions
-        spinnerSetup(Metric.AGE);
-        spinnerSetup(Metric.WEIGHT_CURR);
-        spinnerSetup(Metric.WEIGHT_TARG);
+        // Initialize age spinner dropdown question
+        ageSpinnerSetup();
 
         // Initialize other questions
         EditText name = findViewById(R.id.answer1);
+        EditText currentWeight = findViewById(R.id.answer3);
+        EditText targetWeight = findViewById(R.id.answer4);
         RadioGroup workoutLevelGroup = findViewById(R.id.answer5);
         RadioGroup equipmentGroup = findViewById(R.id.answer7);
 
@@ -69,6 +66,11 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         targetBodyParts.add(findViewById(R.id.answer6Calves));
         targetBodyParts.add(findViewById(R.id.answer6Hips));
 
+        // Set all body parts to true by default
+        for (CheckBox checkBox:targetBodyParts){
+            checkBox.setChecked(true);
+        }
+
         Button submitButton = findViewById(R.id.submitButton);
 
         // Initialize presenter
@@ -78,6 +80,8 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         submitButton.setOnClickListener(v -> {
             // Collect input data
             userSetup.setName(name.getText().toString());
+            userSetup.setCurrentWeight(currentWeight.getText().toString());
+            userSetup.setTargetWeight(targetWeight.getText().toString());
 
             // Get selected workout level
             int workoutLevelId = workoutLevelGroup.getCheckedRadioButtonId();
@@ -108,24 +112,10 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
         });
     }
 
-    public void spinnerSetup(Metric metric) {
+    public void ageSpinnerSetup() {
         Spinner spinnerAnswer = findViewById(R.id.answer2);
-        int sizeOfNum = 0;
-        switch (metric) {
-            case AGE:
-                sizeOfNum = 100;
-                spinnerAnswer = findViewById(R.id.answer2);
-                break;
-            case WEIGHT_CURR:
-                sizeOfNum = 500;
-                spinnerAnswer = findViewById(R.id.answer3);
-                break;
-            case WEIGHT_TARG:
-                sizeOfNum = 500;
-                spinnerAnswer = findViewById(R.id.answer4);
-            default:
-                break;
-        }
+        int sizeOfNum = 100;
+
         // Create an array of numbers
         String[] numbers = new String[sizeOfNum+1];
         for (int i = 0; i <= sizeOfNum; i++) {
@@ -152,34 +142,12 @@ public class UserSetupActivity extends AppCompatActivity implements UserSetupCon
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedNumber = parentView.getItemAtPosition(position).toString();
-                switch (metric) {
-                    case AGE:
-                        userSetup.setAge(selectedNumber);
-                        break;
-                    case WEIGHT_CURR:
-                        userSetup.setCurrentWeight(selectedNumber);
-                        break;
-                    case WEIGHT_TARG:
-                        userSetup.setTargetWeight(selectedNumber);
-                    default:
-                        break;
-                }
+                userSetup.setAge(selectedNumber);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                switch (metric) {
-                    case AGE:
-                        userSetup.setAge("0");
-                        break;
-                    case WEIGHT_CURR:
-                        userSetup.setCurrentWeight("0");
-                        break;
-                    case WEIGHT_TARG:
-                        userSetup.setTargetWeight("0");
-                    default:
-                        break;
-                }
+                userSetup.setAge("0");
             }
         });
     }
