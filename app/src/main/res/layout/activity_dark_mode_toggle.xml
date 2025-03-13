@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <ImageView
         android:layout_width="24dp"
@@ -14,11 +14,12 @@
         android:contentDescription="Dark Mode Icon"
         app:tint="@android:color/white"/>
 
-    <Switch
-        android:id="@+id/switch_dark_mode"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text=""
-        android:textColor="@android:color/white"/>
+        android:text="Dark Mode"
+        android:textSize="16sp"
+        android:paddingStart="16dp"/>
+
 </LinearLayout>
