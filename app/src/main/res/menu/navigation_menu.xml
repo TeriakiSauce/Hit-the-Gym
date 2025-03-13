@@ -6,7 +6,22 @@
         <item
             android:id="@+id/nav_user"
             android:icon="@drawable/ic_user"
-            android:title="User"/>
+            android:title="Profile"/>
+
+        <item
+            android:id="@+id/nav_user_setup"
+            android:icon="@drawable/ic_heart"
+            android:title="User Setup"/>
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home"/>
+
+    </group>
+
+    <!-- Workout Section -->
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_progress"
@@ -14,22 +29,19 @@
             android:title="Progress"/>
 
         <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="Logout"/>
-    </group>
-
-    <!-- Workout Section -->
-    <group android:checkableBehavior="single">
-        <item
             android:id="@+id/nav_workout_plans"
-            android:icon="@drawable/ic_workout"
+            android:icon="@drawable/ic_heart"
             android:title="Workout Plans"/>
 
         <item
             android:id="@+id/nav_create_workout"
-            android:icon="@drawable/ic_create_workout"
+            android:icon="@android:drawable/ic_menu_edit"
             android:title="Create Workout"/>
+
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/pull_image"
+            android:title="Calendar"/>
     </group>
 
     <!-- Settings -->
@@ -41,8 +53,18 @@
     </group>
 
     <!-- Dark Mode Toggle -->
+
+    <item/>
+    <item/>
+    <item/>
+    <item/>
+    <item/>
+
+
     <item
         android:id="@+id/nav_dark_mode"
-        android:title=""
+        android:icon="@drawable/ic_dark_mode"
+        android:title="Dark Mode"
+        android:layout_marginTop="200dp"
         android:actionLayout="@layout/activity_dark_mode_toggle"/>
 </menu>

@@ -346,13 +346,16 @@
     </ScrollView>
 
     <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
+     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="#040404"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
         app:headerLayout="@layout/activity_nav_header"
         app:menu="@menu/navigation_menu"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
