@@ -48,8 +48,19 @@
     </group>
 
     <!-- Dark Mode Toggle -->
+
+    <item/>
+    <item/>
+    <item/>
+    <item/>
+    <item/>
+    <item/>
+
+
     <item
         android:id="@+id/nav_dark_mode"
-        android:title=""
+        android:icon="@drawable/ic_dark_mode"
+        android:title="Dark Mode"
+        android:layout_marginTop="200dp"
         android:actionLayout="@layout/activity_dark_mode_toggle"/>
 </menu>
