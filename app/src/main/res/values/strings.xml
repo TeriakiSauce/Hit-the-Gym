@@ -49,4 +49,9 @@
     <string name="exercise_image">Exercise Image</string>
     <string name="exercise_description">Exercise Description</string>
     <string name="search_clear_button">Search Clear Button</string>
+    <!-- Theme options for the spinner -->
+    <string-array name="theme_options">
+        <item>Dark Mode</item>
+        <item>Light Mode</item>
+    </string-array>
 </resources>
