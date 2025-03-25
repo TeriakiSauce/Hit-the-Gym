@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.1"
 coreSplashscreen = "1.0.1"
+espressoIntents = "3.6.1"
 gson = "2.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -18,9 +19,11 @@ composeBom = "2024.04.01"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.6.0"
 roomCommon = "2.6.1"
+rules = "1.6.1"
 
 [libraries]
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoIntents" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -38,6 +41,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRun
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 room-runtime-v260 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "roomRuntime" }
+rules = { module = "androidx.test:rules", version.ref = "rules" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
