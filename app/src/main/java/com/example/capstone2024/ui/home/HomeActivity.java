@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements HomeContract.View {
 
-    private ImageButton homeButton, progressButton, heartButton, surveyButton, chartButton;
+    private ImageButton homeButton, progressButton, heartButton, surveyButton, chartButton, menuIcon;
     private HomeContract.Presenter presenter;
 
     private DrawerLayout drawerLayout;
@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
         // Initialize Workout Plan
         presenter.initializeWorkoutPlan();
+
     }
 
     private void initializeUI() {
@@ -69,6 +70,17 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         // Drawer and Navigation View
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        menuIcon = findViewById(R.id.menu_icon);
+
+
+        // Set up menu icon click listener
+        menuIcon.setOnClickListener(v -> {
+            if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void setButtonListeners() {
