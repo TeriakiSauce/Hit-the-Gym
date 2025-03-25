@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
 
 public class UserSetupDatabaseHelper {
 
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private UserSetupDao userDao;
     private ExerciseDao exerciseDao;
     private WorkoutSessionDao workoutSessionDao;
@@ -34,7 +35,7 @@ public class UserSetupDatabaseHelper {
     }
 
     public void insertUser(UserSetup user) {
-        new Thread(() -> userDao.insert(user)).start(); // Use a background thread to insert data into the database
+        executorService.execute(() -> userDao.insert(user));
     }
 
     public List<UserSetup> getAllUsersSync() {
@@ -42,74 +43,50 @@ public class UserSetupDatabaseHelper {
     }
 
     public List<UserSetup> fetchAllUsersSync() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<UserSetup>> future = executor.submit(() -> {
-            // Use the synchronous DAO method defined in your helper
-            UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
-            return helper.getAllUsersSync();
-        });
-
+        Future<List<UserSetup>> future = executorService.submit(() -> getAllUsersSync());
         try {
-            // This will block until the result is available, but it's off the main thread.
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            executor.shutdown();
         }
     }
     public void insertExercise(Exercise exercise) {
-        new Thread(() -> exerciseDao.insertExercise(exercise)).start();
+        executorService.execute(() -> exerciseDao.insertExercise(exercise));
     }
     public List<Exercise> getAllExercisesSync() {
         return exerciseDao.getAllExercises();
     }
     public List<Exercise> fetchAllExercisesSync() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<Exercise>> future = executor.submit(() -> {
-            // Use the synchronous DAO method defined in your helper
-            UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(context);
-            return helper.getAllExercisesSync();
-        });
-
+        Future<List<Exercise>> future = executorService.submit(() -> getAllExercisesSync());
         try {
-            // This will block until the result is available, but it's off the main thread.
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            executor.shutdown();
         }
     }
     public int insertWorkoutSession(WorkoutSession workoutSession) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Long> future = executor.submit(() -> workoutSessionDao.insertWorkoutSession(workoutSession));
+        Future<Long> future = executorService.submit(() -> workoutSessionDao.insertWorkoutSession(workoutSession));
         try {
-            // Wait for the insertion to complete and get ID
             long generatedId = future.get();
             workoutSession.setId((int) generatedId);
             return (int) generatedId;
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return 0;
-        } finally {
-            executor.shutdown();
         }
     }
 
     public Map<String, WorkoutSessionWithExercises> getStoredWorkoutProgram() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<WorkoutSessionWithExercises>> future = executor.submit(() ->
+        Future<List<WorkoutSessionWithExercises>> future = executorService.submit(() ->
                 workoutSessionDao.getWorkoutSessionsWithExercises()
         );
         try {
             List<WorkoutSessionWithExercises> sessions = future.get();
-            // Convert the list into a map using a key like "Day X"
             Map<String, WorkoutSessionWithExercises> program = new LinkedHashMap<>();
             for (WorkoutSessionWithExercises ws : sessions) {
-                // Assuming your WorkoutSession entity has a method getDayNumber() that returns the day number.
+                // Assuming your WorkoutSession entity has a method getDayNumber()
                 String key = "Day " + ws.workoutSession.getDayNumber();
                 program.put(key, ws);
             }
@@ -117,14 +94,11 @@ public class UserSetupDatabaseHelper {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new LinkedHashMap<>();
-        } finally {
-            executor.shutdown();
         }
     }
 
     public WorkoutSessionWithExercises getWorkoutSessionWithExercisesByDay(int dayNumber) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<WorkoutSessionWithExercises> future = executor.submit(() ->
+        Future<WorkoutSessionWithExercises> future = executorService.submit(() ->
                 workoutSessionDao.getWorkoutSessionWithExercisesByDay(dayNumber)
         );
         try {
@@ -132,24 +106,23 @@ public class UserSetupDatabaseHelper {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            executor.shutdown();
         }
     }
 
     public void insertExerciseSession(ExerciseSession exerciseSession) {
-        new Thread(() -> exerciseSessionDao.insertExerciseSession(exerciseSession)).start();
+        executorService.execute(() ->
+                exerciseSessionDao.insertExerciseSession(exerciseSession)
+        );
     }
 
     public void updateExerciseSession(ExerciseSession exerciseSession) {
-        new Thread(() -> {
-            exerciseSessionDao.updateExerciseSession(exerciseSession);
-        }).start();
+        executorService.execute(() ->
+                exerciseSessionDao.updateExerciseSession(exerciseSession)
+        );
     }
 
     public ExerciseSessionWithExercise getExerciseSessionWithExerciseById(int id) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<ExerciseSessionWithExercise> future = executor.submit(() ->
+        Future<ExerciseSessionWithExercise> future = executorService.submit(() ->
                 exerciseSessionDao.getExerciseSessionWithExerciseById(id)
         );
         try {
@@ -157,19 +130,17 @@ public class UserSetupDatabaseHelper {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            executor.shutdown();
         }
     }
+
     public void deleteExerciseSession(int exerciseSessionId) {
-        new Thread(() -> {
-            exerciseSessionDao.deleteExerciseSessionById(exerciseSessionId);
-        }).start();
+        executorService.execute(() ->
+                exerciseSessionDao.deleteExerciseSessionById(exerciseSessionId)
+        );
     }
 
     public List<Exercise> searchExercises(String query) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<List<Exercise>> future = executor.submit(() ->
+        Future<List<Exercise>> future = executorService.submit(() ->
                 exerciseDao.searchExercises(query)
         );
         try {
@@ -177,8 +148,6 @@ public class UserSetupDatabaseHelper {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new ArrayList<>();
-        } finally {
-            executor.shutdown();
         }
     }
 }

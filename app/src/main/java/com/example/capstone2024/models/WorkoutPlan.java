@@ -1,5 +1,6 @@
 package com.example.capstone2024.models;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.database.UserSetupDatabaseHelper;
@@ -74,7 +75,9 @@ public class WorkoutPlan {
             exercises.add(exercise);
             helper.insertExercise(exercise);
         }
-        return helper.fetchAllExercisesSync();
+        List<Exercise> exercisesList = helper.fetchAllExercisesSync();
+        Collections.shuffle(exercisesList);
+        return exercisesList;
     }
 
     public Map<String, WorkoutSessionWithExercises> generateWorkoutProgram() {
@@ -117,7 +120,6 @@ public class WorkoutPlan {
             program.put("Day " + (i + 1), new WorkoutSessionWithExercises(tempSession));
         }
 
-        // Add one cardio exercise at the beginning of each workout day as warmup
         for (int day = 0; day < workoutDays; day++) {
             WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
             List<Exercise> cardioExercises = new ArrayList<>();
@@ -132,7 +134,7 @@ public class WorkoutPlan {
                 Collections.shuffle(cardioExercises);
                 Exercise warmup = cardioExercises.get(0);
                 System.out.println(warmup);
-                ExerciseSession warmupSession = new ExerciseSession(session.getId(), warmup.getId(), 1, 1, 10);
+                ExerciseSession warmupSession = new ExerciseSession(session.getId(), warmup);
                 ExerciseSessionWithExercise warmupExercise = new ExerciseSessionWithExercise(warmupSession, warmup);
                 session.getExerciseSessions().add(0, warmupExercise);
             }
@@ -155,7 +157,7 @@ public class WorkoutPlan {
                 String day = "Day " + ((dayIndex % workoutDays) + 1);
                 WorkoutSessionWithExercises workoutSession = program.get(day);
                 // Create main exercise session (default 4 sets)
-                ExerciseSession exerciseSession = new ExerciseSession(workoutSession.getId(), exercise.getId(), 4, 1, 10);
+                ExerciseSession exerciseSession = new ExerciseSession(workoutSession.getId(), exercise);
                 ExerciseSessionWithExercise exerciseExercise = new ExerciseSessionWithExercise(exerciseSession, exercise);
                 workoutSession.getExerciseSessions().add(exerciseExercise);
 
@@ -163,7 +165,7 @@ public class WorkoutPlan {
                 if ("compound".equalsIgnoreCase(exercise.getMechanic())) {
                     if (!muscleStretches.isEmpty()) {
                         Exercise stretch = muscleStretches.get(0);
-                        ExerciseSession stretchSession = new ExerciseSession(workoutSession.getId(),stretch.getId(), 1, 1, 10);
+                        ExerciseSession stretchSession = new ExerciseSession(workoutSession.getId(),stretch);
                         ExerciseSessionWithExercise stretchExercise = new ExerciseSessionWithExercise(stretchSession, stretch);
                         workoutSession.getExerciseSessions().add(stretchExercise);
 
@@ -171,7 +173,7 @@ public class WorkoutPlan {
                         int age = Integer.parseInt(userInput.getOrDefault("age", "30").toString());
                         if (age > 65 && muscleStretches.size() > 1) {
                             Exercise extraStretch = muscleStretches.get(1);
-                            ExerciseSession extraStretchSession = new ExerciseSession(workoutSession.getId(), extraStretch.getId(), 1, 1, 10);
+                            ExerciseSession extraStretchSession = new ExerciseSession(workoutSession.getId(), extraStretch);
                             ExerciseSessionWithExercise extraStretchExercise = new ExerciseSessionWithExercise(extraStretchSession, extraStretch);
                             workoutSession.getExerciseSessions().add(extraStretchExercise);
                         }
@@ -201,7 +203,7 @@ public class WorkoutPlan {
                 if (!compoundExercises.isEmpty()) {
                     Collections.shuffle(compoundExercises);
                     Exercise compound = compoundExercises.get(0);
-                    ExerciseSession compoundSession = new ExerciseSession(session.getId(), compound.getId(), 3, 1, 10);
+                    ExerciseSession compoundSession = new ExerciseSession(session.getId(), compound);
                     ExerciseSessionWithExercise compoundExercise = new ExerciseSessionWithExercise(compoundSession, compound);
                     session.getExerciseSessions().add(compoundExercise);
                 }
@@ -212,6 +214,25 @@ public class WorkoutPlan {
                 System.out.println(es + " " + workoutSessionId);
                 es.getExerciseSession().setWorkoutSessionId(workoutSessionId);
                 helper.insertExerciseSession(es.getExerciseSession());
+            }
+        }
+        // Ensure each workout session has at least 5 exercises
+        for (int day = 0; day < workoutDays; day++) {
+            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
+            while (session.getExerciseSessions().size() < 5) {
+                // Create a list of additional strength exercises not already in the session
+                List<Exercise> availableExercises = new ArrayList<>(exercises);
+                availableExercises.removeIf(ex -> session.getExerciseSessions().stream()
+                        .anyMatch(es -> es.getExercise().getId() == ex.getId()));
+                if (availableExercises.isEmpty()) {
+                    break; // No extra exercises available
+                }
+                // Shuffle and add one extra exercise
+                Collections.shuffle(availableExercises);
+                Exercise additional = availableExercises.get(0);
+                ExerciseSession additionalSession = new ExerciseSession(session.getId(), additional);
+                ExerciseSessionWithExercise additionalExercise = new ExerciseSessionWithExercise(additionalSession, additional);
+                session.getExerciseSessions().add(additionalExercise);
             }
         }
         System.out.println(program);

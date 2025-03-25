@@ -8,6 +8,8 @@ import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.ExerciseSessionContract;
 import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.models.Exercise;
+import com.example.capstone2024.models.ExerciseSession;
+import com.example.capstone2024.models.Set;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,23 +24,22 @@ public class ExerciseSessionPresenter implements ExerciseSessionContract.Present
     @Override
     public void loadExerciseSession(ExerciseSessionWithExercise session) {
         Exercise exercise = session.getExercise();
+        ExerciseSession exerciseSession = session.getExerciseSession();
 
-        if (exercise != null) {
-            String name = exercise.getName(); // Exercise name corresponds to folder name
-            String imageName = name.replace(" ", "_"); // Corresponds to image directory name
+        if (exercise != null && exerciseSession != null) {
+            // Generate the list of Set details from the ExerciseSession
+            List<Set> setDetails = exerciseSession.getSetDetails();
+
+            // Optionally, load other details (e.g., image, instructions)
+            String name = exercise.getName();
+            Drawable firstImage = loadImageFromAssets(name.replace(" ", "_"), 0);
             String instructionsText = buildInstructionsText(exercise);
 
-            // Load the first image from assets
-            Drawable firstImage = loadImageFromAssets(imageName, 0);
-
-            if (firstImage != null) {
-                view.displayExerciseDetails(name, firstImage, instructionsText);
-                view.setupSetsTable(4); // Assuming 4 sets, adjust as needed
-            } else {
-                view.showError("Failed to load exercise image.");
-            }
+            // Update the view with exercise details and the set details
+            view.displayExerciseDetails(name, firstImage, instructionsText);
+            view.setupSetsTable(setDetails);
         } else {
-            view.showError("Failed to load exercise details.");
+            view.showError("Failed to load exercise session details.");
         }
     }
 

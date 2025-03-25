@@ -102,7 +102,7 @@ public class ExerciseSearchActivity extends AppCompatActivity {
             addButton.setOnClickListener(v -> {
                 // Create an ExerciseSession with default values.
                 // The workout_session_id here is set to 1 as a placeholder.
-                ExerciseSession selectedExercise = new ExerciseSession(1, exercise.getId(), 4, 1, 10);
+                ExerciseSession selectedExercise = new ExerciseSession(1, exercise);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("SELECTED_EXERCISE", selectedExercise);
                 setResult(Activity.RESULT_OK, resultIntent);

@@ -3,13 +3,11 @@ package com.example.capstone2024.ui.exercisesession;
 import static nl.dionsegijn.konfetti.core.Position.Relative;
 
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -33,19 +31,18 @@ import com.example.capstone2024.database.ExerciseSessionWithExercise;
 import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.models.Exercise;
 import com.example.capstone2024.models.ExerciseSession;
+import com.example.capstone2024.models.Set;
 import com.example.capstone2024.presenters.ExerciseSessionPresenter;
-import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import nl.dionsegijn.konfetti.core.Party;
 import nl.dionsegijn.konfetti.core.PartyFactory;
 import nl.dionsegijn.konfetti.core.emitter.Emitter;
-import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
 import nl.dionsegijn.konfetti.core.models.Shape;
-import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 import nl.dionsegijn.konfetti.xml.image.ImageUtil;
 
@@ -181,7 +178,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     }
 
     @Override
-    public void setupSetsTable(int numberOfSets) {
+    public void setupSetsTable(List<Set> numberOfSets) {
 
         // Initialize progress bar
         ProgressBar progressBar = findViewById(R.id.exerciseProgressBar);
@@ -202,7 +199,7 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         boolean includeWeight = false;
         String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
         if (equipment != null &&
-                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable") || equipment.equalsIgnoreCase("other"))) {
+                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable") || equipment.equalsIgnoreCase("kettlebell") || equipment.equalsIgnoreCase("other"))) {
             includeWeight = true;
         }
 
