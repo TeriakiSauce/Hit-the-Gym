@@ -49,47 +49,77 @@ public class ExerciseSession implements Serializable {
         String category = exercise.getCategory().toLowerCase();
         String equipment = exercise.getEquipment().toLowerCase();
         if (category.equals("cardio")) {
+            // For cardio, use minimal reps/sets.
             this.sets = 1;
             this.reps = 1;
-            this.restTime = 5; // 5 minute rest for cardio
+            this.restTime = 5; // 5 minutes rest
         } else if (category.equals("stretching")) {
+            // Stretching exercises are typically performed as a single set.
             this.sets = 1;
             this.reps = 10;
-            this.restTime = 1; // 1 minute rest for stretching
+            this.restTime = 1; // 1 minute rest
+        } else if (category.equals("plyometrics")) {
+            // Plyometrics – explosive movements; fewer sets and quick recovery.
+            this.sets = 3;
+            this.reps = 10;
+            this.restTime = 1;
+        } else if (category.equals("powerlifting")) {
+            // Powerlifting – heavy, low rep work.
+            this.sets = 5;
+            this.reps = 5;
+            this.restTime = 4;
+        } else if (category.equals("strongman")) {
+            // Strongman – very heavy, low-rep, high-intensity movements.
+            this.sets = 3;
+            this.reps = 3;
+            this.restTime = 4;
         } else if (category.equals("strength")) {
+            // Strength exercises: adjust further based on equipment.
             if (equipment.contains("barbell")) {
                 this.warmupWeight = 45;
                 this.fullWeight = 65;
-                this.reps = 8;
                 this.sets = 4;
-                this.restTime = 3; // 3 minutes rest for barbell exercises
+                this.reps = 8;
+                this.restTime = 3;
             } else if (equipment.contains("dumbbell") || equipment.contains("kettlebell")) {
                 this.warmupWeight = 10;
                 this.fullWeight = 20;
-                this.reps = 10;
                 this.sets = 4;
-                this.restTime = 2; // 2 minutes rest for dumbbell exercises
+                this.reps = 10;
+                this.restTime = 2;
             } else if (equipment.contains("machine")) {
                 this.warmupWeight = 20;
                 this.fullWeight = 30;
-                this.reps = 10;
                 this.sets = 4;
-                this.restTime = 2; // 2 minutes rest for machine exercises
-            } else if (equipment.contains("bodyweight")) {
                 this.reps = 10;
-                this.sets = 4;
-                this.restTime = 2; // 2 minutes rest for bodyweight exercises
+                this.restTime = 2;
             } else if (equipment.contains("cable")) {
                 this.warmupWeight = 10;
                 this.fullWeight = 15;
-                this.reps = 12;
                 this.sets = 4;
-                this.restTime = 2; // 2 minutes rest for cable exercises
+                this.reps = 12;
+                this.restTime = 2;
+            } else if (equipment.contains("bands")) {
+                // For bands, there is no fixed weight; use higher reps with fewer sets.
+                this.sets = 3;
+                this.reps = 15;
+                this.restTime = 1;
+            } else if (equipment.contains("body") || equipment.contains("foam") || equipment.contains("ball")) {
+                // Body-only or similar minimal-equipment exercises.
+                this.sets = 4;
+                this.reps = 10;
+                this.restTime = 2;
+            } else {
+                // Default for strength if equipment isn't recognized.
+                this.sets = 4;
+                this.reps = 10;
+                this.restTime = 2;
             }
         } else {
+            // Fallback default values for unrecognized categories.
             this.sets = 4;
             this.reps = 10;
-            this.restTime = 2; // default rest time
+            this.restTime = 2;
         }
     }
 
@@ -132,6 +162,22 @@ public class ExerciseSession implements Serializable {
 
     public void setWorkoutSessionId(int workoutSessionId) {
         this.workoutSessionId = workoutSessionId;
+    }
+
+    public int getWarmupWeight() {
+        return warmupWeight;
+    }
+
+    public void setWarmupWeight(int warmupWeight) {
+        this.warmupWeight = warmupWeight;
+    }
+
+    public int getFullWeight() {
+        return fullWeight;
+    }
+
+    public void setFullWeight(int fullWeight) {
+        this.fullWeight = fullWeight;
     }
 
     @Ignore // Generates set values for each set

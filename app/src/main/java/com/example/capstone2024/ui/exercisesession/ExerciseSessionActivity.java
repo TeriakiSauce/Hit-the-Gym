@@ -178,39 +178,32 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
     }
 
     @Override
-    public void setupSetsTable(List<Set> numberOfSets) {
-
-        // Initialize progress bar
+    public void setupSetsTable(List<Set> setDetails) {
+        // Initialize progress bar based on the number of sets
         ProgressBar progressBar = findViewById(R.id.exerciseProgressBar);
-        progressBar.setMax(exerciseSession.getSets()); // Set the maximum value to the total number of sets
-        progressBar.setProgress(exerciseSession.getCompletedSets()); // Start with 0 completed sets
+        progressBar.setMax(setDetails.size());
+        progressBar.setProgress(exerciseSession.getCompletedSets());
 
-        restProgressBar = findViewById(R.id.restProgressBar);
-        setsTableLayout.removeAllViews(); // Clear any existing rows
-
-        // Find the KonfettiView and initialize parameters
-        final Drawable drawable =
-                ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart);
+        // Clear previous rows and reinitialize components
+        setsTableLayout.removeAllViews();
+        final Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart);
         drawableShape = ImageUtil.loadDrawable(drawable, true, true);
         konfettiView = findViewById(R.id.konfettiView);
         konfettiView.bringToFront();
 
-        // Determine if weight input should be included
+        // Determine whether to show the weight column based on equipment
         boolean includeWeight = false;
-        String equipment = exercise.getEquipment(); // Retrieve equipment from the current exercise.
-        if (equipment != null &&
-                (equipment.equalsIgnoreCase("barbell") || equipment.equalsIgnoreCase("dumbbell") || equipment.equalsIgnoreCase("cable") || equipment.equalsIgnoreCase("kettlebell") || equipment.equalsIgnoreCase("other"))) {
+        if (exerciseSession.getWarmupWeight() > 0 || exerciseSession.getFullWeight() > 0) {
             includeWeight = true;
         }
 
-        // Create header row: always add a cell for Weight.
+        // Create header row
         TableRow headerRow = new TableRow(this);
         headerRow.addView(createHeaderTextView("Set Type"));
         headerRow.addView(createHeaderTextView("Reps"));
         if (includeWeight) {
             headerRow.addView(createHeaderTextView("Weight"));
         } else {
-            // Add an invisible header cell to maintain spacing.
             TextView emptyHeader = createHeaderTextView("");
             emptyHeader.setVisibility(View.INVISIBLE);
             headerRow.addView(emptyHeader);
@@ -221,29 +214,37 @@ public class ExerciseSessionActivity extends AppCompatActivity implements Exerci
         // Track completed sets
         final int[] completedSets = {0};
 
-        // Add rows for sets
-        for (int i = 0; i < exerciseSession.getSets(); i++) {
+        // Create a row for each Set in the list
+        for (int i = 0; i < setDetails.size(); i++) {
+            Set set = setDetails.get(i);
             TableRow setRow = new TableRow(this);
 
-            EditText setTypeInput = createEditText("Set " + (i + 1));
-            EditText repsInput = createEditText("Reps");
-
+            // Create and prefill the Set Type field (e.g., "W" or "R")
+            EditText setTypeInput = createEditText("");
+            setTypeInput.setText(set.getSetType());
             setRow.addView(setTypeInput);
+
+            // Create and prefill the Reps field
+            EditText repsInput = createEditText("");
+            repsInput.setText(String.valueOf(set.getReps()));
             setRow.addView(repsInput);
 
+            // Create and prefill the Weight field if applicable
             if (includeWeight) {
-                EditText weightInput = createEditText("Weight");
+                EditText weightInput = createEditText("");
+                weightInput.setText(String.valueOf(set.getWeight()));
                 setRow.addView(weightInput);
             } else {
-                // Add an invisible view to keep the column spacing consistent.
                 TextView emptyCell = createHeaderTextView("");
                 emptyCell.setVisibility(View.INVISIBLE);
                 setRow.addView(emptyCell);
             }
 
+            // Create the CheckBox to mark the set as complete
             CheckBox completionCheckBox = getCheckBox(i, completedSets, progressBar);
-
             setRow.addView(completionCheckBox);
+
+            // Add the row to the table layout
             setsTableLayout.addView(setRow);
         }
     }
