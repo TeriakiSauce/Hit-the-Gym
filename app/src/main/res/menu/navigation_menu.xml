@@ -30,7 +30,7 @@
 
         <item
             android:id="@+id/nav_workout_plans"
-            android:icon="@drawable/ic_heart"
+            android:icon="@drawable/dumbbell2"
             android:title="Workout Plans"/>
 
         <item
