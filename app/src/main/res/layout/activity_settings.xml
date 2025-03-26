@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
-        android:textColor="?attr/colorOnBackground"
+        android:textColor="@color/light_text"
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingBottom="16dp"
@@ -30,33 +30,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Font Size"
-        android:textColor="?attr/colorOnBackground"
+        android:textColor="@color/light_text"
         android:textSize="16sp"
         android:paddingTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/title_settings"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- SeekBar for Font Size -->
-    <SeekBar
-        android:id="@+id/seekbar_font_size"
-        android:layout_width="0dp"
+    <!-- Font Size Selection Buttons -->
+    <LinearLayout
+        android:id="@+id/font_size_buttons"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:max="30"
-        android:progress="16"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/text_font_size_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/button_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small"
+            android:onClick="setFontSizeSmall"/>
+
+        <Button
+            android:id="@+id/button_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:onClick="setFontSizeMedium"/>
+
+        <Button
+            android:id="@+id/button_large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large"
+            android:onClick="setFontSizeLarge"/>
+    </LinearLayout>
 
     <!-- Display Selected Font Size -->
     <TextView
         android:id="@+id/text_font_size_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="16sp"
-        android:textColor="?attr/colorOnBackground"
+        android:text="Medium"
+        android:textColor="@color/light_text"
         android:textSize="16sp"
         android:paddingTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/seekbar_font_size"
+        app:layout_constraintTop_toBottomOf="@id/font_size_buttons"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- Theme Label -->
@@ -65,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Theme"
-        android:textColor="?attr/colorOnBackground"
+        android:textColor="@color/light_text"
         android:textSize="16sp"
         android:paddingTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/text_font_size_value"
