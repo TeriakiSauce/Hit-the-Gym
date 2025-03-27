@@ -19,6 +19,7 @@ import com.example.capstone2024.presenters.WorkoutPlanPresenter;
 import com.example.capstone2024.ui.customworkout.CustomWorkoutActivity;
 import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
+import java.util.HashSet;
 import java.util.Map;
 
 public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPlanContract.View {
@@ -43,10 +44,14 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
         presenter.loadWorkoutProgram();
 
         // Set click listener for the "Create Custom Workout" button
-        createCustomWorkoutButton.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkoutPlanActivity.this, CustomWorkoutActivity.class);
-            startActivity(intent);
-        });
+        createCustomWorkout();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Get updated exercise session to reflect changes
+        presenter.loadWorkoutProgram();
     }
 
     @Override
@@ -73,6 +78,43 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
             // Add the card to the layout
             daysLayout.addView(dayCard);
         }
+    }
+
+    private void createCustomWorkout() {
+        createCustomWorkoutButton.setOnClickListener(v -> {
+            // Initialize helper
+            if (helper == null) {
+                helper = new UserSetupDatabaseHelper(WorkoutPlanActivity.this);
+            }
+
+            // Retrieve the workout program
+            Map<String, WorkoutSessionWithExercises> program = helper.getStoredWorkoutProgram();
+
+            // Get set of used day numbers
+            HashSet<Integer> usedDays = new HashSet<>();
+            for (String key : program.keySet()) {
+                try {
+                    int dayNum = Integer.parseInt(key.replace("Day ", "").trim());
+                    usedDays.add(dayNum);
+                } catch (NumberFormatException ignored) {
+                }
+            }
+
+            // Find the smallest integer not used
+            int nextDay = 1;
+            while (usedDays.contains(nextDay)) {
+                nextDay++;
+            }
+
+            // Create a new workout session with the computed day number
+            WorkoutSession newSession = new WorkoutSession(nextDay);
+            helper.insertWorkoutSession(newSession);
+
+            // Navigate directly to the WorkoutSessionActivity with the new day name
+            Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("DAY_NAME", "Day " + nextDay);
+            startActivity(intent);
+        });
     }
 
     @Override
