@@ -2,9 +2,12 @@ package com.example.capstone2024.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +22,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Spinner spinnerTheme;
     private SharedPreferences sharedPreferences;
+    private TextView textFontSizeValue;
     private static final String PREFS_NAME = "app_preferences";
     private static final String THEME_KEY = "theme_key";
+    private static final String FONT_SIZE_KEY = "font_size_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,30 +49,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Initialize Spinner (Theme Selector)
         spinnerTheme = findViewById(R.id.spinner_theme);
-
-        // Set up spinner with Light and Dark mode options
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.theme_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTheme.setAdapter(adapter);
 
         // Set spinner selection based on saved theme preference
-        if (themePreference.equals("light")) {
-            spinnerTheme.setSelection(1);
-        } else {
-            spinnerTheme.setSelection(0);
-        }
+        spinnerTheme.setSelection(themePreference.equals("light") ? 1 : 0);
 
         // Spinner item selected listener
         spinnerTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, android.view.View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedTheme = position == 0 ? "dark" : "light";
-                // Save theme preference
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(THEME_KEY, selectedTheme);
                 editor.apply();
-                // Apply theme change
                 setThemeBasedOnPreference(selectedTheme);
             }
 
@@ -75,13 +72,43 @@ public class SettingsActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parentView) {
             }
         });
+
+        // Font Size Controls
+        textFontSizeValue = findViewById(R.id.text_font_size_value);
+        Button buttonSmall = findViewById(R.id.button_small);
+        Button buttonMedium = findViewById(R.id.button_medium);
+        Button buttonLarge = findViewById(R.id.button_large);
+
+        // Load saved font size preference
+        float savedFontSize = sharedPreferences.getFloat(FONT_SIZE_KEY, getResources().getInteger(R.integer.font_size_medium));
+        updateFontSize(savedFontSize);
+
+        // Set button click listeners
+        buttonSmall.setOnClickListener(v -> setFontSize(R.string.font_size_small, R.integer.font_size_small));
+        buttonMedium.setOnClickListener(v -> setFontSize(R.string.font_size_medium, R.integer.font_size_medium));
+        buttonLarge.setOnClickListener(v -> setFontSize(R.string.font_size_large, R.integer.font_size_large));
     }
 
     private void setThemeBasedOnPreference(String themePreference) {
         if (themePreference.equals("light")) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); // Light mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Dark mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
+    }
+
+    private void setFontSize(int labelResId, int sizeResId) {
+        float fontSize = getResources().getInteger(sizeResId);
+        textFontSizeValue.setText(getString(labelResId));
+        textFontSizeValue.setTextSize(fontSize);
+
+        // Save font size preference
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat(FONT_SIZE_KEY, fontSize);
+        editor.apply();
+    }
+
+    private void updateFontSize(float fontSize) {
+        textFontSizeValue.setTextSize(fontSize);
     }
 }
