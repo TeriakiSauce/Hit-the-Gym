@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Spinner spinnerTheme;
     private SharedPreferences sharedPreferences;
-    private TextView textFontSizeValue;
+    private TextView textFontSizeValue, textTitle, textFontSizeLabel, textThemeLabel;
     private static final String PREFS_NAME = "app_preferences";
     private static final String THEME_KEY = "theme_key";
     private static final String FONT_SIZE_KEY = "font_size_key";
@@ -75,18 +75,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Font Size Controls
         textFontSizeValue = findViewById(R.id.text_font_size_value);
+        textTitle = findViewById(R.id.title_settings);
+        textFontSizeLabel = findViewById(R.id.text_font_size_label);
+        textThemeLabel = findViewById(R.id.text_theme_label);
+
         Button buttonSmall = findViewById(R.id.button_small);
         Button buttonMedium = findViewById(R.id.button_medium);
         Button buttonLarge = findViewById(R.id.button_large);
 
         // Load saved font size preference
-        float savedFontSize = sharedPreferences.getFloat(FONT_SIZE_KEY, getResources().getInteger(R.integer.font_size_medium));
+        float savedFontSize = sharedPreferences.getFloat(FONT_SIZE_KEY, getResources().getDimension(R.dimen.font_size_medium));
         updateFontSize(savedFontSize);
 
         // Set button click listeners
-        buttonSmall.setOnClickListener(v -> setFontSize(R.string.font_size_small, R.integer.font_size_small));
-        buttonMedium.setOnClickListener(v -> setFontSize(R.string.font_size_medium, R.integer.font_size_medium));
-        buttonLarge.setOnClickListener(v -> setFontSize(R.string.font_size_large, R.integer.font_size_large));
+        buttonSmall.setOnClickListener(v -> setFontSize(R.string.font_size_small, R.dimen.font_size_small));
+        buttonMedium.setOnClickListener(v -> setFontSize(R.string.font_size_medium, R.dimen.font_size_medium));
+        buttonLarge.setOnClickListener(v -> setFontSize(R.string.font_size_large, R.dimen.font_size_large));
     }
 
     private void setThemeBasedOnPreference(String themePreference) {
@@ -98,9 +102,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setFontSize(int labelResId, int sizeResId) {
-        float fontSize = getResources().getInteger(sizeResId);
+        float fontSize = getResources().getDimension(sizeResId);
         textFontSizeValue.setText(getString(labelResId));
         textFontSizeValue.setTextSize(fontSize);
+        textFontSizeLabel.setTextSize(fontSize);
+        textThemeLabel.setTextSize(fontSize);
+        textTitle.setTextSize(fontSize);
 
         // Save font size preference
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -110,5 +117,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void updateFontSize(float fontSize) {
         textFontSizeValue.setTextSize(fontSize);
+        textFontSizeLabel.setTextSize(fontSize);
+        textThemeLabel.setTextSize(fontSize);
+        textTitle.setTextSize(fontSize);
     }
 }
