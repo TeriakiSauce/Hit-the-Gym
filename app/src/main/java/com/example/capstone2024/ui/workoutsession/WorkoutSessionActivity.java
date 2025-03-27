@@ -69,7 +69,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         presenter = new WorkoutSessionPresenter(this);
 
         // Retrieve data from Intent
-        dayName = getIntent().getStringExtra("DAY_NAME");
+        dayName = getIntent().getStringExtra("WORKOUT_NAME");
 
         // Load workout session
         presenter.loadWorkoutSession(dayName);

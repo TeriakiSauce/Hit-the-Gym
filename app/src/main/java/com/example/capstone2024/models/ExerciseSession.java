@@ -49,17 +49,17 @@ public class ExerciseSession implements Serializable {
         String category = exercise.getCategory().toLowerCase();
         String equipment = exercise.getEquipment().toLowerCase();
         if (category.equals("cardio")) {
-            // For cardio, use minimal reps/sets.
+            // For cardio warmups, give one set of one rep
             this.sets = 1;
             this.reps = 1;
             this.restTime = 5; // 5 minutes rest
         } else if (category.equals("stretching")) {
-            // Stretching exercises are typically performed as a single set.
+            // Stretching exercises are performed as a single set
             this.sets = 1;
             this.reps = 10;
             this.restTime = 1; // 1 minute rest
         } else if (category.equals("plyometrics")) {
-            // Plyometrics – explosive movements; fewer sets and quick recovery.
+            // Plyometrics - fewer sets and quick recovery
             this.sets = 3;
             this.reps = 10;
             this.restTime = 1;
@@ -69,12 +69,12 @@ public class ExerciseSession implements Serializable {
             this.reps = 5;
             this.restTime = 4;
         } else if (category.equals("strongman")) {
-            // Strongman – very heavy, low-rep, high-intensity movements.
+            // Strongman – very heavy, low-rep movements
             this.sets = 3;
             this.reps = 3;
             this.restTime = 4;
         } else if (category.equals("strength")) {
-            // Strength exercises: adjust further based on equipment.
+            // Strength exercises, adjust further based on equipment
             if (equipment.contains("barbell")) {
                 this.warmupWeight = 45;
                 this.fullWeight = 65;
@@ -100,23 +100,27 @@ public class ExerciseSession implements Serializable {
                 this.reps = 12;
                 this.restTime = 2;
             } else if (equipment.contains("bands")) {
-                // For bands, there is no fixed weight; use higher reps with fewer sets.
+                // For bands there is no fixed weight
                 this.sets = 3;
                 this.reps = 15;
                 this.restTime = 1;
             } else if (equipment.contains("body") || equipment.contains("foam") || equipment.contains("ball")) {
-                // Body-only or similar minimal-equipment exercises.
+                // Body-only has no weight
                 this.sets = 4;
                 this.reps = 10;
                 this.restTime = 2;
             } else {
-                // Default for strength if equipment isn't recognized.
+                // Default for strength if equipment isn't recognized
+                this.warmupWeight = 0;
+                this.fullWeight = 0;
                 this.sets = 4;
                 this.reps = 10;
                 this.restTime = 2;
             }
         } else {
-            // Fallback default values for unrecognized categories.
+            // Default values for unrecognized categories
+            this.warmupWeight = 0;
+            this.fullWeight = 0;
             this.sets = 4;
             this.reps = 10;
             this.restTime = 2;

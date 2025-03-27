@@ -117,11 +117,11 @@ public class WorkoutPlan {
         Map<String, WorkoutSessionWithExercises> program = new LinkedHashMap<>();
         for (int i = 0; i < workoutDays; i++) {
             WorkoutSession tempSession = new WorkoutSession(i + 1);
-            program.put("Day " + (i + 1), new WorkoutSessionWithExercises(tempSession));
+            program.put("Workout " + (i + 1), new WorkoutSessionWithExercises(tempSession));
         }
 
         for (int day = 0; day < workoutDays; day++) {
-            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
+            WorkoutSessionWithExercises session = program.get("Workout " + (day + 1));
             List<Exercise> cardioExercises = new ArrayList<>();
             // Collect all cardio exercises
             for (Exercise ex : exercises) {
@@ -154,7 +154,7 @@ public class WorkoutPlan {
             List<Exercise> selectedExercises = muscleExercises.subList(0, Math.min(targetCount, muscleExercises.size()));
 
             for (Exercise exercise : selectedExercises) {
-                String day = "Day " + ((dayIndex % workoutDays) + 1);
+                String day = "Workout " + ((dayIndex % workoutDays) + 1);
                 WorkoutSessionWithExercises workoutSession = program.get(day);
                 // Create main exercise session (default 4 sets)
                 ExerciseSession exerciseSession = new ExerciseSession(workoutSession.getId(), exercise);
@@ -185,7 +185,7 @@ public class WorkoutPlan {
 
         // Ensure one compound exercise per session
         for (int day = 0; day < workoutDays; day++) {
-            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
+            WorkoutSessionWithExercises session = program.get("Workout " + (day + 1));
             boolean hasCompound = false;
             for (ExerciseSessionWithExercise es : session.getExerciseSessions()) {
                 if ("compound".equalsIgnoreCase(es.getExercise().getCategory())) {
@@ -218,7 +218,7 @@ public class WorkoutPlan {
         }
         // Ensure each workout session has at least 5 exercises
         for (int day = 0; day < workoutDays; day++) {
-            WorkoutSessionWithExercises session = program.get("Day " + (day + 1));
+            WorkoutSessionWithExercises session = program.get("Workout " + (day + 1));
             while (session.getExerciseSessions().size() < 5) {
                 // Create a list of additional strength exercises not already in the session
                 List<Exercise> availableExercises = new ArrayList<>(exercises);

@@ -87,7 +87,7 @@ public class UserSetupDatabaseHelper {
             Map<String, WorkoutSessionWithExercises> program = new LinkedHashMap<>();
             for (WorkoutSessionWithExercises ws : sessions) {
                 // Assuming your WorkoutSession entity has a method getDayNumber()
-                String key = "Day " + ws.workoutSession.getDayNumber();
+                String key = "Workout " + ws.workoutSession.getDayNumber();
                 program.put(key, ws);
             }
             return program;

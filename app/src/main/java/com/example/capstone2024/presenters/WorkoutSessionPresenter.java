@@ -22,7 +22,7 @@ public class WorkoutSessionPresenter implements WorkoutSessionContract.Presenter
 
     @Override
     public void loadWorkoutSession(String dayName) {
-        currentDayNumber = Integer.parseInt(dayName.replace("Day ", "").trim());
+        currentDayNumber = Integer.parseInt(dayName.replace("Workout ", "").trim());
         // Query the database for the workout session with this day number
         WorkoutSessionWithExercises session = helper.getWorkoutSessionWithExercisesByDay(currentDayNumber);
         if (session != null) {
@@ -40,7 +40,7 @@ public class WorkoutSessionPresenter implements WorkoutSessionContract.Presenter
             helper.insertExerciseSession(newSession);
             view.showMessage("Exercise added.");
             // Reload session after insertion to update UI
-            loadWorkoutSession("Day " + currentDayNumber);
+            loadWorkoutSession("Workout " + currentDayNumber);
         } else {
             view.showError("Failed to add exercise session.");
         }
@@ -50,7 +50,7 @@ public class WorkoutSessionPresenter implements WorkoutSessionContract.Presenter
         // Remove the exercise session from the database.
         helper.deleteExerciseSession(exerciseSessionId);
         view.showMessage("Exercise removed.");
-        loadWorkoutSession("Day " + currentDayNumber);
+        loadWorkoutSession("Workout " + currentDayNumber);
     }
 
     @Override
@@ -58,9 +58,9 @@ public class WorkoutSessionPresenter implements WorkoutSessionContract.Presenter
         // Create a new WorkoutSession with no exercise sessions.
         int dayNumber;
         try {
-            dayNumber = Integer.parseInt(dayName.replace("Day ", "").trim());
+            dayNumber = Integer.parseInt(dayName.replace("Workout ", "").trim());
         } catch (NumberFormatException e) {
-            view.showError("Invalid day name format.");
+            view.showError("Invalid Workout name format.");
             return;
         }
         WorkoutSession emptySession = new WorkoutSession(dayNumber);

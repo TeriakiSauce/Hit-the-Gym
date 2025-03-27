@@ -71,7 +71,7 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
             // Set OnClickListener for the card
             dayCard.setOnClickListener(v -> {
                 Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
-                intent.putExtra("DAY_NAME", day);
+                intent.putExtra("WORKOUT_NAME", day);
                 startActivity(intent);
             });
 
@@ -94,7 +94,7 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
             HashSet<Integer> usedDays = new HashSet<>();
             for (String key : program.keySet()) {
                 try {
-                    int dayNum = Integer.parseInt(key.replace("Day ", "").trim());
+                    int dayNum = Integer.parseInt(key.replace("Workout ", "").trim());
                     usedDays.add(dayNum);
                 } catch (NumberFormatException ignored) {
                 }
@@ -112,7 +112,7 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
 
             // Navigate directly to the WorkoutSessionActivity with the new day name
             Intent intent = new Intent(WorkoutPlanActivity.this, WorkoutSessionActivity.class);
-            intent.putExtra("DAY_NAME", "Day " + nextDay);
+            intent.putExtra("WORKOUT_NAME", "Workout " + nextDay);
             startActivity(intent);
         });
     }
