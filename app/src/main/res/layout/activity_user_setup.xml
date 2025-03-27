@@ -28,6 +28,7 @@
             android:background="@drawable/edittext_background"
             android:textColorHint="@color/hint_text"
             android:textColor="@color/light_text"
+            android:padding="5dp"
             android:inputType="text"/>
 
         <TextView
@@ -89,6 +90,7 @@
             android:background="@drawable/edittext_background"
             android:textColorHint="@color/hint_text"
             android:textColor="@color/light_text"
+            android:padding="5dp"
             android:inputType="numberDecimal"/>
 
         <TextView
@@ -107,6 +109,7 @@
             android:background="@drawable/edittext_background"
             android:textColorHint="@color/hint_text"
             android:textColor="@color/light_text"
+            android:padding="5dp"
             android:inputType="numberDecimal"/>
 
         <TextView
