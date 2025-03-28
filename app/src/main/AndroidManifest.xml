@@ -32,9 +32,6 @@
             android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.customworkout.CustomWorkoutActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.AchievementActivity"
             android:exported="false" />
         <activity

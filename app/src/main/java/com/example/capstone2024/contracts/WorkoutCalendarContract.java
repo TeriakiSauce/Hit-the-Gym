@@ -1,23 +1,13 @@
 package com.example.capstone2024.contracts;
 
 import com.example.capstone2024.models.WorkoutPlan;
+import com.example.capstone2024.models.WorkoutSession;
 
 import java.util.Date;
 import java.util.Map;
 
 public interface WorkoutCalendarContract {
     interface View {
-        /**
-         * Displays the workout data for a given month.
-         *
-         * @param monthData A map of dates to WorkoutPlans for the current month.
-         */
-        void displayMonthData(Map<Date, WorkoutPlan> monthData);
-
-        /**
-         * Updates the calendar UI to reflect changes.
-         */
-        void updateCalendar();
 
         /**
          * Displays an error message to the user.
@@ -25,6 +15,8 @@ public interface WorkoutCalendarContract {
          * @param message The error message to display.
          */
         void showError(String message);
+
+        void updateCalendar();
     }
 
     interface Presenter {

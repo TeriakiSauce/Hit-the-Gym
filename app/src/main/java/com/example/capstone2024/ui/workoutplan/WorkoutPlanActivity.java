@@ -16,7 +16,6 @@ import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.database.WorkoutSessionWithExercises;
 import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.WorkoutPlanPresenter;
-import com.example.capstone2024.ui.customworkout.CustomWorkoutActivity;
 import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 
 import java.util.HashSet;

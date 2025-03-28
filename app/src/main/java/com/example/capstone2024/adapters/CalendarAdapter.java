@@ -15,6 +15,8 @@ import android.widget.BaseAdapter;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.models.WorkoutPlan;
+import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.ui.WorkoutCalendarActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,11 +29,11 @@ public class CalendarAdapter extends BaseAdapter {
 
     private final Context context;
     private final List<Date> dates; // All dates to display
-    private final Map<Date, WorkoutPlan> workoutSchedule; // Map of dates to workouts
+    private final Map<Date, WorkoutSession> workoutSchedule; // Map of dates to workouts
     private final LayoutInflater inflater;
     private final Date today; // Today's date
 
-    public CalendarAdapter(Context context, List<Date> dates, Map<Date, WorkoutPlan> workoutSchedule, Date today) {
+    public CalendarAdapter(Context context, List<Date> dates, Map<Date, WorkoutSession> workoutSchedule, Date today) {
         this.context = context;
         this.dates = dates;
         this.workoutSchedule = workoutSchedule;
@@ -61,25 +63,30 @@ public class CalendarAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.activity_calendar_day, parent, false);
         }
 
+        // Get the date for this cell
+        Date date = dates.get(position);
+
+        // Set the date as the tag so it can be retrieved later
+        convertView.setTag(date);
+
+        convertView.setOnDragListener(((WorkoutCalendarActivity) context).getDragDropListener());
+
         TextView dateText = convertView.findViewById(R.id.dateText);
         TextView workoutInfo = convertView.findViewById(R.id.workoutInfo);
 
-        Date date = dates.get(position);
-        WorkoutPlan workoutPlan = workoutSchedule.get(date);
-
-        // Format and set date
         SimpleDateFormat dateFormat = new SimpleDateFormat("d", Locale.getDefault());
         dateText.setText(dateFormat.format(date));
 
         // Highlight today's date
         if (isSameDay(date, today)) {
-            convertView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.holo_green_light));
+            convertView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.darker_gray));
         } else {
             convertView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         }
 
+        WorkoutSession workoutSession = workoutSchedule.get(date);
         // Set workout information
-        if (workoutPlan != null) {
+        if (workoutSession != null) {
             workoutInfo.setText("Workout Assigned");
         } else {
             workoutInfo.setText("");

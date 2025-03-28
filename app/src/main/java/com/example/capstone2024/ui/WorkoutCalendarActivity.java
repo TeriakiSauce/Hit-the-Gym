@@ -1,9 +1,11 @@
 package com.example.capstone2024.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.DragEvent;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.ClipData;
 import android.widget.Toast;
@@ -12,10 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.adapters.CalendarAdapter;
+import com.example.capstone2024.contracts.WorkoutCalendarContract;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
+import com.example.capstone2024.database.WorkoutSessionWithExercises;
 import com.example.capstone2024.models.WorkoutCalendar;
 import com.example.capstone2024.models.WorkoutPlan;
-
-import org.json.JSONException;
+import com.example.capstone2024.models.WorkoutSession;
+import com.example.capstone2024.presenters.WorkoutCalendarPresenter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,71 +30,79 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class WorkoutCalendarActivity extends AppCompatActivity {
+public class WorkoutCalendarActivity extends AppCompatActivity implements WorkoutCalendarContract.View {
 
     private GridView calendarGrid;
     private WorkoutCalendar workoutCalendarModel;
     private Map<Date, WorkoutPlan> workoutSchedule;
+
+    private WorkoutCalendarPresenter workoutCalendarPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_calendar);
 
+        workoutCalendarPresenter = new WorkoutCalendarPresenter(this, new WorkoutCalendar());
+        // References for current month section
         TextView currentMonthText = findViewById(R.id.currentMonth);
-        calendarGrid = findViewById(R.id.calendarGrid);
+        GridView calendarGrid = findViewById(R.id.calendarGrid);
 
-        // Initialize the calendar model and data
-        workoutCalendarModel = new WorkoutCalendar();
-        workoutSchedule = workoutCalendarModel.getWorkoutPlanForMonth(2025, 0); // Example: January 2025
+        // References for next month section
+        TextView nextMonthText = findViewById(R.id.nextMonth);
+        GridView calendarGridNext = findViewById(R.id.calendarGridNext);
 
-        // Get current date
-        Calendar calendar = Calendar.getInstance();
+        // Initialize the calendar model
+        WorkoutCalendar workoutCalendarModel = new WorkoutCalendar();
+
+        // Get today's date
+        Calendar todayCal = Calendar.getInstance();
+        Date today = todayCal.getTime();
         SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        String currentMonth = monthFormat.format(calendar.getTime());
 
-        // Set current month in the header
-        currentMonthText.setText(currentMonth);
+        //Setup Current Month
+        int currentYear = todayCal.get(Calendar.YEAR);
+        int currentMonthInt = todayCal.get(Calendar.MONTH);
+        currentMonthText.setText(monthFormat.format(todayCal.getTime()));
+        List<Date> currentMonthDates = getMonthDates(currentYear, currentMonthInt);
+        // Retrieve current month schedule from the model
+        Map<Date, WorkoutSession> currentMonthSchedule = workoutCalendarModel.getWorkoutPlanForMonth(currentYear, currentMonthInt);
+        CalendarAdapter adapterCurrent = new CalendarAdapter(this, currentMonthDates, currentMonthSchedule, today);
+        calendarGrid.setAdapter(adapterCurrent);
 
-        // Generate a list of all dates in the current month
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonthInt = calendar.get(Calendar.MONTH);
-        List<Date> monthDates = getMonthDates(currentYear, currentMonthInt);
+        // Setup Next Month
+        Calendar nextMonthCal = Calendar.getInstance();
+        nextMonthCal.add(Calendar.MONTH, 1); // Move to next month
+        int nextMonthYear = nextMonthCal.get(Calendar.YEAR);
+        int nextMonthInt = nextMonthCal.get(Calendar.MONTH);
+        nextMonthText.setText(monthFormat.format(nextMonthCal.getTime()));
+        List<Date> nextMonthDates = getMonthDates(nextMonthYear, nextMonthInt);
+        Map<Date, WorkoutSession> nextMonthSchedule = workoutCalendarModel.getWorkoutPlanForMonth(nextMonthYear, nextMonthInt);
+        CalendarAdapter adapterNext = new CalendarAdapter(this, nextMonthDates, nextMonthSchedule, today);
+        calendarGridNext.setAdapter(adapterNext);
 
-        // Set up the adapter
-        Date today = calendar.getTime();
-        CalendarAdapter adapter = new CalendarAdapter(this, monthDates, workoutSchedule, today);
-        calendarGrid.setAdapter(adapter);
+        // Set up footer with workout icons
+        LinearLayout footerContainer = findViewById(R.id.footerContainer);
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
 
-        // Array of workout icon IDs and names
-        int[] workoutFrameIds = {
-                R.id.workout_day1,
-                R.id.workout_day2,
-                R.id.workout_day3,
-                R.id.workout_day4,
-                R.id.workout_day5
-        };
+        // Retrieve the workout program
+        Map<String, WorkoutSessionWithExercises> workoutProgram = helper.getStoredWorkoutProgram();
+        footerContainer.removeAllViews();
 
-        String[] workoutNames = {
-                "Day 1 Workout",
-                "Day 2 Workout",
-                "Day 3 Workout",
-                "Day 4 Workout",
-                "Day 5 Workout"
-        };
+        // Iterate through the workout sessions and inflate a view
+        for (String dayName : workoutProgram.keySet()) {
+            View workoutDayView = getLayoutInflater().inflate(R.layout.calendar_workout_icon, footerContainer, false);
 
-        // Set up drag listeners for all workout icons
-        for (int i = 0; i < workoutFrameIds.length; i++) {
-            View workoutFrame = findViewById(workoutFrameIds[i]);
-            workoutFrame.setTag(workoutNames[i]); // Assign workout name as tag
-            workoutFrame.setOnLongClickListener(dragStartListener); // Assign drag listener
+            // Set the workout day name on the TextView
+            TextView dayText = workoutDayView.findViewById(R.id.workout_day_text);
+            dayText.setText(dayName.replace("Workout", "Day"));
+
+            // Attach the drag start listener
+            workoutDayView.setOnLongClickListener(dragStartListener);
+
+            // Add the dynamically created view to the container
+            footerContainer.addView(workoutDayView);
         }
-
-        // Set up drop listeners for calendar grid items
-        calendarGrid.setOnItemLongClickListener((parent, view, position, id) -> {
-            view.setOnDragListener(dragDropListener);
-            return true;
-        });
     }
 
     private List<Date> getMonthDates(int year, int month) {
@@ -121,16 +134,28 @@ public class WorkoutCalendarActivity extends AppCompatActivity {
     // Listener for handling drag-and-drop events
     private final View.OnDragListener dragDropListener = (v, event) -> {
         switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                return true;
             case DragEvent.ACTION_DROP:
-                String workout = event.getClipData().getItemAt(0).getText().toString(); // Get workout name
-                handleWorkoutDrop(v, workout);
+                // Retrieve the workout name from the drag data
+                String workoutName = event.getClipData().getItemAt(0).getText().toString();
+
+                // Retrieve the date associated with the target view (set in getView of the adapter)
+                Date targetDate = (Date) v.getTag();
+
+                if (targetDate != null) {
+                    UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(this);
+                    int day = Integer.parseInt(workoutName.replace("Workout ", "").trim());
+                    // Retrieve or create the WorkoutPlan corresponding to workoutName
+                    WorkoutSession workoutSession = helper.getWorkoutSessionWithExercisesByDay(day).getWorkoutSession();
+
+                    // Assign the workout plan to the target date via the presenter
+                    workoutCalendarPresenter.assignWorkoutToDay(targetDate, workoutSession);
+                }
+
                 return true;
             case DragEvent.ACTION_DRAG_ENDED:
                 View draggedView = (View) event.getLocalState();
                 if (!event.getResult()) {
-                    draggedView.setVisibility(View.VISIBLE); // Restore visibility if not dropped
+                    draggedView.setVisibility(View.VISIBLE);
                 }
                 return true;
             default:
@@ -141,5 +166,18 @@ public class WorkoutCalendarActivity extends AppCompatActivity {
     // Handle workout drop events
     private void handleWorkoutDrop(View targetView, String workout) {
         Toast.makeText(this, "Dropped: " + workout, Toast.LENGTH_SHORT).show();
+    }
+
+    public View.OnDragListener getDragDropListener() {
+        return dragDropListener;
+    }
+
+    public void updateCalendar() {
+        return;
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

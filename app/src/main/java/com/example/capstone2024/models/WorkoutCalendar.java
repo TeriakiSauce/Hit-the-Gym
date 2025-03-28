@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WorkoutCalendar extends GregorianCalendar {
-    private Map<Date, WorkoutPlan> workoutSchedule;
+    private Map<Date, WorkoutSession> workoutSchedule;
 
     public WorkoutCalendar() {
         super();
@@ -15,18 +15,13 @@ public class WorkoutCalendar extends GregorianCalendar {
 
     /**
      * Adds a workout plan to the specified date.
-     *
-     * @param date        The date to assign the workout plan.
-     * @param workoutPlan The workout plan to assign.
      */
-    public void addWorkout(Date date, WorkoutPlan workoutPlan) {
-        workoutSchedule.put(date, workoutPlan);
+    public void addWorkout(Date date, WorkoutSession workoutSession) {
+        workoutSchedule.put(date, workoutSession);
     }
 
     /**
      * Removes a workout plan from the specified date.
-     *
-     * @param date The date to remove the workout plan.
      */
     public void removeWorkout(Date date) {
         workoutSchedule.remove(date);
@@ -34,24 +29,17 @@ public class WorkoutCalendar extends GregorianCalendar {
 
     /**
      * Gets the workout plan for a specific date.
-     *
-     * @param date The date to retrieve the workout plan for.
-     * @return The workout plan for the date, or null if none exists.
      */
-    public WorkoutPlan getWorkoutForDate(Date date) {
+    public WorkoutSession getWorkoutForDate(Date date) {
         return workoutSchedule.get(date);
     }
 
     /**
      * Gets all workout plans for a specific month.
-     *
-     * @param year  The year of the month to retrieve.
-     * @param month The month to retrieve (0-based index).
-     * @return A map of dates to workout plans for the specified month.
      */
-    public Map<Date, WorkoutPlan> getWorkoutPlanForMonth(int year, int month) {
-        Map<Date, WorkoutPlan> monthData = new HashMap<>();
-        for (Map.Entry<Date, WorkoutPlan> entry : workoutSchedule.entrySet()) {
+    public Map<Date, WorkoutSession> getWorkoutPlanForMonth(int year, int month) {
+        Map<Date, WorkoutSession> monthData = new HashMap<>();
+        for (Map.Entry<Date, WorkoutSession> entry : workoutSchedule.entrySet()) {
             Date date = entry.getKey();
             if (date.getYear() == year - 1900 && date.getMonth() == month) {
                 monthData.put(date, entry.getValue());
@@ -62,9 +50,6 @@ public class WorkoutCalendar extends GregorianCalendar {
 
     /**
      * Checks if a workout plan is assigned to the specified date.
-     *
-     * @param date The date to check.
-     * @return True if a workout is assigned, false otherwise.
      */
     public boolean hasWorkout(Date date) {
         return workoutSchedule.containsKey(date);

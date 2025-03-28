@@ -36,4 +36,8 @@ public class WorkoutSessionWithExercises implements Serializable {
         sb.append("Workout Session ID: ").append(workoutSession.getId()).append(" ");
         return sb.toString();
     }
+
+    public WorkoutSession getWorkoutSession() {
+        return workoutSession;
+    }
 }

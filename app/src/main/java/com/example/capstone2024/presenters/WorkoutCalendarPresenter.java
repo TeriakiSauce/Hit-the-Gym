@@ -3,6 +3,7 @@ package com.example.capstone2024.presenters;
 import com.example.capstone2024.contracts.WorkoutCalendarContract;
 import com.example.capstone2024.models.WorkoutCalendar;
 import com.example.capstone2024.models.WorkoutPlan;
+import com.example.capstone2024.models.WorkoutSession;
 
 import java.util.Date;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class WorkoutCalendarPresenter {
         this.workoutCalendarModel = workoutCalendarModel;
     }
 
-    public void assignWorkoutToDay(Date date, WorkoutPlan workoutPlan) {
-        workoutCalendarModel.addWorkout(date, workoutPlan);
+    public void assignWorkoutToDay(Date date, WorkoutSession workoutSession) {
+        workoutCalendarModel.addWorkout(date, workoutSession);
         view.updateCalendar();
     }
 
@@ -26,8 +27,8 @@ public class WorkoutCalendarPresenter {
         view.updateCalendar();
     }
 
-    public void loadMonthData(int year, int month) {
-        Map<Date, WorkoutPlan> monthData = workoutCalendarModel.getWorkoutPlanForMonth(year, month);
-        view.displayMonthData(monthData);
-    }
+//    public void loadMonthData(int year, int month) {
+//        Map<Date, WorkoutSession> monthData = workoutCalendarModel.getWorkoutPlanForMonth(year, month);
+//        view.displayMonthData(monthData);
+//    }
 }
