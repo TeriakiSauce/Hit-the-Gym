@@ -59,7 +59,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.usersetup.UserStatusActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.UserProfileActivity"
             android:exported="false" />
