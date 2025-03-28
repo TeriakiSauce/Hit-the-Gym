@@ -1,9 +1,12 @@
 package com.example.capstone2024.ui.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +27,6 @@ import com.example.capstone2024.ui.WorkoutCalendarActivity;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
 import com.example.capstone2024.ui.usersetup.UserStatusActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
-//import com.example.capstone2024.ui.createworkout.CreateWorkoutActivity;
-//import com.example.capstone2024.ui.settings.SettingsActivity;
 import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -36,14 +37,24 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
     private ImageButton homeButton, progressButton, heartButton, surveyButton, chartButton, menuIcon;
     private HomeContract.Presenter presenter;
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "app_preferences";
+    private static final String FONT_SIZE_KEY = "font_size_key";
+
+    private TextView titleHome;
+    private TextView textWorkout1, textWorkout2, textWorkout3, textWorkout4, textWorkout5;
+    private TextView individualWorkoutsTitle, weeklyWorkoutTitle, personalInfoTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         // Initialize UI components
         initializeUI();
@@ -59,7 +70,6 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
         // Initialize Workout Plan
         presenter.initializeWorkoutPlan();
-
     }
 
     private void initializeUI() {
@@ -72,6 +82,19 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         navigationView = findViewById(R.id.nav_view);
         menuIcon = findViewById(R.id.menu_icon);
 
+        // Initialize TextViews
+        titleHome = findViewById(R.id.title_home);
+        textWorkout1 = findViewById(R.id.text_workout1);
+        textWorkout2 = findViewById(R.id.text_workout2);
+        textWorkout3 = findViewById(R.id.text_workout3);
+        textWorkout4 = findViewById(R.id.text_workout4);
+        textWorkout5 = findViewById(R.id.text_workout5);
+        individualWorkoutsTitle = findViewById(R.id.individual_workouts_title);
+        weeklyWorkoutTitle = findViewById(R.id.weekly_workout_title);
+        personalInfoTitle = findViewById(R.id.personal_info_title);
+
+        // Apply font sizes
+        applyFontSizes();
 
         // Set up menu icon click listener
         menuIcon.setOnClickListener(v -> {
@@ -83,13 +106,45 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         });
     }
 
+    private void applyFontSizes() {
+        String fontSizePref = sharedPreferences.getString(FONT_SIZE_KEY, "small");
+
+        applyFontSizeToView(titleHome, fontSizePref);
+        applyFontSizeToView(textWorkout1, fontSizePref);
+        applyFontSizeToView(textWorkout2, fontSizePref);
+        applyFontSizeToView(textWorkout3, fontSizePref);
+        applyFontSizeToView(textWorkout4, fontSizePref);
+        applyFontSizeToView(textWorkout5, fontSizePref);
+        applyFontSizeToView(individualWorkoutsTitle, fontSizePref);
+        applyFontSizeToView(weeklyWorkoutTitle, fontSizePref);
+        applyFontSizeToView(personalInfoTitle, fontSizePref);
+    }
+
+    private void applyFontSizeToView(TextView textView, String fontSizePref) {
+        if (textView == null) return;
+
+        switch (fontSizePref) {
+            case "small":
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.font_size_small));
+                break;
+            case "medium":
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.font_size_medium));
+                break;
+            case "large":
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.font_size_large));
+                break;
+        }
+    }
+
     private void setButtonListeners() {
         chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
         surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
     }
 
     private void setupNavigationDrawer() {
-        // Navigation Item Click Listener
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -97,8 +152,6 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
                 if (id == R.id.nav_user) {
                     startActivity(new Intent(HomeActivity.this, UserStatusActivity.class));
-                //} else if (id == R.id.nav_progress) {
-                //    startActivity(new Intent(HomeActivity.this, ProgressActivity.class));
                 } else if (id == R.id.nav_user_setup) {
                     startActivity(new Intent(HomeActivity.this, UserSetupActivity.class));
                 } else if (id == R.id.nav_workout_plans) {
@@ -111,32 +164,22 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                     startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 }
 
-                // Close the drawer after selection
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
-
-        // Set up Drawer Toggle
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        //        this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawerLayout.addDrawerListener(toggle);
-        //toggle.syncState();
     }
 
-    //@Override
-    //public void onBackPressed() {
-    //    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-    //        drawerLayout.closeDrawer(GravityCompat.START);
-    //    } else {
-    //        super.onBackPressed();
-    //    }
-    //}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyFontSizes();
+    }
 
     // Presenter Callbacks
     @Override
     public void displayWorkoutProgram(Map<String, WorkoutSessionWithExercises> workoutProgram) {
-        // Logic for updating UI with workout program (if needed)
+        // Implementation
     }
 
     @Override

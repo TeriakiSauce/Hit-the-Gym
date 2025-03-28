@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme -->
+    <!-- Dark mode theme -->
     <style name="Theme.Capstone2024" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme colors -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -14,7 +14,7 @@
         <item name="android:statusBarColor">@color/dark_gray</item>
         <!-- Customize your theme here. -->
     </style>
-    <!-- Base application theme. -->
+    <!-- Light mode theme. -->
     <style name="Base.Theme.Capstone2024" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <!-- Customize your light theme here. -->

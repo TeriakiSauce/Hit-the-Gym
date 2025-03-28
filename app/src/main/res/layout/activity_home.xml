@@ -46,13 +46,14 @@
                     android:src="@drawable/ic_menu" />
 
                 <TextView
+                    android:id="@+id/title_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="40dp"
                     android:text="Hit the Gym!"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/font_size_title"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -87,6 +88,7 @@
                             android:padding="16dp">
 
                             <TextView
+                                android:id="@+id/individual_workouts_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Individual Workouts"
@@ -124,11 +126,12 @@
                                             android:scaleType="centerCrop" />
 
                                         <TextView
+                                            android:id="@+id/text_workout1"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Workout 1"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="18sp"
+                                            android:textSize="@dimen/font_size_medium"
                                             android:gravity="center" />
                                     </LinearLayout>
 
@@ -148,11 +151,12 @@
                                             android:scaleType="centerCrop" />
 
                                         <TextView
+                                            android:id="@+id/text_workout2"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Workout 2"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="18sp"
+                                            android:textSize="@dimen/font_size_medium"
                                             android:gravity="center" />
                                     </LinearLayout>
 
@@ -172,11 +176,12 @@
                                             android:scaleType="centerCrop" />
 
                                         <TextView
+                                            android:id="@+id/text_workout3"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Workout 3"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="18sp"
+                                            android:textSize="@dimen/font_size_medium"
                                             android:gravity="center" />
                                     </LinearLayout>
 
@@ -196,11 +201,12 @@
                                             android:scaleType="centerCrop" />
 
                                         <TextView
+                                            android:id="@+id/text_workout4"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Workout 4"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="18sp"
+                                            android:textSize="@dimen/font_size_medium"
                                             android:gravity="center" />
                                     </LinearLayout>
 
@@ -221,11 +227,12 @@
                                             android:scaleType="centerCrop" />
 
                                         <TextView
+                                            android:id="@+id/text_workout5"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Workout 5"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="18sp"
+                                            android:textSize="@dimen/font_size_medium"
                                             android:gravity="center" />
                                     </LinearLayout>
 
@@ -251,11 +258,12 @@
                             android:padding="16dp">
 
                             <TextView
+                                android:id="@+id/weekly_workout_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Weekly Workout Plan"
                                 android:textColor="#FFFFFF"
-                                android:textSize="18sp"
+                                android:textSize="@dimen/font_size_label_medium"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"/>
 
@@ -287,11 +295,12 @@
                             android:padding="16dp">
 
                             <TextView
+                                android:id="@+id/personal_info_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Personal Information"
                                 android:textColor="#FFFFFF"
-                                android:textSize="18sp"
+                                android:textSize="@dimen/font_size_label_medium"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"/>
 
@@ -312,7 +321,7 @@
     </ScrollView>
 
     <!-- Navigation Drawer -->
-     <com.google.android.material.navigation.NavigationView
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="280dp"
         android:layout_height="match_parent"
