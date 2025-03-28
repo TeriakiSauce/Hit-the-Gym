@@ -22,6 +22,7 @@ import com.example.capstone2024.ui.SettingsActivity;
 import com.example.capstone2024.ui.UserProfileActivity;
 import com.example.capstone2024.ui.WorkoutCalendarActivity;
 import com.example.capstone2024.ui.usersetup.UserSetupActivity;
+import com.example.capstone2024.ui.usersetup.UserStatusActivity;
 import com.example.capstone2024.ui.workoutplan.WorkoutPlanActivity;
 //import com.example.capstone2024.ui.createworkout.CreateWorkoutActivity;
 //import com.example.capstone2024.ui.settings.SettingsActivity;
@@ -134,7 +135,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
     @Override
     public void navigateToSurvey() {
-        startActivity(new Intent(HomeActivity.this, UserSetupActivity.class));
+        startActivity(new Intent(HomeActivity.this, UserStatusActivity.class));
     }
 
     @Override

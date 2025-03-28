@@ -69,6 +69,10 @@ public class UserStatusActivity extends AppCompatActivity implements UserSetupCo
         TextView equipmentText = findViewById(R.id.statusEquipment);
         equipmentText.setText("Equipment available: " + user.getEquipment());
 
+        Button modifyButton = findViewById(R.id.updateButton);
+        modifyButton.setOnClickListener(v -> {
+            updateInfo();
+        });
     }
 
     @Override
@@ -79,6 +83,12 @@ public class UserStatusActivity extends AppCompatActivity implements UserSetupCo
     @Override
     public void navigateToHome() {
         Intent intent = new Intent(UserStatusActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void updateInfo() {
+        Intent intent = new Intent(UserStatusActivity.this, UserSetupActivity.class);
         startActivity(intent);
         finish();
     }
