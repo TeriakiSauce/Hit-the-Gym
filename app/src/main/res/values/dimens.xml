@@ -1,3 +1,16 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <!-- Base font sizes -->
+    <dimen name="font_size_small">14sp</dimen>
+    <dimen name="font_size_medium">16sp</dimen>
+    <dimen name="font_size_large">20sp</dimen>
+    <dimen name="font_size_title">24sp</dimen>
+
+    <!-- Relative scaling -->
+    <dimen name="font_size_label_small">16sp</dimen>
+    <dimen name="font_size_label_medium">18sp</dimen>
+    <dimen name="font_size_label_large">22sp</dimen>
+
+    <dimen name="font_size_title_small">20sp</dimen>
+    <dimen name="font_size_title_medium">24sp</dimen>
+    <dimen name="font_size_title_large">30sp</dimen>
 </resources>
