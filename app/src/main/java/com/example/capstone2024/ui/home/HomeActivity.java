@@ -62,10 +62,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
 
     private void initializeUI() {
         // Bottom Navigation Buttons
-//        homeButton = findViewById(R.id.button_home);
-//        progressButton = findViewById(R.id.button_progress);
         chartButton = findViewById(R.id.button_chart);
-//        heartButton = findViewById(R.id.button_heart);
         surveyButton = findViewById(R.id.button_survey);
 
         // Drawer and Navigation View
@@ -74,10 +71,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     }
 
     private void setButtonListeners() {
-//        homeButton.setOnClickListener(v -> {});
-//        progressButton.setOnClickListener(v -> presenter.handleProgressNavigation());
         chartButton.setOnClickListener(v -> presenter.handleWorkoutPlanNavigation());
-//        heartButton.setOnClickListener(v -> presenter.handleWorkoutCalendarNavigation());
         surveyButton.setOnClickListener(v -> presenter.handleSurveyNavigation());
     }
 
