@@ -96,9 +96,9 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                 int id = item.getItemId();
 
                 if (id == R.id.nav_user) {
-                    startActivity(new Intent(HomeActivity.this, UserProfileActivity.class));
-                } else if (id == R.id.nav_progress) {
-                    startActivity(new Intent(HomeActivity.this, ProgressActivity.class));
+                    startActivity(new Intent(HomeActivity.this, UserStatusActivity.class));
+                //} else if (id == R.id.nav_progress) {
+                //    startActivity(new Intent(HomeActivity.this, ProgressActivity.class));
                 } else if (id == R.id.nav_user_setup) {
                     startActivity(new Intent(HomeActivity.this, UserSetupActivity.class));
                 } else if (id == R.id.nav_workout_plans) {

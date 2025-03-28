@@ -24,11 +24,6 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_progress"
-            android:icon="@drawable/ic_progress"
-            android:title="Progress"/>
-
-        <item
             android:id="@+id/nav_workout_plans"
             android:icon="@drawable/dumbbell2"
             android:title="Workout Plans"/>
@@ -52,7 +47,7 @@
             android:title="Settings"/>
     </group>
 
-    <!-- Dark Mode Toggle -->
+    <!-- Dark Mode Toggle
 
     <item/>
     <item/>
@@ -66,5 +61,5 @@
         android:icon="@drawable/ic_dark_mode"
         android:title="Dark Mode"
         android:layout_marginTop="200dp"
-        android:actionLayout="@layout/activity_dark_mode_toggle"/>
+        android:actionLayout="@layout/activity_dark_mode_toggle"/>-->
 </menu>
