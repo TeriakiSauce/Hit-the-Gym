@@ -58,7 +58,6 @@ public class WorkoutPlanActivity extends AppCompatActivity implements WorkoutPla
         daysLayout.removeAllViews(); // Clear existing views
         for (Map.Entry<String, WorkoutSessionWithExercises> entry : workoutProgram.entrySet()) {
             String day = entry.getKey();
-            WorkoutSessionWithExercises workoutSession = entry.getValue();
 
             // Inflate the custom card layout
             View dayCard = getLayoutInflater().inflate(R.layout.day_card, daysLayout, false);

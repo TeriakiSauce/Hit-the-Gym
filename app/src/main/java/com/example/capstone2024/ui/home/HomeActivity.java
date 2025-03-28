@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.capstone2024.R;
 import com.example.capstone2024.contracts.HomeContract;
+import com.example.capstone2024.database.UserSetupDatabaseHelper;
 import com.example.capstone2024.database.WorkoutSessionWithExercises;
 import com.example.capstone2024.models.WorkoutSession;
 import com.example.capstone2024.presenters.HomePresenter;
@@ -31,6 +33,7 @@ import com.example.capstone2024.ui.workoutsession.WorkoutSessionActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements HomeContract.View {
@@ -82,6 +85,9 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         navigationView = findViewById(R.id.nav_view);
         menuIcon = findViewById(R.id.menu_icon);
 
+        // Initialize Workout Buttons
+        initializeWorkoutButtons();
+
         // Initialize TextViews
         titleHome = findViewById(R.id.title_home);
         textWorkout1 = findViewById(R.id.text_workout1);
@@ -104,6 +110,40 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+    }
+    private void initializeWorkoutButtons() {
+        LinearLayout workout1Container = findViewById(R.id.workout_button1);
+        LinearLayout workout2Container = findViewById(R.id.workout_button2);
+        LinearLayout workout3Container = findViewById(R.id.workout_button3);
+        LinearLayout workout4Container = findViewById(R.id.workout_button4);
+        LinearLayout workout5Container = findViewById(R.id.workout_button5);
+
+        workout1Container.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("WORKOUT_NAME", "Workout 1");
+            startActivity(intent);
+        });
+        workout2Container.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("WORKOUT_NAME", "Workout 2");
+            startActivity(intent);
+        });
+        workout3Container.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("WORKOUT_NAME", "Workout 3");
+            startActivity(intent);
+        });
+        workout4Container.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("WORKOUT_NAME", "Workout 4");
+            startActivity(intent);
+        });
+        workout5Container.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+            intent.putExtra("WORKOUT_NAME", "Workout 5");
+            startActivity(intent);
+        });
+
     }
 
     private void applyFontSizes() {
@@ -157,7 +197,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                 } else if (id == R.id.nav_workout_plans) {
                     startActivity(new Intent(HomeActivity.this, WorkoutPlanActivity.class));
                 } else if (id == R.id.nav_create_workout) {
-                    startActivity(new Intent(HomeActivity.this, WorkoutSessionActivity.class));
+                    createCustomWorkout();
                 } else if (id == R.id.nav_calendar) {
                     startActivity(new Intent(HomeActivity.this, WorkoutCalendarActivity.class));
                 } else if (id == R.id.nav_settings) {
@@ -168,6 +208,39 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
                 return true;
             }
         });
+    }
+    // Creates a new custom workout and brings the user to it
+    private void createCustomWorkout() {
+        // Initialize helper
+        UserSetupDatabaseHelper helper = new UserSetupDatabaseHelper(HomeActivity.this);
+
+        // Retrieve the workout program
+        Map<String, WorkoutSessionWithExercises> program = helper.getStoredWorkoutProgram();
+
+        // Get set of used day numbers
+        HashSet<Integer> usedDays = new HashSet<>();
+        for (String key : program.keySet()) {
+            try {
+                int dayNum = Integer.parseInt(key.replace("Workout ", "").trim());
+                usedDays.add(dayNum);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        // Find the smallest integer not used
+        int nextDay = 1;
+        while (usedDays.contains(nextDay)) {
+            nextDay++;
+        }
+
+        // Create a new workout session with the computed day number
+        WorkoutSession newSession = new WorkoutSession(nextDay);
+        helper.insertWorkoutSession(newSession);
+
+        // Navigate directly to the WorkoutSessionActivity with the new day name
+        Intent intent = new Intent(HomeActivity.this, WorkoutSessionActivity.class);
+        intent.putExtra("WORKOUT_NAME", "Workout " + nextDay);
+        startActivity(intent);
     }
 
     @Override

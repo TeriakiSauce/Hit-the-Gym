@@ -42,8 +42,8 @@
                     android:contentDescription="Menu Icon"
                     android:scaleType="centerCrop"
                     android:background="@android:color/transparent"
-                    android:tint="@android:color/white"
-                    android:src="@drawable/ic_menu" />
+                    android:src="@drawable/ic_menu"
+                    app:tint="@android:color/white" />
 
                 <TextView
                     android:id="@+id/title_home"
@@ -112,18 +112,24 @@
 
                                     <!-- Day 1 -->
                                     <LinearLayout
+                                        android:id="@+id/workout_button1"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:gravity="center"
-                                        android:layout_marginEnd="16dp">
+                                        android:layout_marginEnd="16dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:descendantFocusability="blocksDescendants">
 
                                         <ImageButton
                                             android:layout_width="120dp"
                                             android:layout_height="120dp"
                                             android:src="@drawable/bench_press"
                                             android:contentDescription="Push"
-                                            android:scaleType="centerCrop" />
+                                            android:scaleType="centerCrop"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                         <TextView
                                             android:id="@+id/text_workout1"
@@ -137,18 +143,24 @@
 
                                     <!-- Day 2 -->
                                     <LinearLayout
+                                        android:id="@+id/workout_button2"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:gravity="center"
-                                        android:layout_marginEnd="16dp">
+                                        android:layout_marginEnd="16dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:descendantFocusability="blocksDescendants">
 
                                         <ImageButton
                                             android:layout_width="120dp"
                                             android:layout_height="120dp"
                                             android:src="@drawable/pull"
                                             android:contentDescription="Pull"
-                                            android:scaleType="centerCrop" />
+                                            android:scaleType="centerCrop"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                         <TextView
                                             android:id="@+id/text_workout2"
@@ -162,18 +174,24 @@
 
                                     <!-- Day 3 -->
                                     <LinearLayout
+                                        android:id="@+id/workout_button3"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:gravity="center"
-                                        android:layout_marginEnd="16dp">
+                                        android:layout_marginEnd="16dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:descendantFocusability="blocksDescendants">
 
                                         <ImageButton
                                             android:layout_width="120dp"
                                             android:layout_height="120dp"
                                             android:src="@drawable/legs"
                                             android:contentDescription="Day 3"
-                                            android:scaleType="centerCrop" />
+                                            android:scaleType="centerCrop"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                         <TextView
                                             android:id="@+id/text_workout3"
@@ -187,18 +205,24 @@
 
                                     <!-- Day 4 -->
                                     <LinearLayout
+                                        android:id="@+id/workout_button4"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:gravity="center"
-                                        android:layout_marginEnd="16dp">
+                                        android:layout_marginEnd="16dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:descendantFocusability="blocksDescendants">
 
                                         <ImageButton
                                             android:layout_width="120dp"
                                             android:layout_height="120dp"
                                             android:src="@drawable/back"
                                             android:contentDescription="Back"
-                                            android:scaleType="centerCrop" />
+                                            android:scaleType="centerCrop"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                         <TextView
                                             android:id="@+id/text_workout4"
@@ -210,21 +234,26 @@
                                             android:gravity="center" />
                                     </LinearLayout>
 
-                                    <!-- Add More Workouts Here -->
-                                    <!-- Example of a Future Workout -->
+                                    <!-- Day 5 -->
                                     <LinearLayout
+                                        android:id="@+id/workout_button5"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
                                         android:gravity="center"
-                                        android:layout_marginEnd="16dp">
+                                        android:layout_marginEnd="16dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:descendantFocusability="blocksDescendants">
 
                                         <ImageButton
                                             android:layout_width="120dp"
                                             android:layout_height="120dp"
                                             android:src="@drawable/shoulder"
                                             android:contentDescription="Sample"
-                                            android:scaleType="centerCrop" />
+                                            android:scaleType="centerCrop"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                         <TextView
                                             android:id="@+id/text_workout5"
