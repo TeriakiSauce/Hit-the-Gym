@@ -58,6 +58,9 @@
             android:name=".ui.usersetup.UserSetupActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.usersetup.UserStatusActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.UserProfileActivity"
             android:exported="false" />
     </application>
