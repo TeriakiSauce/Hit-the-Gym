@@ -2,6 +2,7 @@ package com.example.capstone2024.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,10 +12,10 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.capstone2024.R;
 
@@ -43,12 +44,33 @@ public class SettingsActivity extends AppCompatActivity {
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String themePreference = sharedPreferences.getString(THEME_KEY, "dark");
+        String fontSizePreference = sharedPreferences.getString(FONT_SIZE_KEY, "medium");
 
         // Apply the saved theme at startup
         setThemeBasedOnPreference(themePreference);
 
-        // Initialize Spinner (Theme Selector)
+        // Initialize UI components
         spinnerTheme = findViewById(R.id.spinner_theme);
+        textFontSizeValue = findViewById(R.id.text_font_size_value);
+        textTitle = findViewById(R.id.title_settings);
+        textFontSizeLabel = findViewById(R.id.text_font_size_label);
+        textThemeLabel = findViewById(R.id.text_theme_label);
+
+        Button buttonSmall = findViewById(R.id.button_small);
+        Button buttonMedium = findViewById(R.id.button_medium);
+        Button buttonLarge = findViewById(R.id.button_large);
+
+        // Set up theme spinner
+        setupThemeSpinner(themePreference);
+
+        // Set up font size controls
+        setupFontSizeControls(fontSizePreference);
+
+        // Apply initial font sizes
+        updateFontSizeViews(fontSizePreference);
+    }
+
+    private void setupThemeSpinner(String themePreference) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.theme_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -72,25 +94,20 @@ public class SettingsActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parentView) {
             }
         });
+    }
 
-        // Font Size Controls
-        textFontSizeValue = findViewById(R.id.text_font_size_value);
-        textTitle = findViewById(R.id.title_settings);
-        textFontSizeLabel = findViewById(R.id.text_font_size_label);
-        textThemeLabel = findViewById(R.id.text_theme_label);
-
+    private void setupFontSizeControls(String fontSizePreference) {
         Button buttonSmall = findViewById(R.id.button_small);
         Button buttonMedium = findViewById(R.id.button_medium);
         Button buttonLarge = findViewById(R.id.button_large);
 
-        // Load saved font size preference
-        float savedFontSize = sharedPreferences.getFloat(FONT_SIZE_KEY, getResources().getDimension(R.dimen.font_size_medium));
-        updateFontSize(savedFontSize);
+        // Set initial font size display text
+        textFontSizeValue.setText(fontSizePreference.substring(0, 1).toUpperCase() + fontSizePreference.substring(1));
 
         // Set button click listeners
-        buttonSmall.setOnClickListener(v -> setFontSize(R.string.font_size_small, R.dimen.font_size_small));
-        buttonMedium.setOnClickListener(v -> setFontSize(R.string.font_size_medium, R.dimen.font_size_medium));
-        buttonLarge.setOnClickListener(v -> setFontSize(R.string.font_size_large, R.dimen.font_size_large));
+        buttonSmall.setOnClickListener(v -> setFontSize("small"));
+        buttonMedium.setOnClickListener(v -> setFontSize("medium"));
+        buttonLarge.setOnClickListener(v -> setFontSize("large"));
     }
 
     private void setThemeBasedOnPreference(String themePreference) {
@@ -101,24 +118,38 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void setFontSize(int labelResId, int sizeResId) {
-        float fontSize = getResources().getDimension(sizeResId);
-        textFontSizeValue.setText(getString(labelResId));
-        textFontSizeValue.setTextSize(fontSize);
-        textFontSizeLabel.setTextSize(fontSize);
-        textThemeLabel.setTextSize(fontSize);
-        textTitle.setTextSize(fontSize);
+    private void setFontSize(String sizeKey) {
+        // Update the display text
+        textFontSizeValue.setText(sizeKey.substring(0, 1).toUpperCase() + sizeKey.substring(1));
 
-        // Save font size preference
+        // Save the preference
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat(FONT_SIZE_KEY, fontSize);
+        editor.putString(FONT_SIZE_KEY, sizeKey);
         editor.apply();
+
+        // Update current activity views
+        updateFontSizeViews(sizeKey);
     }
 
-    private void updateFontSize(float fontSize) {
-        textFontSizeValue.setTextSize(fontSize);
-        textFontSizeLabel.setTextSize(fontSize);
-        textThemeLabel.setTextSize(fontSize);
-        textTitle.setTextSize(fontSize);
+    private void updateFontSizeViews(String sizeKey) {
+        float size;
+        switch (sizeKey) {
+            case "small":
+                size = getResources().getDimension(R.dimen.font_size_small);
+                break;
+            case "medium":
+                size = getResources().getDimension(R.dimen.font_size_medium);
+                break;
+            case "large":
+                size = getResources().getDimension(R.dimen.font_size_large);
+                break;
+            default:
+                size = getResources().getDimension(R.dimen.font_size_medium);
+        }
+
+        textFontSizeValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+        textFontSizeLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+        textThemeLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+        textTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
     }
 }

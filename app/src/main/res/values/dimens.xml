@@ -1,16 +1,17 @@
 <resources>
-    <!-- Base font sizes -->
-    <dimen name="font_size_small">14sp</dimen>
-    <dimen name="font_size_medium">16sp</dimen>
-    <dimen name="font_size_large">20sp</dimen>
-    <dimen name="font_size_title">24sp</dimen>
+    <!-- Base font sizes (Small is now the default) -->
+    <dimen name="font_size_small">18sp</dimen>
+    <dimen name="font_size_medium">22sp</dimen>
+    <dimen name="font_size_large">26sp</dimen>
+    <dimen name="font_size_title">32sp</dimen>
 
     <!-- Relative scaling -->
-    <dimen name="font_size_label_small">16sp</dimen>
-    <dimen name="font_size_label_medium">18sp</dimen>
-    <dimen name="font_size_label_large">22sp</dimen>
+    <dimen name="font_size_label_small">20sp</dimen>
+    <dimen name="font_size_label_medium">24sp</dimen>
+    <dimen name="font_size_label_large">34sp</dimen>
 
-    <dimen name="font_size_title_small">20sp</dimen>
-    <dimen name="font_size_title_medium">24sp</dimen>
-    <dimen name="font_size_title_large">30sp</dimen>
+    <dimen name="font_size_title_small">28sp</dimen>
+    <dimen name="font_size_title_medium">34sp</dimen>
+    <dimen name="font_size_title_large">48sp</dimen>
+
 </resources>
